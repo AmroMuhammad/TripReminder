@@ -3,17 +3,17 @@ package com.iti41g1.tripreminder.controller;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
-
 import com.firebase.ui.auth.AuthUI;
-import com.google.firebase.FirebaseApp;
+import com.firebase.ui.auth.IdpResponse;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.iti41g1.tripreminder.R;
+import com.iti41g1.tripreminder.model.Constants;
 
 import java.util.Arrays;
 import java.util.List;
@@ -70,12 +70,25 @@ public class LoginActivity extends AppCompatActivity {
                     }else{
                         startActivityForResult(AuthUI.getInstance().createSignInIntentBuilder().
                                 setIsSmartLockEnabled(false)
-                    .setAvailableProviders(providers).build(),Constants.AUTH_REQUEST_CODE);
+                                .setTheme(R.style.AuthenticationTheme)
+                                .setAvailableProviders(providers).build(),Constants.AUTH_REQUEST_CODE);
                     }
             }
         };
     }
 
-
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == Constants.AUTH_REQUEST_CODE) {
+            IdpResponse response = IdpResponse.fromResultIntent(data);
+            if (resultCode == RESULT_OK) {
+                Log.i(Constants.LOG_TAG,"signed in successfully");  //already signed in
+            } else {
+                Log.i(Constants.LOG_TAG,"not signed in successfully");  //already signed in
+                finish();
+            }
+        }
+    }
 
 }
