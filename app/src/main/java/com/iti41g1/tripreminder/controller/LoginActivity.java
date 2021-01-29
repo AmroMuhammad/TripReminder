@@ -21,71 +21,73 @@ import java.util.List;
 
 public class LoginActivity extends AppCompatActivity {
     private FirebaseAuth firebaseAuth;
-    private FirebaseAuth.AuthStateListener listner;  //listener to check if signed in or not
+    //private FirebaseAuth.AuthStateListener listner;  //listener to check if signed in or not
     private List<AuthUI.IdpConfig> providers; //to get sign in  with email and google
     private FirebaseUser user;
-    private Button btnSignOut;
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        firebaseAuth.addAuthStateListener(listner);
-    }
+//    @Override
+//    protected void onStart() {
+//        super.onStart();
+//        firebaseAuth.addAuthStateListener(listner);
+//        Log.i(Constants.LOG_TAG,"onStart");
+//    }
 
-    @Override
-    protected void onStop() {
-        if(listner != null)
-            firebaseAuth.removeAuthStateListener(listner);
-        super.onStop();
-    }
+//    @Override
+//    protected void onStop() {
+//        if(listner != null) {
+//            firebaseAuth.removeAuthStateListener(listner);
+//            Log.i(Constants.LOG_TAG,"onStop");
+//        }
+//        super.onStop();
+//    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        btnSignOut = findViewById(R.id.btnSignOut);
+        Log.i(Constants.LOG_TAG,"onCreate");
         initializeSignInProcess();
 
-        btnSignOut.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                firebaseAuth.signOut();
-            }
-        });
     }
 
 
     private void initializeSignInProcess() {
+        Log.i(Constants.LOG_TAG,"initializeProcess");
+
         providers = Arrays.asList(
                 new AuthUI.IdpConfig.EmailBuilder().build(),
                 new AuthUI.IdpConfig.GoogleBuilder().build()
         );
         firebaseAuth = FirebaseAuth.getInstance();
-        listner = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                    user = firebaseAuth.getCurrentUser();
-                    if(user != null){
-                        Log.i(Constants.LOG_TAG,"signed in + "+user.getEmail());  //already signed in
-                    }else{
-                        startActivityForResult(AuthUI.getInstance().createSignInIntentBuilder().
-                                setIsSmartLockEnabled(false)
-                                .setTheme(R.style.AuthenticationTheme)
-                                .setAvailableProviders(providers).build(),Constants.AUTH_REQUEST_CODE);
-                    }
-            }
-        };
+        Log.i(Constants.LOG_TAG,"checkUser");
+        user = firebaseAuth.getCurrentUser();
+        if(user != null){
+            Log.i(Constants.LOG_TAG,"signed in + "+user.getEmail());  //already signed in
+            startActivity(new Intent(LoginActivity.this, MainActivity.class));
+            finish();
+        }else{
+            Log.i(Constants.LOG_TAG,"sign in process");
+            startActivityForResult(AuthUI.getInstance().createSignInIntentBuilder().
+                    setIsSmartLockEnabled(false)
+                    .setTheme(R.style.AuthenticationTheme)
+                    .setAvailableProviders(providers).build(),Constants.AUTH_REQUEST_CODE);
+        }
+
+
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        Log.i(Constants.LOG_TAG,"onActivityResult");
         if (requestCode == Constants.AUTH_REQUEST_CODE) {
-            IdpResponse response = IdpResponse.fromResultIntent(data);
+            Log.i(Constants.LOG_TAG,"Auth request code is correct");
             if (resultCode == RESULT_OK) {
-                Log.i(Constants.LOG_TAG,"signed in successfully");  //already signed in
+                Log.i(Constants.LOG_TAG,"signed in successfully");
+                startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                finish();
             } else {
-                Log.i(Constants.LOG_TAG,"not signed in successfully");  //already signed in
+                Log.i(Constants.LOG_TAG,"not signed in successfully");
                 finish();
             }
         }
