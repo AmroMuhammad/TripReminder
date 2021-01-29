@@ -21,25 +21,9 @@ import java.util.List;
 
 public class LoginActivity extends AppCompatActivity {
     private FirebaseAuth firebaseAuth;
-    //private FirebaseAuth.AuthStateListener listner;  //listener to check if signed in or not
     private List<AuthUI.IdpConfig> providers; //to get sign in  with email and google
     private FirebaseUser user;
 
-//    @Override
-//    protected void onStart() {
-//        super.onStart();
-//        firebaseAuth.addAuthStateListener(listner);
-//        Log.i(Constants.LOG_TAG,"onStart");
-//    }
-
-//    @Override
-//    protected void onStop() {
-//        if(listner != null) {
-//            firebaseAuth.removeAuthStateListener(listner);
-//            Log.i(Constants.LOG_TAG,"onStop");
-//        }
-//        super.onStop();
-//    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +34,7 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
-
+//initialize FireBaseUI to take care of Sign in and sign up
     private void initializeSignInProcess() {
         Log.i(Constants.LOG_TAG,"initializeProcess");
 
@@ -76,6 +60,7 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
+    //result of FirebaseUI auth process
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
