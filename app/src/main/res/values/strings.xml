@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Trip Reminder</string>
+    <string name="SignOut">Sign Out</string>
 </resources>
