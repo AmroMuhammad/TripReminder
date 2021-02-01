@@ -12,4 +12,5 @@
     <string name="RoundTrip">Round Trip</string>
     <string name="AddNote">Add Note</string>
     <string name="SaveNotes">Save Notes</string>
+    <string name="SignOut">Sign Out</string>
 </resources>

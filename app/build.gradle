@@ -28,6 +28,9 @@ android {
     }
 }
 
+apply plugin: 'com.android.application'
+apply plugin: 'com.google.gms.google-services'
+
 dependencies {
 
     implementation 'androidx.appcompat:appcompat:1.2.0'
@@ -51,5 +54,21 @@ dependencies {
     implementation "androidx.recyclerview:recyclerview:1.1.0"
     // For control over item selection of both touch and mouse driven selection
     implementation "androidx.recyclerview:recyclerview-selection:1.1.0"
+
+
+    //added for firebase
+    implementation platform('com.google.firebase:firebase-bom:26.3.0')
+    implementation 'com.google.firebase:firebase-analytics'
+
+    //added for firebase sign in and register authentication
+    implementation 'com.firebaseui:firebase-ui-auth:7.1.1'
+    implementation 'com.facebook.android:facebook-android-sdk:4.41.0'
+
+    implementation 'com.google.firebase:firebase-auth'
+    implementation 'com.google.android.gms:play-services-auth:19.0.0'
+
+    def lottieVersion = "3.4.0"
+    implementation "com.airbnb.android:lottie:$lottieVersion"
+
 
 }
