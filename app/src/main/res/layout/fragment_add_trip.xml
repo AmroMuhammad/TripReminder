@@ -112,7 +112,8 @@
                 android:id="@+id/radioBtn_oneDirection"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/SingleTrip" />
+                android:text="@string/SingleTrip"
+                android:checked="true"/>
 
             <RadioButton
                 android:id="@+id/radioBtn_roundTrip"

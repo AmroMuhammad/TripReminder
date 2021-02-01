@@ -13,4 +13,5 @@
     <string name="AddNote">Add Note</string>
     <string name="SaveNotes">Save Notes</string>
     <string name="SignOut">Sign Out</string>
+    <string name="AddTrip">Add Trip</string>
 </resources>
