@@ -1,3 +1,15 @@
 <resources>
     <string name="app_name">Trip Reminder</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="TripName">Trip Name</string>
+    <string name="StartPoint">Start Point</string>
+    <string name="EndPoint">End Point</string>
+    <string name="ChooseDate">Choose Date</string>
+    <string name="Add">Add</string>
+    <string name="ChooseTime">Choose Time</string>
+    <string name="AddNotes">Add Notes</string>
+    <string name="SingleTrip">One Direction</string>
+    <string name="RoundTrip">Round Trip</string>
+    <string name="AddNote">Add Note</string>
+    <string name="SaveNotes">Save Notes</string>
 </resources>
