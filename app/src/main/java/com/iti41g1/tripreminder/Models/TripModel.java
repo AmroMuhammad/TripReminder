@@ -1,4 +1,4 @@
-package Models;
+package com.iti41g1.tripreminder.Models;
 
 import java.util.ArrayList;
 

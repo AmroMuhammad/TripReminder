@@ -1,4 +1,4 @@
-package com.iti41g1.tripreminder.model;
+package com.iti41g1.tripreminder.Models;
 
 public interface Constants {
    int AUTH_REQUEST_CODE = 2103;

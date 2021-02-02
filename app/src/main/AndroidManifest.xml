@@ -12,17 +12,16 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.TripReminder">
-        <activity android:name=".controller.AddTripActivity"/>
-        <activity android:name=".controller.SplashActivity"/>
-        <activity android:name=".controller.HomeActivity">
+        <activity android:name=".controller.activity.AddTripActivity"/>
+        <activity android:name=".controller.activity.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".controller.LoginActivity"/>
-        <activity android:name=".controller.MainActivity" />
+        <activity android:name=".controller.activity.HomeActivity"/>
+        <activity android:name=".controller.activity.LoginActivity"/>
     </application>
 
 </manifest>

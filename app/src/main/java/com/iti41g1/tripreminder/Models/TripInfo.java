@@ -1,4 +1,4 @@
-package com.iti41g1.tripreminder.controller;
+package com.iti41g1.tripreminder.Models;
 
 import java.sql.Time;
 import java.util.Date;

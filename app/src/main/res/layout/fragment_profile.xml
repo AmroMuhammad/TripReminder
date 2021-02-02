@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".controller.ProfileFragment">
+    tools:context=".controller.Fragments.ProfileFragment">
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/imageView"
@@ -46,7 +46,7 @@
         app:layout_constraintTop_toBottomOf="@+id/name_txt" />
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/txtSync"
         android:layout_width="52dp"
         android:layout_height="20dp"
         android:layout_marginStart="20dp"
@@ -54,11 +54,11 @@
         android:text="@string/sync"
         android:textColor="@color/design_default_color_primary"
         android:textSize="17sp"
-        app:layout_constraintStart_toEndOf="@+id/imageView3"
+        app:layout_constraintStart_toEndOf="@+id/imgSync"
         app:layout_constraintTop_toBottomOf="@+id/profile" />
 
     <TextView
-        android:id="@+id/textView4"
+        android:id="@+id/txtLogout"
         android:layout_width="74dp"
         android:layout_height="28dp"
         android:layout_marginStart="20dp"
@@ -67,8 +67,8 @@
         android:textColor="@color/design_default_color_primary"
         android:textSize="17sp"
         android:text="@string/logout"
-        app:layout_constraintStart_toEndOf="@+id/imageView4"
-        app:layout_constraintTop_toBottomOf="@+id/textView3" />
+        app:layout_constraintStart_toEndOf="@+id/imgLogout"
+        app:layout_constraintTop_toBottomOf="@+id/txtSync" />
 
     <ImageView
         android:id="@+id/imageView2"
@@ -81,23 +81,25 @@
         app:layout_constraintTop_toBottomOf="@+id/imageView" />
 
     <ImageView
-        android:id="@+id/imageView3"
+        android:id="@+id/imgSync"
         android:layout_width="52dp"
         android:layout_height="53dp"
         android:layout_marginStart="4dp"
         android:layout_marginTop="4dp"
         android:src="@drawable/ic_baseline_sync_24"
         app:layout_constraintStart_toStartOf="@+id/imageView2"
-        app:layout_constraintTop_toBottomOf="@+id/imageView2" />
+        app:layout_constraintTop_toBottomOf="@+id/imageView2"
+        android:clickable="true"/>
 
     <ImageView
-        android:id="@+id/imageView4"
+        android:id="@+id/imgLogout"
         android:layout_width="50dp"
         android:layout_height="51dp"
         android:layout_marginTop="12dp"
         android:src="@drawable/ic_baseline_aout_24"
-        app:layout_constraintStart_toStartOf="@+id/imageView3"
-        app:layout_constraintTop_toBottomOf="@+id/imageView3" />
+        app:layout_constraintStart_toStartOf="@+id/imgSync"
+        app:layout_constraintTop_toBottomOf="@+id/imgSync"
+        android:clickable="true"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,4 +1,4 @@
-package com.iti41g1.tripreminder.controller;
+package com.iti41g1.tripreminder.controller.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -8,6 +8,10 @@ import android.os.Bundle;
 
 import com.google.android.material.tabs.TabLayout;
 import com.iti41g1.tripreminder.R;
+import com.iti41g1.tripreminder.controller.Fragments.HistoryFragment;
+import com.iti41g1.tripreminder.controller.Fragments.ProfileFragment;
+import com.iti41g1.tripreminder.controller.Fragments.UpcomingFragment;
+import com.iti41g1.tripreminder.Adapters.ViewPagerAdaptor;
 
 import java.util.ArrayList;
 import java.util.List;

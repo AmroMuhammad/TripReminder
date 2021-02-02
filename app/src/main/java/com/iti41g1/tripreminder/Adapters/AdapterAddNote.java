@@ -1,4 +1,4 @@
-package Adapters;
+package com.iti41g1.tripreminder.Adapters;
 
 import android.content.Context;
 import android.text.Editable;
@@ -15,7 +15,7 @@ import com.iti41g1.tripreminder.R;
 
 import java.util.ArrayList;
 
-import Models.NoteModel;
+import com.iti41g1.tripreminder.Models.NoteModel;
 
 public class AdapterAddNote extends RecyclerView.Adapter<AdapterAddNote.viewHolder> {
     @NonNull

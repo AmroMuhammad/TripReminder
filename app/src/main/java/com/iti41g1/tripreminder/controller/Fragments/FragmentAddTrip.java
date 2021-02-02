@@ -1,4 +1,4 @@
-package Fragments;
+package com.iti41g1.tripreminder.controller.Fragments;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
@@ -31,7 +31,7 @@ import com.google.android.libraries.places.widget.Autocomplete;
 import com.google.android.libraries.places.widget.AutocompleteActivity;
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
 import com.iti41g1.tripreminder.R;
-import com.iti41g1.tripreminder.model.Constants;
+import com.iti41g1.tripreminder.Models.Constants;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -42,9 +42,9 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
 
-import Adapters.AdapterAddNote;
-import Models.NoteModel;
-import Models.TripModel;
+import com.iti41g1.tripreminder.Adapters.AdapterAddNote;
+import com.iti41g1.tripreminder.Models.NoteModel;
+import com.iti41g1.tripreminder.Models.TripModel;
 
 import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;

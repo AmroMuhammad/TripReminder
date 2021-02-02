@@ -1,6 +1,4 @@
-package Models;
-
-import java.io.Serializable;
+package com.iti41g1.tripreminder.Models;
 
 public class NoteModel {
     private String note;

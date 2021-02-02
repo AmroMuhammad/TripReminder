@@ -1,4 +1,4 @@
-package com.iti41g1.tripreminder.controller;
+package com.iti41g1.tripreminder.controller.Fragments;
 
 import android.os.Bundle;
 
@@ -13,21 +13,21 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.iti41g1.tripreminder.R;
-import com.iti41g1.tripreminder.controller.TripAdapter;
-import com.iti41g1.tripreminder.controller.TripInfo;
+import com.iti41g1.tripreminder.Adapters.TripAdapter;
+import com.iti41g1.tripreminder.Models.TripInfo;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class UpcomingFragment extends Fragment {
-ImageView emptyListImg;
+public class HistoryFragment extends Fragment {
     RecyclerView tripRecyclerView;
     private TripAdapter tripAdapter;
-    private List tripsList=new ArrayList<TripInfo>(); ;
+    ImageView emptyListImg;
+    private List tripsList =new ArrayList<TripInfo>();
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        tripsListPrepare();
+       // tripsListPrepare();
     }
 
     @Override
@@ -38,13 +38,13 @@ ImageView emptyListImg;
         tripRecyclerView.setAdapter(tripAdapter);
         emptyListImg=view.findViewById(R.id.emptyList_img);
     }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_upcoming, container, false);
+        return inflater.inflate(R.layout.fragment_history, container, false);
     }
+
     @Override
     public void onStart() {
         super.onStart();
@@ -52,13 +52,13 @@ ImageView emptyListImg;
         {
             emptyListImg.setVisibility(View.VISIBLE);
             emptyListImg.setImageResource(R.drawable.preview);
-
         }
         else
         {
             emptyListImg.setVisibility(View.GONE);
         }
     }
+
     private void tripsListPrepare() {
         tripsList.add(new TripInfo(R.drawable.ic_baseline_add_24,"iti","12/12/2021","10:05","assuit","cairo",new String []{"hi","hello"}));
         tripsList.add(new TripInfo(R.drawable.ic_baseline_add_24,"iti","12/12/2021","10:05","assuit","cairo",new String []{"hi","hello"}));

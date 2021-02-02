@@ -1,4 +1,4 @@
-package com.iti41g1.tripreminder.controller;
+package com.iti41g1.tripreminder.Adapters;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;

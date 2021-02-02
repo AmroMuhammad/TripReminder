@@ -1,4 +1,4 @@
-package com.iti41g1.tripreminder.controller;
+package com.iti41g1.tripreminder.controller.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -8,7 +8,7 @@ import android.os.Bundle;
 
 import com.iti41g1.tripreminder.R;
 
-import Fragments.FragmentAddTrip;
+import com.iti41g1.tripreminder.controller.Fragments.FragmentAddTrip;
 
 public class AddTripActivity extends AppCompatActivity {
     FragmentManager f;

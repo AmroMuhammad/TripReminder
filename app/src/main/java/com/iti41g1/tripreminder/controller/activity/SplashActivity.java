@@ -1,4 +1,4 @@
-package com.iti41g1.tripreminder.controller;
+package com.iti41g1.tripreminder.controller.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -8,7 +8,7 @@ import android.os.Handler;
 import android.view.WindowManager;
 
 import com.iti41g1.tripreminder.R;
-import com.iti41g1.tripreminder.model.Constants;
+import com.iti41g1.tripreminder.Models.Constants;
 
 
 public class SplashActivity extends AppCompatActivity {
