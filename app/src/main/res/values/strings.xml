@@ -14,4 +14,8 @@
     <string name="SaveNotes">Save Notes</string>
     <string name="SignOut">Sign Out</string>
     <string name="AddTrip">Add Trip</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="profile">Your Profile</string>
+    <string name="sync">Sync</string>
+    <string name="logout">Logout</string>
 </resources>
