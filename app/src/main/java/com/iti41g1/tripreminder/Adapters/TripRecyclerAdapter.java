@@ -1,5 +1,8 @@
 package com.iti41g1.tripreminder.Adapters;
 
+import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,13 +14,15 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.iti41g1.tripreminder.R;
-import com.iti41g1.tripreminder.Models.TripInfo;
+import com.iti41g1.tripreminder.database.Trip;
 
 import java.util.List;
 
-public class TripAdapter extends RecyclerView.Adapter<TripAdapter.MyViewHolder> {
+public class TripRecyclerAdapter extends RecyclerView.Adapter<TripRecyclerAdapter.MyViewHolder> {
     List TrripInfoList;
-    public TripAdapter(List TrripInfoList) {
+    Context context;
+    public TripRecyclerAdapter(Context context, List TrripInfoList) {
+        this.context = context;
         this.TrripInfoList=TrripInfoList;
     }
     @NonNull
@@ -31,19 +36,19 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.MyViewHolder> 
 
     @Override
     public void onBindViewHolder( MyViewHolder holder, int position) {
-        TripInfo trip= (TripInfo) TrripInfoList.get(position);
-        holder.nameTxt.setText(trip.getName());
+        Trip trip= (Trip) TrripInfoList.get(position);
+        holder.nameTxt.setText(trip.getTripName());
         holder.timeTxt.setText(trip.getTime());
         holder.dateTxt.setText(trip.getDate());
-        holder.sourceTxt.setText(trip.getSource());
-        holder.destinationTxt.setText(trip.getDestination());
+        holder.sourceTxt.setText(trip.getStartPoint());
+        holder.destinationTxt.setText(trip.getEndPoint());
         holder.dateTxt.setText(trip.getDate());
-        holder.trip_img.setImageResource(trip.getTripImg());
+//        holder.trip_img.setImageResource(trip.getTripImg());
         holder.start_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
+                //dont forget to change status in database
+                initMap(((Trip) TrripInfoList.get(position)).getEndPointLat(),((Trip) TrripInfoList.get(position)).getEndPointLong());
             }
         });
     }
@@ -71,5 +76,12 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.MyViewHolder> 
             start_btn= itemView.findViewById(R.id.start_btn);
 
         }
+    }
+
+    public void initMap(double latitude, double longtitude){
+        Uri gmmIntentUri = Uri.parse("https://www.google.com/maps/dir/?api=1&origin=&destination="+latitude+","+longtitude+"&travelmode=driving");
+        Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+        mapIntent.setPackage("com.google.android.apps.maps");
+        context.startActivity(mapIntent);
     }
 }

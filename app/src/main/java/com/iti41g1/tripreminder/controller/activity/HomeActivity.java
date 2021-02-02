@@ -2,6 +2,7 @@ package com.iti41g1.tripreminder.controller.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.room.Room;
 import androidx.viewpager.widget.ViewPager;
 
 import android.os.Bundle;
@@ -12,6 +13,7 @@ import com.iti41g1.tripreminder.controller.Fragments.HistoryFragment;
 import com.iti41g1.tripreminder.controller.Fragments.ProfileFragment;
 import com.iti41g1.tripreminder.controller.Fragments.UpcomingFragment;
 import com.iti41g1.tripreminder.Adapters.ViewPagerAdaptor;
+import com.iti41g1.tripreminder.database.TripDatabase;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,11 +28,15 @@ public class HomeActivity extends AppCompatActivity {
     private List<Fragment> fragments;
     private List<String> fragmentTitles;
     private ViewPagerAdaptor adaptor;
+    public static TripDatabase database;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
+        //initalize DB
+        database = Room.databaseBuilder(this, TripDatabase.class, "tripDB").build();
         //inflating views
         viewPager = findViewById(R.id.viewPager);
         tabLayout = findViewById(R.id.tabLayout);

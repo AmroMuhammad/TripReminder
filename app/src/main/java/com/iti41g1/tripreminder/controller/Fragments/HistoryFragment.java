@@ -13,29 +13,28 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.iti41g1.tripreminder.R;
-import com.iti41g1.tripreminder.Adapters.TripAdapter;
-import com.iti41g1.tripreminder.Models.TripInfo;
+import com.iti41g1.tripreminder.Adapters.TripRecyclerAdapter;
+import com.iti41g1.tripreminder.database.Trip;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class HistoryFragment extends Fragment {
     RecyclerView tripRecyclerView;
-    private TripAdapter tripAdapter;
+    private TripRecyclerAdapter tripRecyclerAdapter;
     ImageView emptyListImg;
-    private List tripsList =new ArrayList<TripInfo>();
+    private List tripsList =new ArrayList<Trip>();
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-       // tripsListPrepare();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         tripRecyclerView=view.findViewById(R.id.trip_recycleView);
-        TripAdapter tripAdapter=new TripAdapter(tripsList);
-        tripRecyclerView.setAdapter(tripAdapter);
+        TripRecyclerAdapter tripRecyclerAdapter =new TripRecyclerAdapter(getContext(),tripsList);
+        tripRecyclerView.setAdapter(tripRecyclerAdapter);
         emptyListImg=view.findViewById(R.id.emptyList_img);
     }
     @Override
@@ -57,15 +56,5 @@ public class HistoryFragment extends Fragment {
         {
             emptyListImg.setVisibility(View.GONE);
         }
-    }
-
-    private void tripsListPrepare() {
-        tripsList.add(new TripInfo(R.drawable.ic_baseline_add_24,"iti","12/12/2021","10:05","assuit","cairo",new String []{"hi","hello"}));
-        tripsList.add(new TripInfo(R.drawable.ic_baseline_add_24,"iti","12/12/2021","10:05","assuit","cairo",new String []{"hi","hello"}));
-        tripsList.add(new TripInfo(R.drawable.ic_baseline_add_24,"iti","12/12/2021","10:05","assuit","cairo",new String []{"hi","hello"}));
-        tripsList.add(new TripInfo(R.drawable.ic_baseline_add_24,"iti","12/12/2021","10:05","assuit","cairo",new String []{"hi","hello"}));
-        tripsList.add(new TripInfo(R.drawable.ic_baseline_add_24,"iti","12/12/2021","10:05","assuit","cairo",new String []{"hi","hello"}));
-        tripsList.add(new TripInfo(R.drawable.ic_baseline_add_24,"iti","12/12/2021","10:05","assuit","cairo",new String []{"hi","hello"}));
-        tripsList.add(new TripInfo(R.drawable.ic_baseline_add_24,"iti","12/12/2021","10:05","assuit","cairo",new String []{"hi","hello"}));
     }
 }

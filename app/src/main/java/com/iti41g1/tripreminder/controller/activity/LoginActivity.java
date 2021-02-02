@@ -20,6 +20,7 @@ public class LoginActivity extends AppCompatActivity {
     private FirebaseAuth firebaseAuth;
     private List<AuthUI.IdpConfig> providers; //to get sign in  with email and google
     private FirebaseUser user;
+    public static String userUID;
 
 
     @Override
@@ -44,6 +45,7 @@ public class LoginActivity extends AppCompatActivity {
         user = firebaseAuth.getCurrentUser();
         if(user != null){
             Log.i(Constants.LOG_TAG,"signed in + "+user.getEmail());  //already signed in
+            Log.i(Constants.LOG_TAG,"signed in + "+user.getUid());  //already signed in
             startActivity(new Intent(LoginActivity.this, HomeActivity.class));
             finish();
         }else{

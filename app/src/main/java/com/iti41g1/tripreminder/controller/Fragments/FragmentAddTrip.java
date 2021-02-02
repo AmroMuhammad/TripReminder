@@ -44,7 +44,6 @@ import java.util.TimeZone;
 
 import com.iti41g1.tripreminder.Adapters.AdapterAddNote;
 import com.iti41g1.tripreminder.Models.NoteModel;
-import com.iti41g1.tripreminder.Models.TripModel;
 
 import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
@@ -72,6 +71,13 @@ public class FragmentAddTrip extends Fragment {
     AdapterAddNote adapter;
     LinearLayoutManager linearLayoutManager;
     ArrayList<NoteModel> notes;
+    boolean isDateCorrect = false;
+    boolean isTimeCorrect = false;
+    boolean isDateCorrectRoundTrip = false;
+    boolean isTimeCorrectRoundTrip = false;
+    boolean isDateToday=false;
+    boolean isDateTodayRoundTrip=false;
+    boolean isFirstTimeSeleceted=false;
 
     private static final String TAG = "AddTripFragment";
     private static final String apiKey = "AIzaSyAKXUZsOm7RLbPEAQQxp6TZsU9YWLeh5Pg";
@@ -84,15 +90,9 @@ public class FragmentAddTrip extends Fragment {
     final int month = calender.get(Calendar.MONTH);
     final int day = calender.get(Calendar.DAY_OF_MONTH);
     Boolean isRound = false;
-    TripModel tripModel = new TripModel();
+    //Trip tripModel = new Trip();
     Place place;
-    boolean isDateCorrect = false;
-    boolean isTimeCorrect = false;
-    boolean isDateCorrectRoundTrip = false;
-    boolean isTimeCorrectRoundTrip = false;
-    boolean isDateToday=false;
-    boolean isDateTodayRoundTrip=false;
-    boolean isFirstTimeSeleceted=false;
+
 
 
     public FragmentAddTrip() {
@@ -223,7 +223,7 @@ public class FragmentAddTrip extends Fragment {
         btnSaveTrip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                checkData(v);
+                //checkData(v);
             }
         });
         return view;
@@ -431,50 +431,50 @@ public class FragmentAddTrip extends Fragment {
         return isRound;
     }
 
-    public void checkData(View v) {
-        Log.i(TAG, "checkData: ");
-        if (!TextUtils.isEmpty(editTextTripName.getText().toString())) {
-            Log.i(TAG, "checkData: name n" + editTextTripName.getText());
-            if (!TextUtils.isEmpty(editTextStartPoint.getText().toString())
-                    && !TextUtils.isEmpty(editTextEndPoint.getText().toString())) {
-                if (!TextUtils.isEmpty(textViewDate.getText().toString()) && !TextUtils.isEmpty(textViewTime.getText().toString())) {
-                    if (adapter.getNotesList() != null) {
-                        tripModel.setNotes(adapter.getNotesList());
-                    }
-                    tripModel.setTripName(editTextTripName.getText().toString());
-                    tripModel.setLocation(new TripModel.Location(place.getLatLng().latitude, place.getLatLng().longitude));
-                    tripModel.setDate(new TripModel.Date(day, month, year));
-                    tripModel.setTime2(new TripModel.Time(hour, minute));
-                    Log.i(TAG, "checkData: trip ");
-                    if (!isRound) {
-                        tripModel.setTripType("one Direction");
-                        tripModel.setDate2(null);
-                        tripModel.setTime2(null);
-                    } else if (!TextUtils.isEmpty(textViewDate2.getText().toString())
-                            && !TextUtils.isEmpty(textViewTime2.getText().toString())) {
-                        tripModel.setTripType("round Trip");
-                        tripModel.setDate2(new TripModel.Date(day, month, year));
-                        tripModel.setTime2(new TripModel.Time(hour, minute));
-                    } else {
-                        textViewDate2.setError("Required");
-                        textViewTime.setError("Required");
-                        Toast.makeText(getContext(), "Please Enter Date and Time", Toast.LENGTH_LONG).show();
-                    }
-                    Log.i(TAG, "checkData: " + tripModel.getTripName().toString() + "/" + tripModel.getLocation());
-                } else {
-                    textViewDate.setError("Required");
-                    textViewTime.setError("Required");
-                    Toast.makeText(getContext(), "Please Enter Date and Time", Toast.LENGTH_LONG).show();
-                }
-            } else {
-                editTextStartPoint.setError("Required");
-                editTextEndPoint.setError("Required");
-                Toast.makeText(getContext(), "Please Enter Start and End Point", Toast.LENGTH_LONG).show();
-            }
-            Log.i(TAG, "checkData: " + tripModel);
-        } else {
-            Toast.makeText(getContext(), "Please Enter Valid data", Toast.LENGTH_LONG).show();
-        }
-    }
+//    public void checkData(View v) {
+//        Log.i(TAG, "checkData: ");
+//        if (!TextUtils.isEmpty(editTextTripName.getText().toString())) {
+//            Log.i(TAG, "checkData: name n" + editTextTripName.getText());
+//            if (!TextUtils.isEmpty(editTextStartPoint.getText().toString())
+//                    && !TextUtils.isEmpty(editTextEndPoint.getText().toString())) {
+//                if (!TextUtils.isEmpty(textViewDate.getText().toString()) && !TextUtils.isEmpty(textViewTime.getText().toString())) {
+//                    if (adapter.getNotesList() != null) {
+//                        tripModel.setNotes(adapter.getNotesList());
+//                    }
+//                    tripModel.setTripName(editTextTripName.getText().toString());
+//                    tripModel.setLocation(new TripModel.Location(place.getLatLng().latitude, place.getLatLng().longitude));
+//                    tripModel.setDate(new TripModel.Date(day, month, year));
+//                    tripModel.setTime2(new TripModel.Time(hour, minute));
+//                    Log.i(TAG, "checkData: trip ");
+//                    if (!isRound) {
+//                        tripModel.setTripType("one Direction");
+//                        tripModel.setDate2(null);
+//                        tripModel.setTime2(null);
+//                    } else if (!TextUtils.isEmpty(textViewDate2.getText().toString())
+//                            && !TextUtils.isEmpty(textViewTime2.getText().toString())) {
+//                        tripModel.setTripType("round Trip");
+//                        tripModel.setDate2(new TripModel.Date(day, month, year));
+//                        tripModel.setTime2(new TripModel.Time(hour, minute));
+//                    } else {
+//                        textViewDate2.setError("Required");
+//                        textViewTime.setError("Required");
+//                        Toast.makeText(getContext(), "Please Enter Date and Time", Toast.LENGTH_LONG).show();
+//                    }
+//                    Log.i(TAG, "checkData: " + tripModel.getTripName().toString() + "/" + tripModel.getLocation());
+//                } else {
+//                    textViewDate.setError("Required");
+//                    textViewTime.setError("Required");
+//                    Toast.makeText(getContext(), "Please Enter Date and Time", Toast.LENGTH_LONG).show();
+//                }
+//            } else {
+//                editTextStartPoint.setError("Required");
+//                editTextEndPoint.setError("Required");
+//                Toast.makeText(getContext(), "Please Enter Start and End Point", Toast.LENGTH_LONG).show();
+//            }
+//            Log.i(TAG, "checkData: " + tripModel);
+//        } else {
+//            Toast.makeText(getContext(), "Please Enter Valid data", Toast.LENGTH_LONG).show();
+//        }
+//    }
 
 }
