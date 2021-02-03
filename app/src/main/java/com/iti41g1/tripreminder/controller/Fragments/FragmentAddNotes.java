@@ -2,8 +2,10 @@ package com.iti41g1.tripreminder.controller.Fragments;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentResultListener;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -27,6 +29,12 @@ public class FragmentAddNotes extends Fragment {
     Button   btnAddNote;
     Button   btnSaveNotes;
     ArrayList<String> notes;
+    String date;
+    String time;
+    String date2;
+    String time2;
+    ArrayList<String> notesl;
+
     public static final String TAG="Notes";
 
     public FragmentAddNotes() {
@@ -34,7 +42,22 @@ public class FragmentAddNotes extends Fragment {
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) { super.onCreate(savedInstanceState); }
+    public void onCreate(Bundle savedInstanceState) { super.onCreate(savedInstanceState);
+
+        getParentFragmentManager().setFragmentResultListener("datakey", this, new FragmentResultListener() {
+            @Override
+            public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle bundle) {
+                // We use a String here, but any type that can be put in a Bundle is supported
+                if(bundle!=null){
+                 date = bundle.getString("date");
+                 time=bundle.getString("time");
+                 date2 = bundle.getString("date2");
+                 time2=bundle.getString("time2");
+                Log.i(TAG, "onFragmentResult:  AddNotes"+date+".."+time+".."+date2+".."+time2);
+                // Do something with the result
+            }}
+        });
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -65,15 +88,26 @@ public class FragmentAddNotes extends Fragment {
         btnSaveNotes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!notes.isEmpty()){
-                    for(int i=0;i<notes.size();i++) {
+                Bundle result = new Bundle();
+                if(!notes.isEmpty()) {
+                    for (int i = 0; i < notes.size(); i++) {
                         Log.i(TAG, "onClick:Savebutton " + notes.get(i));
                     }
-                        Bundle result = new Bundle();
-                        result.putStringArrayList("bundleKey",notes);
-                        getParentFragmentManager().setFragmentResult("requestKey", result);
-                    Log.i(TAG, "onClick: "+result);
+                    //   Bundle result = new Bundle();
+                    result.putStringArrayList("bundleKey", notes);
                 }
+                        if(date!="")
+                        result.putString("date",date);
+                        if(time!="")
+                        result.putString("time",time);
+                        if(date2!="")
+                        result.putString("date2",date2);
+                        if(time2!="")
+                        result.putString("time2",time2);
+                        getParentFragmentManager().setFragmentResult("requestKey", result);
+                    Log.i(TAG, "onClick: addnotes"+result);
+
+
             }
         });
         return view;

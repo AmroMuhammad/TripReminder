@@ -1,13 +1,16 @@
 package com.iti41g1.tripreminder.controller.activity;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import android.os.Bundle;
+import android.util.Log;
 
 import com.iti41g1.tripreminder.R;
 
+import com.iti41g1.tripreminder.controller.Fragments.FragmentAddNotes;
 import com.iti41g1.tripreminder.controller.Fragments.FragmentAddTrip;
 
 public class AddTripActivity extends AppCompatActivity {

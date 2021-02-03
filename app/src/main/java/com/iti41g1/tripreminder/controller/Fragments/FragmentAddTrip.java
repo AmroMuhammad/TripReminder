@@ -99,12 +99,10 @@ public class FragmentAddTrip extends Fragment {
     final int month = calender.get(Calendar.MONTH);
     final int day = calender.get(Calendar.DAY_OF_MONTH);
     Boolean isRound = false;
-    //Trip tripModel = new Trip();
     Place placeStartPoint;
     Place placeEndPoint;
-    FragmentManager f;
-    Fragment fragmentAddNotes;
-    ArrayList<String> result;
+    ArrayList<String> resultNotes;
+    Trip trip;
 
     public FragmentAddTrip() {
         // Required empty public constructor
@@ -114,16 +112,17 @@ public class FragmentAddTrip extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Places.initialize(getContext(), apiKey);
-        getParentFragmentManager().setFragmentResultListener("requestKey", this, new FragmentResultListener() {
-            @Override
-            public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle bundle) {
-                // We use a String here, but any type that can be put in a Bundle is supported
-                result=new ArrayList();
-                result = bundle.getStringArrayList("bundleKey");
-                Log.i(TAG, "onFragmentResult: "+result);
-                // Do something with the result
-            }
-        });
+        Log.i(TAG, "onCreate: ");
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        Log.i(TAG, "onSaveInstanceState: ");
+        outState.putString("Date",textViewDate.getText().toString());
+        outState.putString("Time",textViewTime.getText().toString());
+        outState.putString("DateRound",textViewDate2.getText().toString());
+        outState.putString("TimeRound",textViewTime2.getText().toString());
     }
 
     @Override
@@ -159,45 +158,64 @@ public class FragmentAddTrip extends Fragment {
         constraintLayoutNotes = view.findViewById(R.id.layoutOfNotes);
         constraintLayoutRoundTrip = view.findViewById(R.id.constraintLayoutAddRound);
         Log.i(TAG, "onCreateView: ");
+        if(savedInstanceState!=null){
+            textViewDate.setText(savedInstanceState.getString("Date"));
+            textViewTime.setText(savedInstanceState.getString("Time"));
+            textViewDate2.setText(savedInstanceState.getString("DateRound"));
+            textViewTime2.setText(savedInstanceState.getString("TimeRound"));
+        }
+
+        getParentFragmentManager().setFragmentResultListener("requestKey", this, new FragmentResultListener() {
+            @Override
+            public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle bundle) {
+                // We use a String here, but any type that can be put in a Bundle is supported
+                resultNotes=new ArrayList();
+                resultNotes = bundle.getStringArrayList("bundleKey");
+                String date=bundle.getString("date");
+                String time=bundle.getString("time");
+                String date2=bundle.getString("date2");
+                String time2=bundle.getString("time2");
+                textViewDate.setText(date);
+                textViewTime.setText(time);
+                textViewDate2.setText(date2);
+                textViewTime2.setText(time2);
+                Log.i(TAG, "onFragmentResult: "+resultNotes+".."+date+".."+time+date2+".."+time2);
+                // Do something with the result
 
 
+            }
+        });
         btnAddNotes.setOnClickListener(new View.OnClickListener() {
             @SuppressLint("ResourceType")
             @Override
             public void onClick(View v) {
-/*
-                constraintLayoutNotes.setVisibility(View.VISIBLE);
-                Log.i(TAG, "onClick:add button ");
-                notes.add(new NoteModel("", false));
-                Log.i(TAG, notes.toString());
-                adapter.notifyDataSetChanged();
-**/
-/*
-                fragmentAddNotes=new FragmentAddNotes();
-                FragmentManager fragmentManager = getChildFragmentManager();
-                fragmentManager.beginTransaction()
-                       .replace(R.layout.fragment_add_notes, fragmentAddNotes, null)
-                        .setReorderingAllowed(true)
-                        .addToBackStack("name") // name can be null
-                        .commit();**/
-
-                // Create new fragment and transaction
                 FragmentTransaction transaction = getFragmentManager().beginTransaction();
-             //   transaction.setReorderingAllowed(true);
-
+                transaction.setReorderingAllowed(true);
 // Replace whatever is in the fragment_container view with this fragment
                 transaction.replace(R.id.fragmentB, FragmentAddNotes.class,null);
                 transaction.addToBackStack(null);
-
-
-// Commit the transaction
                 transaction.commit();
+                // send data
+           //     if(!TextUtils.isEmpty(textViewTime.getText())||!TextUtils.isEmpty(textViewDate.getText())) {
+                    Bundle result = new Bundle();
+                    if (!TextUtils.isEmpty(textViewDate.getText()))
+                        result.putString("date", textViewDate.getText().toString());
+                    if (!TextUtils.isEmpty(textViewTime.getText()))
+                        result.putString("time", textViewTime.getText().toString());
+                    if (!TextUtils.isEmpty(textViewDate2.getText()))
+                        result.putString("date2", textViewDate2.getText().toString());
+                    if (!TextUtils.isEmpty(textViewTime2.getText()))
+                        result.putString("time2", textViewTime2.getText().toString());
+                    getParentFragmentManager().setFragmentResult("datakey", result);
+                    Log.i(TAG, "onClick: addtrip" + result);
+         //       }
             }
         });
-
         radioButtonOneDirection.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                textViewTime2.setText("");
+                textViewDate2.setText("");
                 constraintLayoutRoundTrip.setVisibility(View.GONE);
                 isRound = onRadioButtonClicked(v);
             }
@@ -267,7 +285,6 @@ public class FragmentAddTrip extends Fragment {
         btnSaveTrip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //checkData(v);
                 checkData();
             }
         });
@@ -475,7 +492,7 @@ public class FragmentAddTrip extends Fragment {
         Log.i(TAG, "onRadioButtonClicked: " + ((RadioButton) view).getText());
         return isRound;
     }
-    
+
 
     public void checkData(){
         Log.i(TAG, "checkData: ");
@@ -488,15 +505,15 @@ public class FragmentAddTrip extends Fragment {
                             FirebaseUser user = firebaseAuth.getCurrentUser();
                                 //create one obj for one direction
                                 assert user != null;
-                                Trip trip=new Trip(user.getUid(),editTextTripName.getText().toString(),placeStartPoint.getName(),
+                                 trip=new Trip(user.getUid(),editTextTripName.getText().toString(),placeStartPoint.getName(),
                                         placeEndPoint.getName(),placeEndPoint.getLatLng().latitude,placeEndPoint.getLatLng().longitude,
                                         textViewDate.getText().toString(),textViewTime.getText().toString(),R.drawable.preview,
                                         "upcomming");
                             Log.i(TAG, "checkData:mmmmmm "+trip.getTripName()+trip.getDate()+trip.getTime()+
                                     trip.getEndPoint()+trip.getStartPoint()+trip.getTripStatus());
                                 insertRoom(trip);
-                            if(result!=null){
-                                trip.setNotes(result);
+                            if(resultNotes!=null){
+                                trip.setNotes(resultNotes);
                             }
 
                             if(isRound){
@@ -509,23 +526,23 @@ public class FragmentAddTrip extends Fragment {
                                         textViewDate2.getText().toString(),textViewTime2.getText().toString(),R.drawable.preview,
                                         "upcomming");
                                 insertRoom(tripRound);
-                                        if(result!=null){
-                                            tripRound.setNotes(result);
+                                        if(resultNotes!=null){
+                                            tripRound.setNotes(resultNotes);
                                         }
                             }else{
-                                        editTextStartPoint.setError("Valid Time");
+                                        textViewTime2.setError("Valid Time");
                                         Toast.makeText(getContext(),"Please, Enter Valid Time for round",Toast.LENGTH_LONG).show();
                                     }
                                 }else{
-                                    editTextStartPoint.setError("Valid Date");
+                                    textViewDate2.setError("Valid Date");
                                     Toast.makeText(getContext(),"Please, Enter Valid Date for round",Toast.LENGTH_LONG).show();
                                 }}
                         }else{
-                            editTextStartPoint.setError("Valid Time");
+                            textViewTime.setError("Valid Time");
                             Toast.makeText(getContext(),"Please, Enter Valid Time",Toast.LENGTH_LONG).show();
                         }
                     }else{
-                        editTextStartPoint.setError("Please Enter Valid Date");
+                        textViewDate.setError("Please Enter Valid Date");
                         Toast.makeText(getContext(),"Please, Enter Valid Date",Toast.LENGTH_LONG).show();
                     }
 
