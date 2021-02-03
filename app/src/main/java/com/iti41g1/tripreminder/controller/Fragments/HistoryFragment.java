@@ -7,33 +7,40 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.iti41g1.tripreminder.Adapters.TripHistoryRecyclerAdapter;
+import com.iti41g1.tripreminder.Models.Constants;
 import com.iti41g1.tripreminder.R;
-import com.iti41g1.tripreminder.Adapters.TripRecyclerAdapter;
+import com.iti41g1.tripreminder.Adapters.TripUpcomingRecyclerAdapter;
+import com.iti41g1.tripreminder.controller.activity.HomeActivity;
 import com.iti41g1.tripreminder.database.Trip;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class HistoryFragment extends Fragment {
+
     RecyclerView tripRecyclerView;
-    private TripRecyclerAdapter tripRecyclerAdapter;
+    private TripHistoryRecyclerAdapter tripRecyclerAdapter;
     ImageView emptyListImg;
     private List tripsList =new ArrayList<Trip>();
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        tripsListPrepare();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         tripRecyclerView=view.findViewById(R.id.trip_recycleView);
-        TripRecyclerAdapter tripRecyclerAdapter =new TripRecyclerAdapter(getContext(),tripsList);
+        tripRecyclerAdapter =new TripHistoryRecyclerAdapter(getContext(),tripsList);
         tripRecyclerView.setAdapter(tripRecyclerAdapter);
         emptyListImg=view.findViewById(R.id.emptyList_img);
     }
@@ -47,14 +54,35 @@ public class HistoryFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        if(tripsList.isEmpty())
-        {
+        if(tripsList.isEmpty()) {
             emptyListImg.setVisibility(View.VISIBLE);
             emptyListImg.setImageResource(R.drawable.preview);
         }
-        else
-        {
+        else {
             emptyListImg.setVisibility(View.GONE);
         }
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            getFragmentManager().beginTransaction().detach(this).attach(this).commit();
+        }
+    }
+
+    private void tripsListPrepare() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                // HomeActivity.database.tripDAO().insert(trip);
+                tripsList = HomeActivity.database.tripDAO().selectHistoryTrip(HomeActivity.fireBaseUseerId,"canceled","finished");
+                Log.i(Constants.LOG_TAG,"heerereeee");
+            }
+        }).start();
+    }
+    private void refreshList() {
+        tripRecyclerAdapter =new TripHistoryRecyclerAdapter(getContext(),tripsList);
+        tripRecyclerView.setAdapter(tripRecyclerAdapter);
     }
 }

@@ -8,6 +8,7 @@ import androidx.viewpager.widget.ViewPager;
 import android.os.Bundle;
 
 import com.google.android.material.tabs.TabLayout;
+import com.google.firebase.auth.FirebaseAuth;
 import com.iti41g1.tripreminder.R;
 import com.iti41g1.tripreminder.controller.Fragments.HistoryFragment;
 import com.iti41g1.tripreminder.controller.Fragments.ProfileFragment;
@@ -20,21 +21,22 @@ import java.util.List;
 
 public class HomeActivity extends AppCompatActivity {
 
-    private ViewPager viewPager;
+    public  ViewPager viewPager;
     private TabLayout tabLayout;
     private UpcomingFragment upcomingFragment;
     private ProfileFragment profileFragment;
     private HistoryFragment historyFragment;
     private List<Fragment> fragments;
     private List<String> fragmentTitles;
-    private ViewPagerAdaptor adaptor;
+    public ViewPagerAdaptor adaptor;
     public static TripDatabase database;
+    public static String fireBaseUseerId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-
+        fireBaseUseerId= FirebaseAuth.getInstance().getCurrentUser().getUid();
         //initalize DB
         database = Room.databaseBuilder(this, TripDatabase.class, "tripDB").build();
         //inflating views
