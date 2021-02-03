@@ -16,6 +16,7 @@ import android.widget.Button;
 import com.iti41g1.tripreminder.R;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import com.iti41g1.tripreminder.Adapters.AdapterAddNote;
 import com.iti41g1.tripreminder.Models.NoteModel;
@@ -24,7 +25,8 @@ public class FragmentAddNotes extends Fragment {
     AdapterAddNote adapter;
     LinearLayoutManager linearLayoutManager;
     Button   btnAddNote;
-    ArrayList<NoteModel>notes;
+    Button   btnSaveNotes;
+    ArrayList<String> notes;
     public static final String TAG="Notes";
 
     public FragmentAddNotes() {
@@ -40,6 +42,7 @@ public class FragmentAddNotes extends Fragment {
         // Inflate the layout for this fragment
         View view= inflater.inflate(R.layout.fragment_add_notes, container, false);
         btnAddNote=view.findViewById(R.id.btn_addNote);
+        btnSaveNotes=view.findViewById(R.id.btn_saveNotes);
         recyclerView=view.findViewById(R.id.recyclerView);
         notes=new ArrayList<>();
         adapter=new AdapterAddNote(notes,getContext());
@@ -47,14 +50,30 @@ public class FragmentAddNotes extends Fragment {
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(linearLayoutManager);
 
+
         Log.i(TAG, "onCreateView: ");
         btnAddNote.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.i(TAG, "onClick:add button ");
-                notes.add(new NoteModel("", false));
+                Log.i(TAG, "onClick:add button "+notes.toString());
+             //   notes.add(new NoteModel("", false));
+                notes.add("");
                 Log.i(TAG, notes.toString());
                 adapter.notifyDataSetChanged();
+            }
+        });
+        btnSaveNotes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!notes.isEmpty()){
+                    for(int i=0;i<notes.size();i++) {
+                        Log.i(TAG, "onClick:Savebutton " + notes.get(i));
+                    }
+                        Bundle result = new Bundle();
+                        result.putStringArrayList("bundleKey",notes);
+                        getParentFragmentManager().setFragmentResult("requestKey", result);
+                    Log.i(TAG, "onClick: "+result);
+                }
             }
         });
         return view;

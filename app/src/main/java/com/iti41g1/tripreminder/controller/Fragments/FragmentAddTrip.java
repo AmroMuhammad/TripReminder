@@ -1,5 +1,6 @@
 package com.iti41g1.tripreminder.controller.Fragments;
 
+import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
@@ -18,10 +19,13 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentResultListener;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -75,7 +79,7 @@ public class FragmentAddTrip extends Fragment {
     RecyclerView recyclerView;
     AdapterAddNote adapter;
     LinearLayoutManager linearLayoutManager;
-    ArrayList<NoteModel> notes;
+    ArrayList<String> notes;
     boolean isDateCorrect = false;
     boolean isTimeCorrect = false;
     boolean isDateCorrectRoundTrip = false;
@@ -99,7 +103,7 @@ public class FragmentAddTrip extends Fragment {
     Place placeStartPoint;
     Place placeEndPoint;
     FragmentManager f;
-    Fragment fragmentB;
+    Fragment fragmentAddNotes;
 
     public FragmentAddTrip() {
         // Required empty public constructor
@@ -109,6 +113,16 @@ public class FragmentAddTrip extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Places.initialize(getContext(), apiKey);
+        getParentFragmentManager().setFragmentResultListener("requestKey", this, new FragmentResultListener() {
+            @Override
+            public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle bundle) {
+                // We use a String here, but any type that can be put in a Bundle is supported
+                ArrayList<String> result=new ArrayList();
+                result = bundle.getStringArrayList("bundleKey");
+                Log.i(TAG, "onFragmentResult: "+result);
+                // Do something with the result
+            }
+        });
     }
 
     @Override
@@ -143,25 +157,40 @@ public class FragmentAddTrip extends Fragment {
         recyclerView.setLayoutManager(linearLayoutManager);
         constraintLayoutNotes = view.findViewById(R.id.layoutOfNotes);
         constraintLayoutRoundTrip = view.findViewById(R.id.constraintLayoutAddRound);
-
         Log.i(TAG, "onCreateView: ");
 
+
         btnAddNotes.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("ResourceType")
             @Override
             public void onClick(View v) {
-
+/*
                 constraintLayoutNotes.setVisibility(View.VISIBLE);
                 Log.i(TAG, "onClick:add button ");
                 notes.add(new NoteModel("", false));
                 Log.i(TAG, notes.toString());
                 adapter.notifyDataSetChanged();
-
+**/
 /*
-                    f=getFragmentManager();
-                    getChildFragmentManager();
-                    fragmentB = new FragmentAddNotes();
-                    f.beginTransaction().add(R.id.fragmentB, fragmentB, "fragment").commit();
-*/
+                fragmentAddNotes=new FragmentAddNotes();
+                FragmentManager fragmentManager = getChildFragmentManager();
+                fragmentManager.beginTransaction()
+                       .replace(R.layout.fragment_add_notes, fragmentAddNotes, null)
+                        .setReorderingAllowed(true)
+                        .addToBackStack("name") // name can be null
+                        .commit();**/
+
+                // Create new fragment and transaction
+                FragmentTransaction transaction = getFragmentManager().beginTransaction();
+             //   transaction.setReorderingAllowed(true);
+
+// Replace whatever is in the fragment_container view with this fragment
+                transaction.replace(R.id.fragmentB, FragmentAddNotes.class,null);
+                transaction.addToBackStack(null);
+
+
+// Commit the transaction
+                transaction.commit();
             }
         });
 
@@ -238,7 +267,7 @@ public class FragmentAddTrip extends Fragment {
             @Override
             public void onClick(View v) {
                 //checkData(v);
-                checkData();
+              //  checkData();
             }
         });
         return view;

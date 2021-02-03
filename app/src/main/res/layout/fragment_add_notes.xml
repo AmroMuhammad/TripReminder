@@ -2,13 +2,13 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     tools:context=".controller.Fragments.FragmentAddNotes">
 
     <androidx.constraintlayout.widget.ConstraintLayout
 
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="match_parent">
 
 
@@ -16,24 +16,24 @@
             android:id="@+id/btn_addNote"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="44dp"
+            android:layout_marginStart="167dp"
+            android:layout_marginTop="208dp"
             android:layout_marginEnd="4dp"
             android:text="@string/AddNote"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.086"
-            app:layout_constraintStart_toEndOf="@+id/recyclerView"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintStart_toStartOf="@+id/btn_saveNotes"
+            app:layout_constraintTop_toBottomOf="@+id/txtView_noteTitle" />
 
         <Button
             android:id="@+id/btn_saveNotes"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="228dp"
             android:text="@string/SaveNotes"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.906"
+            app:layout_constraintHorizontal_bias="0.446"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/btn_addNote" />
 
@@ -42,7 +42,22 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="144dp"
+            app:layout_constraintBottom_toTopOf="@+id/btn_saveNotes"
+            app:layout_constraintEnd_toStartOf="@+id/btn_addNote"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txtView_noteTitle"
+            app:layout_constraintVertical_bias="0.344" />
+
+        <TextView
+            android:id="@+id/txtView_noteTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="44dp"
+            android:text="TextView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.447"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
