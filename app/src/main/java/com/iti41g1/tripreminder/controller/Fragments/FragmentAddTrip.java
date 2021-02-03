@@ -21,6 +21,7 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -30,6 +31,8 @@ import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.widget.Autocomplete;
 import com.google.android.libraries.places.widget.AutocompleteActivity;
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.iti41g1.tripreminder.R;
 import com.iti41g1.tripreminder.Models.Constants;
 
@@ -44,6 +47,8 @@ import java.util.TimeZone;
 
 import com.iti41g1.tripreminder.Adapters.AdapterAddNote;
 import com.iti41g1.tripreminder.Models.NoteModel;
+import com.iti41g1.tripreminder.controller.activity.HomeActivity;
+import com.iti41g1.tripreminder.database.Trip;
 
 import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
@@ -91,9 +96,10 @@ public class FragmentAddTrip extends Fragment {
     final int day = calender.get(Calendar.DAY_OF_MONTH);
     Boolean isRound = false;
     //Trip tripModel = new Trip();
-    Place place;
-
-
+    Place placeStartPoint;
+    Place placeEndPoint;
+    FragmentManager f;
+    Fragment fragmentB;
 
     public FragmentAddTrip() {
         // Required empty public constructor
@@ -143,11 +149,19 @@ public class FragmentAddTrip extends Fragment {
         btnAddNotes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 constraintLayoutNotes.setVisibility(View.VISIBLE);
                 Log.i(TAG, "onClick:add button ");
                 notes.add(new NoteModel("", false));
                 Log.i(TAG, notes.toString());
                 adapter.notifyDataSetChanged();
+
+/*
+                    f=getFragmentManager();
+                    getChildFragmentManager();
+                    fragmentB = new FragmentAddNotes();
+                    f.beginTransaction().add(R.id.fragmentB, fragmentB, "fragment").commit();
+*/
             }
         });
 
@@ -224,6 +238,7 @@ public class FragmentAddTrip extends Fragment {
             @Override
             public void onClick(View v) {
                 //checkData(v);
+                checkData();
             }
         });
         return view;
@@ -233,12 +248,12 @@ public class FragmentAddTrip extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if (requestCode == AUTOCOMPLETE_REQUEST_CODE_STARTPOINT) {
             if (resultCode == RESULT_OK) {
-                place = Autocomplete.getPlaceFromIntent(data);
+                placeStartPoint = Autocomplete.getPlaceFromIntent(data);
 
-                Log.i(TAG, "Place: " + place.getName() + ", " + place.getId());
-                if (place.getLatLng() != null) {
-                    editTextStartPoint.setText(place.getName());
-                    Log.i(TAG, "Place: " + place.getLatLng());
+                Log.i(TAG, "Place: " + placeStartPoint.getName() + ", " + placeStartPoint.getId());
+                if (placeStartPoint.getLatLng() != null) {
+                    editTextStartPoint.setText(placeStartPoint.getName());
+                    Log.i(TAG, "Place: " + placeStartPoint.getLatLng());
                 }
 
             } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
@@ -251,9 +266,9 @@ public class FragmentAddTrip extends Fragment {
             return;
         } else if (requestCode == AUTOCOMPLETE_REQUEST_CODE_ENDPOINT) {
             if (resultCode == RESULT_OK) {
-                Place place = Autocomplete.getPlaceFromIntent(data);
-                Log.i(TAG, "Place: " + place.getName() + ", " + place.getId());
-                editTextEndPoint.setText(place.getName());
+                placeEndPoint  = Autocomplete.getPlaceFromIntent(data);
+                Log.i(TAG, "Place: " + placeEndPoint.getName() + ", " + placeEndPoint.getId());
+                editTextEndPoint.setText(placeEndPoint.getName());
             } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
                 // TODO: Handle the error.
                 Status status = Autocomplete.getStatusFromIntent(data);
@@ -450,7 +465,7 @@ public class FragmentAddTrip extends Fragment {
 //                        tripModel.setTripType("one Direction");
 //                        tripModel.setDate2(null);
 //                        tripModel.setTime2(null);
-//                    } else if (!TextUtils.isEmpty(textViewDate2.getText().toString())
+//                    } else if (!TextUtils.isEm)
 //                            && !TextUtils.isEmpty(textViewTime2.getText().toString())) {
 //                        tripModel.setTripType("round Trip");
 //                        tripModel.setDate2(new TripModel.Date(day, month, year));
@@ -476,5 +491,79 @@ public class FragmentAddTrip extends Fragment {
 //            Toast.makeText(getContext(), "Please Enter Valid data", Toast.LENGTH_LONG).show();
 //        }
 //    }
+
+    public void checkData(){
+        Log.i(TAG, "checkData: ");
+        if(!TextUtils.isEmpty(editTextTripName.getText())){
+            if(!TextUtils.isEmpty(editTextStartPoint.getText())){
+                if(!TextUtils.isEmpty(editTextEndPoint.getText())){
+                    if(!TextUtils.isEmpty(textViewDate.getText())){
+                        if(!TextUtils.isEmpty(textViewTime.getText())){
+                            FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+                            FirebaseUser user = firebaseAuth.getCurrentUser();
+                                //create one obj for one direction
+                                assert user != null;
+                                Trip trip=new Trip(user.getUid(),editTextTripName.getText().toString(),placeStartPoint.getName(),
+                                        placeEndPoint.getName(),placeEndPoint.getLatLng().latitude,placeEndPoint.getLatLng().longitude,
+                                        textViewDate.getText().toString(),textViewTime.getText().toString(),R.drawable.preview,
+                                        "upcomming");
+                            Log.i(TAG, "checkData:mmmmmm "+trip.getTripName()+trip.getDate()+trip.getTime()+
+                                    trip.getEndPoint()+trip.getStartPoint()+trip.getTripStatus());
+                                insertRoom(trip);
+
+                            if(isRound){
+                                if(!TextUtils.isEmpty(textViewDate2.getText())){
+                                    if(!TextUtils.isEmpty(textViewTime2.getText())){
+
+                                //create two obj
+                                Trip tripRound=new Trip(user.getUid(),editTextTripName.getText().toString()+"Round",placeEndPoint.getName(),
+                                        placeStartPoint.getName(),placeStartPoint.getLatLng().latitude,placeStartPoint.getLatLng().longitude,
+                                        textViewDate2.getText().toString(),textViewTime2.getText().toString(),R.drawable.preview,
+                                        "upcomming");
+                                insertRoom(tripRound);
+                            }else{
+                                        editTextStartPoint.setError("Valid Time");
+                                        Toast.makeText(getContext(),"Please, Enter Valid Time for round",Toast.LENGTH_LONG).show();
+                                    }
+                                }else{
+                                    editTextStartPoint.setError("Valid Date");
+                                    Toast.makeText(getContext(),"Please, Enter Valid Date for round",Toast.LENGTH_LONG).show();
+                                }}
+                        }else{
+                            editTextStartPoint.setError("Valid Time");
+                            Toast.makeText(getContext(),"Please, Enter Valid Time",Toast.LENGTH_LONG).show();
+                        }
+                    }else{
+                        editTextStartPoint.setError("Please Enter Valid Date");
+                        Toast.makeText(getContext(),"Please, Enter Valid Date",Toast.LENGTH_LONG).show();
+                    }
+
+                }else{
+                    editTextStartPoint.setError(" Required End Point");
+                    Toast.makeText(getContext(),"Please, Required End Point",Toast.LENGTH_LONG).show();
+                }
+
+            }else{
+                editTextStartPoint.setError("Please Enter Valid Start Point");
+                Toast.makeText(getContext(),"Please, Required Start Point",Toast.LENGTH_LONG).show();
+            }
+        }else{
+            editTextTripName.setError("Required");
+            Toast.makeText(getContext(),"Please, Required Trip Name",Toast.LENGTH_LONG).show();
+
+        }
+    }
+
+    private void insertRoom(Trip trip) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                HomeActivity.database.tripDAO().insert(trip);
+            }
+        }).start();
+
+        Log.i(TAG, "insertRoom: ");
+
+    }
 
 }
