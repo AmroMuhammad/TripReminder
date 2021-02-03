@@ -3,11 +3,14 @@ package com.iti41g1.tripreminder.database;
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
+import androidx.room.TypeConverter;
+import androidx.room.TypeConverters;
 
+import java.io.Serializable;
 import java.util.List;
 
 @Entity(tableName = "Trip")
-public class Trip {
+public class Trip  implements Serializable {
 
     @NonNull
     private String userID;
@@ -32,9 +35,18 @@ public class Trip {
     private  String time;
     @NonNull
     private  int tripImg;
-
-   // private List<String> notes;
+    @NonNull
     private String tripStatus;
+    @TypeConverters(DataConverter.class)
+    private List<String> notes;
+
+    public List<String> getNotes() {
+        return notes;
+    }
+
+    public void setNotes(List<String> notes) {
+        this.notes = notes;
+    }
 
     public Trip(@NonNull String userID, @NonNull String tripName, @NonNull String startPoint,
                 @NonNull String endPoint, @NonNull double endPointLat, @NonNull double endPointLong,

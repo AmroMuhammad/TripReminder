@@ -104,6 +104,7 @@ public class FragmentAddTrip extends Fragment {
     Place placeEndPoint;
     FragmentManager f;
     Fragment fragmentAddNotes;
+    ArrayList<String> result;
 
     public FragmentAddTrip() {
         // Required empty public constructor
@@ -117,7 +118,7 @@ public class FragmentAddTrip extends Fragment {
             @Override
             public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle bundle) {
                 // We use a String here, but any type that can be put in a Bundle is supported
-                ArrayList<String> result=new ArrayList();
+                result=new ArrayList();
                 result = bundle.getStringArrayList("bundleKey");
                 Log.i(TAG, "onFragmentResult: "+result);
                 // Do something with the result
@@ -267,7 +268,7 @@ public class FragmentAddTrip extends Fragment {
             @Override
             public void onClick(View v) {
                 //checkData(v);
-              //  checkData();
+                checkData();
             }
         });
         return view;
@@ -474,52 +475,7 @@ public class FragmentAddTrip extends Fragment {
         Log.i(TAG, "onRadioButtonClicked: " + ((RadioButton) view).getText());
         return isRound;
     }
-
-//    public void checkData(View v) {
-//        Log.i(TAG, "checkData: ");
-//        if (!TextUtils.isEmpty(editTextTripName.getText().toString())) {
-//            Log.i(TAG, "checkData: name n" + editTextTripName.getText());
-//            if (!TextUtils.isEmpty(editTextStartPoint.getText().toString())
-//                    && !TextUtils.isEmpty(editTextEndPoint.getText().toString())) {
-//                if (!TextUtils.isEmpty(textViewDate.getText().toString()) && !TextUtils.isEmpty(textViewTime.getText().toString())) {
-//                    if (adapter.getNotesList() != null) {
-//                        tripModel.setNotes(adapter.getNotesList());
-//                    }
-//                    tripModel.setTripName(editTextTripName.getText().toString());
-//                    tripModel.setLocation(new TripModel.Location(place.getLatLng().latitude, place.getLatLng().longitude));
-//                    tripModel.setDate(new TripModel.Date(day, month, year));
-//                    tripModel.setTime2(new TripModel.Time(hour, minute));
-//                    Log.i(TAG, "checkData: trip ");
-//                    if (!isRound) {
-//                        tripModel.setTripType("one Direction");
-//                        tripModel.setDate2(null);
-//                        tripModel.setTime2(null);
-//                    } else if (!TextUtils.isEm)
-//                            && !TextUtils.isEmpty(textViewTime2.getText().toString())) {
-//                        tripModel.setTripType("round Trip");
-//                        tripModel.setDate2(new TripModel.Date(day, month, year));
-//                        tripModel.setTime2(new TripModel.Time(hour, minute));
-//                    } else {
-//                        textViewDate2.setError("Required");
-//                        textViewTime.setError("Required");
-//                        Toast.makeText(getContext(), "Please Enter Date and Time", Toast.LENGTH_LONG).show();
-//                    }
-//                    Log.i(TAG, "checkData: " + tripModel.getTripName().toString() + "/" + tripModel.getLocation());
-//                } else {
-//                    textViewDate.setError("Required");
-//                    textViewTime.setError("Required");
-//                    Toast.makeText(getContext(), "Please Enter Date and Time", Toast.LENGTH_LONG).show();
-//                }
-//            } else {
-//                editTextStartPoint.setError("Required");
-//                editTextEndPoint.setError("Required");
-//                Toast.makeText(getContext(), "Please Enter Start and End Point", Toast.LENGTH_LONG).show();
-//            }
-//            Log.i(TAG, "checkData: " + tripModel);
-//        } else {
-//            Toast.makeText(getContext(), "Please Enter Valid data", Toast.LENGTH_LONG).show();
-//        }
-//    }
+    
 
     public void checkData(){
         Log.i(TAG, "checkData: ");
@@ -539,6 +495,9 @@ public class FragmentAddTrip extends Fragment {
                             Log.i(TAG, "checkData:mmmmmm "+trip.getTripName()+trip.getDate()+trip.getTime()+
                                     trip.getEndPoint()+trip.getStartPoint()+trip.getTripStatus());
                                 insertRoom(trip);
+                            if(result!=null){
+                                trip.setNotes(result);
+                            }
 
                             if(isRound){
                                 if(!TextUtils.isEmpty(textViewDate2.getText())){
@@ -550,6 +509,9 @@ public class FragmentAddTrip extends Fragment {
                                         textViewDate2.getText().toString(),textViewTime2.getText().toString(),R.drawable.preview,
                                         "upcomming");
                                 insertRoom(tripRound);
+                                        if(result!=null){
+                                            tripRound.setNotes(result);
+                                        }
                             }else{
                                         editTextStartPoint.setError("Valid Time");
                                         Toast.makeText(getContext(),"Please, Enter Valid Time for round",Toast.LENGTH_LONG).show();

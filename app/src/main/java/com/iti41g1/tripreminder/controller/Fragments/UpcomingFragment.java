@@ -53,7 +53,7 @@ public class UpcomingFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         tripRecyclerView=view.findViewById(R.id.trip_recycleView);
-        Trip trip = new Trip("123","maa","gize","pyramids",30.0594,31.2195,"2/10/2020","10:25",R.id.trip_img,"upcoming");
+   //     Trip trip = new Trip("123","maa","gize","pyramids",30.0594,31.2195,"2/10/2020","10:25",R.id.trip_img,"upcoming");
 
         TripRecyclerAdapter tripRecyclerAdapter =new TripRecyclerAdapter(getContext(),tripsList);
         tripRecyclerView.setAdapter(tripRecyclerAdapter);
