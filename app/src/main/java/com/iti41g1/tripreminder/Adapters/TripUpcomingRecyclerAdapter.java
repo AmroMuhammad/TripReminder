@@ -61,7 +61,7 @@ public class TripUpcomingRecyclerAdapter extends RecyclerView.Adapter<TripUpcomi
         holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-               openDaialog(((Trip) tripList.get(position)),position);
+               openDaialog(((Trip) tripList.get(position)),position-1);
                 tripList.remove((Trip) tripList.get(position));
                 return false;
             }
@@ -100,7 +100,8 @@ public class TripUpcomingRecyclerAdapter extends RecyclerView.Adapter<TripUpcomi
                                        // tripList.remove(trip);
                                     }
                                 }).start();
-                                notifyItemRemoved(position);
+                              //  notifyItemRemoved(position);
+                                notifyDataSetChanged();
                             }
                         });
 

@@ -1,5 +1,6 @@
 package com.iti41g1.tripreminder.controller.Fragments;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -33,12 +34,13 @@ public class HistoryFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        tripsListPrepare();
+       // tripsListPrepare();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        new LoadRoomData().execute();
         tripRecyclerView=view.findViewById(R.id.trip_recycleView);
         tripRecyclerAdapter =new TripHistoryRecyclerAdapter(getContext(),tripsList);
         tripRecyclerView.setAdapter(tripRecyclerAdapter);
@@ -51,25 +53,8 @@ public class HistoryFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_history, container, false);
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        if(tripsList.isEmpty()) {
-            emptyListImg.setVisibility(View.VISIBLE);
-            emptyListImg.setImageResource(R.drawable.preview);
-        }
-        else {
-            emptyListImg.setVisibility(View.GONE);
-        }
-    }
 
-    @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        super.setUserVisibleHint(isVisibleToUser);
-        if (isVisibleToUser) {
-            getFragmentManager().beginTransaction().detach(this).attach(this).commit();
-        }
-    }
+
 
     private void tripsListPrepare() {
         new Thread(new Runnable() {
@@ -81,8 +66,27 @@ public class HistoryFragment extends Fragment {
             }
         }).start();
     }
-    private void refreshList() {
-        tripRecyclerAdapter =new TripHistoryRecyclerAdapter(getContext(),tripsList);
-        tripRecyclerView.setAdapter(tripRecyclerAdapter);
+    private class LoadRoomData extends AsyncTask<Void,Void,List<Trip>> {
+
+        @Override
+        protected List<Trip> doInBackground(Void... voids) {
+
+            return HomeActivity.database.tripDAO().selectHistoryTrip(HomeActivity.fireBaseUseerId,"canceled","finished");
+        }
+
+        @Override
+        protected void onPostExecute(List<Trip> trips) {
+            super.onPostExecute(trips);
+            tripsList = trips;
+            if(tripsList.isEmpty()) {
+                emptyListImg.setVisibility(View.VISIBLE);
+                emptyListImg.setImageResource(R.drawable.preview);
+            }
+            else {
+                emptyListImg.setVisibility(View.GONE);
+            }
+            tripRecyclerAdapter =new TripHistoryRecyclerAdapter(getContext(),tripsList);
+            tripRecyclerView.setAdapter(tripRecyclerAdapter);
+        }
     }
 }

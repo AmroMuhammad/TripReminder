@@ -79,7 +79,8 @@ public class TripHistoryRecyclerAdapter extends RecyclerView.Adapter<TripHistory
 
                             }
                         }).start();
-                        notifyItemRemoved(position);
+                      //  notifyItemRemoved(position);
+                        notifyDataSetChanged();
                     }
                 });
 

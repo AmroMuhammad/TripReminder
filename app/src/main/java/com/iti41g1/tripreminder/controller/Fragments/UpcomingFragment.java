@@ -1,6 +1,7 @@
 package com.iti41g1.tripreminder.controller.Fragments;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -15,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.iti41g1.tripreminder.Adapters.TripHistoryRecyclerAdapter;
 import com.iti41g1.tripreminder.Models.Constants;
 import com.iti41g1.tripreminder.R;
 import com.iti41g1.tripreminder.Adapters.TripUpcomingRecyclerAdapter;
@@ -35,22 +37,23 @@ public class UpcomingFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        tripsListPrepare();
+      //  tripsListPrepare();
 
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        new LoadRoomData().execute();
         tripRecyclerView=view.findViewById(R.id.trip_recycleView);
         //Trip trip = new Trip("123","maa","gize","pyramids",30.0594,31.2195,"2/10/2020","10:25",R.id.trip_img,"upcoming");
 
         tripUpcomingRecyclerAdapter =new TripUpcomingRecyclerAdapter(getContext(),tripsList);
-        tripRecyclerView.setAdapter(tripUpcomingRecyclerAdapter);
         Log.i(Constants.LOG_TAG,"asdasdas");
         emptyListImg=view.findViewById(R.id.emptyList_img);
         floatingBtnAdd = view.findViewById(R.id.add_flout_btn);
         initializeAddTrip();
+
 
     }
 
@@ -60,27 +63,7 @@ public class UpcomingFragment extends Fragment {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_upcoming, container, false);
     }
-    @Override
-    public void onStart() {
-        super.onStart();
-        if(tripsList.isEmpty())
-        {
-            emptyListImg.setVisibility(View.VISIBLE);
-            emptyListImg.setImageResource(R.drawable.preview);
-        }
-        else
-        {
-            emptyListImg.setVisibility(View.GONE);
-        }
-       // tripsListPrepare();
-    }
-    @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        super.setUserVisibleHint(isVisibleToUser);
-        if (isVisibleToUser) {
-            getFragmentManager().beginTransaction().detach(this).attach(this).commit();
-        }
-    }
+
     private void tripsListPrepare() {
         new Thread(new Runnable() {
             @Override
@@ -113,5 +96,28 @@ public class UpcomingFragment extends Fragment {
                 //startActivity(new Intent(getContext(), AddTripActivity.class));
             }
         });
+    }
+
+    private class LoadRoomData extends AsyncTask<Void,Void,List<Trip>> {
+
+        @Override
+        protected List<Trip> doInBackground(Void... voids) {
+            return HomeActivity.database.tripDAO().selectUpcomingTrip(HomeActivity.fireBaseUseerId,"upcoming");
+        }
+
+        @Override
+        protected void onPostExecute(List<Trip> trips) {
+            super.onPostExecute(trips);
+            tripsList = trips;
+            if(tripsList.isEmpty()) {
+                emptyListImg.setVisibility(View.VISIBLE);
+                emptyListImg.setImageResource(R.drawable.preview);
+            }
+            else {
+                emptyListImg.setVisibility(View.GONE);
+            }
+            tripUpcomingRecyclerAdapter =new TripUpcomingRecyclerAdapter(getContext(),tripsList);
+            tripRecyclerView.setAdapter(tripUpcomingRecyclerAdapter);
+        }
     }
 }
