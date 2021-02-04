@@ -2,6 +2,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/frame"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".controller.Fragments.FragmentAddTrip">
@@ -9,295 +10,308 @@
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scrollbars="vertical">
-
-        <Button
-            android:id="@+id/btn_saveTrip"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="4dp"
-            android:text="@string/Add"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/constraintLayoutAddRound"/>
-
-        <Button
-            android:id="@+id/btn_addNotes"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
-            android:layout_marginTop="56dp"
-            android:text="@string/AddNotes"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/txtView_ChooseTime" />
-
-        <EditText
-            android:id="@+id/ediTxt_tripName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
-            android:layout_marginTop="24dp"
-            android:autofillHints=""
-            android:ems="10"
-            android:hint="@string/TripName"
-            android:inputType="textPersonName"
-            app:layout_constraintStart_toEndOf="@+id/txtView_tripName"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <EditText
-            android:id="@+id/editTxt_startPoint"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="28dp"
-            android:layout_marginTop="20dp"
-            android:autofillHints=""
-            android:ems="10"
-            android:hint="@string/StartPoint"
-            android:inputType="textPersonName"
-            app:layout_constraintStart_toEndOf="@+id/txtView_startPoint"
-            app:layout_constraintTop_toBottomOf="@+id/ediTxt_tripName" />
-
-        <EditText
-            android:id="@+id/editTxt_endPoint"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="36dp"
-            android:layout_marginTop="16dp"
-            android:autofillHints=""
-            android:ems="10"
-            android:hint="@string/EndPoint"
-            android:inputType="textPersonName"
-            app:layout_constraintStart_toEndOf="@+id/txtView_endPoint"
-            app:layout_constraintTop_toBottomOf="@+id/editTxt_startPoint" />
-
-        <ImageButton
-            android:id="@+id/btn_date"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="52dp"
-            android:contentDescription="TODO"
-            android:src="@drawable/ic_baseline_calendar_today_24"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.4"
-            app:layout_constraintStart_toEndOf="@+id/txtView_chooseDate"
-            app:layout_constraintTop_toBottomOf="@+id/editTxt_endPoint" />
-
-        <ImageButton
-            android:id="@+id/btn_time"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="104dp"
-            android:layout_marginTop="24dp"
-            android:contentDescription="TODO"
-            android:src="@drawable/ic_baseline_access_time_24"
-            app:layout_constraintStart_toEndOf="@+id/txtView_ChooseTime"
-            app:layout_constraintTop_toBottomOf="@+id/btn_date" />
-
-        <RadioGroup
-            android:id="@+id/radioGroup_typeTrip"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
-            android:layout_marginTop="24dp"
-            android:orientation="horizontal"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btn_addNotes">
-
-            <RadioButton
-                android:id="@+id/radioBtn_oneDirection"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/SingleTrip"
-                android:checked="true"/>
-
-            <RadioButton
-                android:id="@+id/radioBtn_roundTrip"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/RoundTrip" />
-        </RadioGroup>
-
-        <TextView
-            android:id="@+id/txtView_endPoint"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="40dp"
-            android:text="@string/EndPoint"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/txtView_startPoint" />
-
-        <TextView
-            android:id="@+id/txtView_startPoint"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="56dp"
-            android:text="@string/StartPoint"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/txtView_tripName" />
-
-        <TextView
-            android:id="@+id/txtView_chooseDate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="84dp"
-            android:text="@string/ChooseDate"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/txtView_endPoint" />
-
-        <TextView
-            android:id="@+id/txtView_tripName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="24dp"
-            android:text="@string/TripName"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-
-        <TextView
-            android:id="@+id/txtView_ChooseTime"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="44dp"
-            android:text="@string/ChooseTime"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/txtView_chooseDate" />
-
-        <TextView
-            android:id="@+id/txtView_date"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="12dp"
-            android:layout_marginBottom="13dp"
-            app:layout_constraintBottom_toTopOf="@+id/txtView_ChooseTime"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/txtView_chooseDate"
-            app:layout_constraintVertical_bias="1.0" />
-
-        <TextView
-            android:id="@+id/txtview_time"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
-            app:layout_constraintBottom_toTopOf="@+id/btn_addNotes"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/txtView_ChooseTime"
-            app:layout_constraintVertical_bias="0.315" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/layoutOfNotes"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginEnd="4dp"
-            android:visibility="gone"
-            app:layout_constraintBottom_toTopOf="@+id/radioGroup_typeTrip"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toEndOf="@+id/btn_addNotes"
-            app:layout_constraintTop_toBottomOf="@+id/btn_time">
+            android:id="@+id/container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbars="vertical">
 
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerView"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
+            <Button
+                android:id="@+id/btn_saveTrip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
+                android:text="@string/Add"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.498"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/constraintLayoutAddRound"
-            android:layout_width="253dp"
-            android:layout_height="144dp"
-            android:visibility="gone"
-            app:layout_constraintBottom_toTopOf="@+id/btn_saveTrip"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/radioGroup_typeTrip">
-
-            <ImageButton
-                android:id="@+id/btn_date2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="16dp"
-                android:contentDescription="TODO"
-                android:src="@drawable/ic_baseline_calendar_today_24"
-                app:layout_constraintBottom_toTopOf="@id/btn_time2"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintLeft_toRightOf="@id/txtView_chooseDate2"
                 app:layout_constraintTop_toBottomOf="@id/constraintLayoutAddRound" />
 
-            <ImageButton
-                android:id="@+id/btn_time2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
-                android:layout_marginEnd="16dp"
-                android:contentDescription="TODO"
-                android:src="@drawable/ic_baseline_access_time_24"
-                app:layout_constraintBottom_toTopOf="@id/constraintLayoutAddRound"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintLeft_toRightOf="@id/txtView_ChooseTime2"
-                app:layout_constraintTop_toBottomOf="@id/btn_date2" />
-
-            <TextView
-                android:id="@+id/txtView_chooseDate2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:text="@string/ChooseDate"
-                app:layout_constraintLeft_toLeftOf="@id/constraintLayoutAddRound"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/txtView_ChooseTime2"
+            <Button
+                android:id="@+id/btn_addNotes"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="12dp"
+                android:layout_marginTop="56dp"
+                android:text="@string/AddNotes"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/txtView_ChooseTime" />
+
+            <EditText
+                android:id="@+id/ediTxt_tripName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="24dp"
+                android:autofillHints=""
+                android:ems="10"
+                android:hint="@string/TripName"
+                android:inputType="textPersonName"
+                app:layout_constraintStart_toEndOf="@+id/txtView_tripName"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <EditText
+                android:id="@+id/editTxt_startPoint"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="28dp"
+                android:layout_marginTop="20dp"
+                android:autofillHints=""
+                android:ems="10"
+                android:hint="@string/StartPoint"
+                android:inputType="textPersonName"
+                app:layout_constraintStart_toEndOf="@+id/txtView_startPoint"
+                app:layout_constraintTop_toBottomOf="@+id/ediTxt_tripName" />
+
+            <EditText
+                android:id="@+id/editTxt_endPoint"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="36dp"
+                android:layout_marginTop="16dp"
+                android:autofillHints=""
+                android:ems="10"
+                android:hint="@string/EndPoint"
+                android:inputType="textPersonName"
+                app:layout_constraintStart_toEndOf="@+id/txtView_endPoint"
+                app:layout_constraintTop_toBottomOf="@+id/editTxt_startPoint" />
+
+            <FrameLayout
+                android:id="@+id/fragment_addNotes"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.487">
+
+            </FrameLayout>
+
+            <ImageButton
+                android:id="@+id/btn_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="52dp"
+                android:contentDescription="TODO"
+                android:src="@drawable/ic_baseline_calendar_today_24"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.4"
+                app:layout_constraintStart_toEndOf="@+id/txtView_chooseDate"
+                app:layout_constraintTop_toBottomOf="@+id/editTxt_endPoint" />
+
+            <ImageButton
+                android:id="@+id/btn_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="104dp"
+                android:layout_marginTop="24dp"
+                android:contentDescription="TODO"
+                android:src="@drawable/ic_baseline_access_time_24"
+                app:layout_constraintStart_toEndOf="@+id/txtView_ChooseTime"
+                app:layout_constraintTop_toBottomOf="@+id/btn_date" />
+
+            <RadioGroup
+                android:id="@+id/radioGroup_typeTrip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="24dp"
+                android:orientation="horizontal"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/btn_addNotes">
+
+                <RadioButton
+                    android:id="@+id/radioBtn_oneDirection"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:text="@string/SingleTrip" />
+
+                <RadioButton
+                    android:id="@+id/radioBtn_roundTrip"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/RoundTrip" />
+            </RadioGroup>
+
+            <TextView
+                android:id="@+id/txtView_endPoint"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="40dp"
+                android:text="@string/EndPoint"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/txtView_startPoint" />
+
+            <TextView
+                android:id="@+id/txtView_startPoint"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="56dp"
+                android:text="@string/StartPoint"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/txtView_tripName" />
+
+            <TextView
+                android:id="@+id/txtView_chooseDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="84dp"
+                android:text="@string/ChooseDate"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/txtView_endPoint" />
+
+
+            <TextView
+                android:id="@+id/txtView_tripName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="24dp"
+                android:text="@string/TripName"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/txtView_ChooseTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
                 android:layout_marginTop="44dp"
                 android:text="@string/ChooseTime"
-                app:layout_constraintLeft_toLeftOf="@id/constraintLayoutAddRound"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/txtView_chooseDate2" />
+                app:layout_constraintTop_toBottomOf="@+id/txtView_chooseDate" />
 
             <TextView
-                android:id="@+id/txtView_Date2"
+                android:id="@+id/txtView_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="4dp"
-                android:layout_marginBottom="21dp"
-                app:layout_constraintBottom_toTopOf="@+id/txtView_ChooseTime2"
-                app:layout_constraintLeft_toLeftOf="@id/constraintLayoutAddRound"
+                android:layout_marginTop="12dp"
+                android:layout_marginBottom="13dp"
+                app:layout_constraintBottom_toTopOf="@+id/txtView_ChooseTime"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/txtView_chooseDate2" />
+                app:layout_constraintTop_toBottomOf="@+id/txtView_chooseDate"
+                app:layout_constraintVertical_bias="1.0" />
 
             <TextView
-                android:id="@+id/txtView_Time2"
+                android:id="@+id/txtview_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="20dp"
-                app:layout_constraintLeft_toLeftOf="@id/constraintLayoutAddRound"
+                android:layout_marginStart="12dp"
+                app:layout_constraintBottom_toTopOf="@+id/btn_addNotes"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/txtView_ChooseTime2" />
+                app:layout_constraintTop_toBottomOf="@+id/txtView_ChooseTime"
+                app:layout_constraintVertical_bias="0.315" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/layoutOfNotes"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginEnd="4dp"
+                android:visibility="gone"
+                app:layout_constraintBottom_toTopOf="@+id/radioGroup_typeTrip"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toEndOf="@+id/btn_addNotes"
+                app:layout_constraintTop_toBottomOf="@+id/btn_time">
+
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerView"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/constraintLayoutAddRound"
+                android:layout_width="253dp"
+                android:layout_height="144dp"
+                android:visibility="gone"
+                app:layout_constraintBottom_toTopOf="@+id/btn_saveTrip"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/radioGroup_typeTrip">
+
+                <ImageButton
+                    android:id="@+id/btn_date2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:contentDescription="TODO"
+                    android:src="@drawable/ic_baseline_calendar_today_24"
+                    app:layout_constraintBottom_toTopOf="@id/btn_time2"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintLeft_toRightOf="@id/txtView_chooseDate2"
+                    app:layout_constraintTop_toBottomOf="@id/constraintLayoutAddRound" />
+
+                <ImageButton
+                    android:id="@+id/btn_time2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="32dp"
+                    android:layout_marginEnd="16dp"
+                    android:contentDescription="TODO"
+                    android:src="@drawable/ic_baseline_access_time_24"
+                    app:layout_constraintBottom_toTopOf="@id/constraintLayoutAddRound"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintLeft_toRightOf="@id/txtView_ChooseTime2"
+                    app:layout_constraintTop_toBottomOf="@id/btn_date2" />
+
+                <TextView
+                    android:id="@+id/txtView_chooseDate2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:text="@string/ChooseDate"
+                    app:layout_constraintLeft_toLeftOf="@id/constraintLayoutAddRound"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/txtView_ChooseTime2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginTop="44dp"
+                    android:text="@string/ChooseTime"
+                    app:layout_constraintLeft_toLeftOf="@id/constraintLayoutAddRound"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/txtView_chooseDate2" />
+
+                <TextView
+                    android:id="@+id/txtView_Date2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginBottom="21dp"
+                    app:layout_constraintBottom_toTopOf="@+id/txtView_ChooseTime2"
+                    app:layout_constraintLeft_toLeftOf="@id/constraintLayoutAddRound"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/txtView_chooseDate2" />
+
+                <TextView
+                    android:id="@+id/txtView_Time2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="20dp"
+                    app:layout_constraintLeft_toLeftOf="@id/constraintLayoutAddRound"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/txtView_ChooseTime2" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
         </androidx.constraintlayout.widget.ConstraintLayout>
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 </FrameLayout>

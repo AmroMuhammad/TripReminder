@@ -3,6 +3,7 @@ package com.iti41g1.tripreminder.Adapters;
 import android.content.Context;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,15 +15,17 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.iti41g1.tripreminder.R;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import com.iti41g1.tripreminder.Models.NoteModel;
+import com.iti41g1.tripreminder.controller.Fragments.FragmentAddNotes;
 
 public class AdapterAddNote extends RecyclerView.Adapter<AdapterAddNote.viewHolder> {
     @NonNull
 
-    ArrayList<NoteModel> notesList;
+    List<String> notesList;
     Context context;
-    public AdapterAddNote(ArrayList<NoteModel> notesList, Context context){
+    public AdapterAddNote(List<String> notesList, Context context){
         this.context=context;
         this.notesList=notesList;
     }
@@ -32,20 +35,23 @@ public class AdapterAddNote extends RecyclerView.Adapter<AdapterAddNote.viewHold
                 .inflate(R.layout.note_row, parent, false);
         EditText editText = view.findViewById(R.id.editTxtNote);
         editText.setText("");
+        Log.i(FragmentAddNotes.TAG, "onCreateViewHolder: "+notesList.toString());
         return new viewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull AdapterAddNote.viewHolder holder, int position) {
-        if (notesList.get(position).getNote().length() > 0)
-            holder.note.setText(notesList.get(position).getNote());
+       if (notesList.get(position).length() > 0)
+            holder.getEditText().setText(notesList.get(position));
+          //  holder.note.setText("");
+        Log.i(FragmentAddNotes.TAG, "onBindViewHolder: "+notesList.get(position));
     }
 
     @Override
     public int getItemCount() {
         return notesList.size();
     }
-    public ArrayList<NoteModel> getNotesList(){
+    public List<String> getNotesList(){
         return notesList;
     }
 
@@ -62,8 +68,9 @@ public class AdapterAddNote extends RecyclerView.Adapter<AdapterAddNote.viewHold
 
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    notesList.set(getAdapterPosition(),new NoteModel(s.toString(),
-                            notesList.get(getAdapterPosition()).getChecked()));
+                   // notesList.set(getAdapterPosition(),new NoteModel(s.toString(),
+                            //notesList.get(getAdapterPosition()).getChecked()));
+                    notesList.set(getAdapterPosition(),s.toString());
                 }
 
                 @Override

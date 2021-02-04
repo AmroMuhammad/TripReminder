@@ -1,5 +1,6 @@
 package com.iti41g1.tripreminder.controller.Fragments;
 
+import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
@@ -18,9 +19,13 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentResultListener;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -30,6 +35,8 @@ import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.widget.Autocomplete;
 import com.google.android.libraries.places.widget.AutocompleteActivity;
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.iti41g1.tripreminder.R;
 import com.iti41g1.tripreminder.Models.Constants;
 
@@ -44,6 +51,8 @@ import java.util.TimeZone;
 
 import com.iti41g1.tripreminder.Adapters.AdapterAddNote;
 import com.iti41g1.tripreminder.Models.NoteModel;
+import com.iti41g1.tripreminder.controller.activity.HomeActivity;
+import com.iti41g1.tripreminder.database.Trip;
 
 import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
@@ -70,7 +79,7 @@ public class FragmentAddTrip extends Fragment {
     RecyclerView recyclerView;
     AdapterAddNote adapter;
     LinearLayoutManager linearLayoutManager;
-    ArrayList<NoteModel> notes;
+    ArrayList<String> notes;
     boolean isDateCorrect = false;
     boolean isTimeCorrect = false;
     boolean isDateCorrectRoundTrip = false;
@@ -79,7 +88,7 @@ public class FragmentAddTrip extends Fragment {
     boolean isDateTodayRoundTrip=false;
     boolean isFirstTimeSeleceted=false;
 
-    private static final String TAG = "AddTripFragment";
+    public static final String TAG = "AddTripFragment";
     private static final String apiKey = "AIzaSyAKXUZsOm7RLbPEAQQxp6TZsU9YWLeh5Pg";
     private static final int AUTOCOMPLETE_REQUEST_CODE_STARTPOINT = 1;
     private static final int AUTOCOMPLETE_REQUEST_CODE_ENDPOINT = 2;
@@ -90,10 +99,10 @@ public class FragmentAddTrip extends Fragment {
     final int month = calender.get(Calendar.MONTH);
     final int day = calender.get(Calendar.DAY_OF_MONTH);
     Boolean isRound = false;
-    //Trip tripModel = new Trip();
-    Place place;
-
-
+    Place placeStartPoint;
+    Place placeEndPoint;
+    ArrayList<String> resultNotes;
+    Trip trip;
 
     public FragmentAddTrip() {
         // Required empty public constructor
@@ -103,10 +112,42 @@ public class FragmentAddTrip extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Places.initialize(getContext(), apiKey);
+        Log.i(TAG, "onCreate: ");
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        Log.i(TAG, "onSaveInstanceState: ");
+        outState.putString("Date",textViewDate.getText().toString());
+        outState.putString("Time",textViewTime.getText().toString());
+        outState.putString("DateRound",textViewDate2.getText().toString());
+        outState.putString("TimeRound",textViewTime2.getText().toString());
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        if(savedInstanceState!=null){
+            textViewDate.setText(savedInstanceState.getString("Date"));
+            textViewTime.setText(savedInstanceState.getString("Time"));
+            textViewDate2.setText(savedInstanceState.getString("DateRound"));
+            textViewTime2.setText(savedInstanceState.getString("TimeRound"));
+        }
+        Log.i(TAG, "onActivityCreated: ");
+        
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        if(savedInstanceState!=null){
+            textViewDate.setText(savedInstanceState.getString("Date"));
+            textViewTime.setText(savedInstanceState.getString("Time"));
+            textViewDate2.setText(savedInstanceState.getString("DateRound"));
+            textViewTime2.setText(savedInstanceState.getString("TimeRound"));
+            Log.i(TAG, "onCreateView: ++");
+        }
+        Log.i(TAG, "onCreateView: --");
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_add_trip, container, false);
         editTextTripName = view.findViewById(R.id.ediTxt_tripName);
@@ -137,23 +178,61 @@ public class FragmentAddTrip extends Fragment {
         recyclerView.setLayoutManager(linearLayoutManager);
         constraintLayoutNotes = view.findViewById(R.id.layoutOfNotes);
         constraintLayoutRoundTrip = view.findViewById(R.id.constraintLayoutAddRound);
-
         Log.i(TAG, "onCreateView: ");
 
-        btnAddNotes.setOnClickListener(new View.OnClickListener() {
+        getParentFragmentManager().setFragmentResultListener("requestKey", this, new FragmentResultListener() {
             @Override
-            public void onClick(View v) {
-                constraintLayoutNotes.setVisibility(View.VISIBLE);
-                Log.i(TAG, "onClick:add button ");
-                notes.add(new NoteModel("", false));
-                Log.i(TAG, notes.toString());
-                adapter.notifyDataSetChanged();
+            public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle bundle) {
+                // We use a String here, but any type that can be put in a Bundle is supported
+                resultNotes=new ArrayList();
+                ArrayList notesl=new ArrayList();
+                resultNotes = bundle.getStringArrayList("bundleKey");
+                notesl=bundle.getStringArrayList("list");
+                String date=bundle.getString("date");
+                String time=bundle.getString("time");
+                String date2=bundle.getString("date2");
+                String time2=bundle.getString("time2");
+                textViewDate.setText(date);
+                textViewTime.setText(time);
+                textViewDate2.setText(date2);
+                textViewTime2.setText(time2);
+                Log.i(TAG, "onFragmentResult: "+notesl+resultNotes+".."+date+".."+time+date2+".."+time2);
+                // Do something with the result
+
+
             }
         });
-
+        btnAddNotes.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("ResourceType")
+            @Override
+            public void onClick(View v) {
+                FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                transaction.setReorderingAllowed(true);
+// Replace whatever is in the fragment_container view with this fragment
+                transaction.replace(R.id.fragmentB, FragmentAddNotes.class,null);
+                transaction.addToBackStack(null);
+                transaction.commit();
+                // send data
+           //     if(!TextUtils.isEmpty(textViewTime.getText())||!TextUtils.isEmpty(textViewDate.getText())) {
+                    Bundle result = new Bundle();
+                    if (!TextUtils.isEmpty(textViewDate.getText()))
+                        result.putString("date", textViewDate.getText().toString());
+                    if (!TextUtils.isEmpty(textViewTime.getText()))
+                        result.putString("time", textViewTime.getText().toString());
+                    if (!TextUtils.isEmpty(textViewDate2.getText()))
+                        result.putString("date2", textViewDate2.getText().toString());
+                    if (!TextUtils.isEmpty(textViewTime2.getText()))
+                        result.putString("time2", textViewTime2.getText().toString());
+                    getParentFragmentManager().setFragmentResult("datakey", result);
+                    Log.i(TAG, "onClick: addtrip" + result);
+         //       }
+            }
+        });
         radioButtonOneDirection.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                textViewTime2.setText("");
+                textViewDate2.setText("");
                 constraintLayoutRoundTrip.setVisibility(View.GONE);
                 isRound = onRadioButtonClicked(v);
             }
@@ -223,22 +302,22 @@ public class FragmentAddTrip extends Fragment {
         btnSaveTrip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //checkData(v);
+                checkData();
             }
         });
         return view;
     }
-
+    
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if (requestCode == AUTOCOMPLETE_REQUEST_CODE_STARTPOINT) {
             if (resultCode == RESULT_OK) {
-                place = Autocomplete.getPlaceFromIntent(data);
+                placeStartPoint = Autocomplete.getPlaceFromIntent(data);
 
-                Log.i(TAG, "Place: " + place.getName() + ", " + place.getId());
-                if (place.getLatLng() != null) {
-                    editTextStartPoint.setText(place.getName());
-                    Log.i(TAG, "Place: " + place.getLatLng());
+                Log.i(TAG, "Place: " + placeStartPoint.getName() + ", " + placeStartPoint.getId());
+                if (placeStartPoint.getLatLng() != null) {
+                    editTextStartPoint.setText(placeStartPoint.getName());
+                    Log.i(TAG, "Place: " + placeStartPoint.getLatLng());
                 }
 
             } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
@@ -251,9 +330,9 @@ public class FragmentAddTrip extends Fragment {
             return;
         } else if (requestCode == AUTOCOMPLETE_REQUEST_CODE_ENDPOINT) {
             if (resultCode == RESULT_OK) {
-                Place place = Autocomplete.getPlaceFromIntent(data);
-                Log.i(TAG, "Place: " + place.getName() + ", " + place.getId());
-                editTextEndPoint.setText(place.getName());
+                placeEndPoint  = Autocomplete.getPlaceFromIntent(data);
+                Log.i(TAG, "Place: " + placeEndPoint.getName() + ", " + placeEndPoint.getId());
+                editTextEndPoint.setText(placeEndPoint.getName());
             } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
                 // TODO: Handle the error.
                 Status status = Autocomplete.getStatusFromIntent(data);
@@ -431,50 +510,115 @@ public class FragmentAddTrip extends Fragment {
         return isRound;
     }
 
-//    public void checkData(View v) {
-//        Log.i(TAG, "checkData: ");
-//        if (!TextUtils.isEmpty(editTextTripName.getText().toString())) {
-//            Log.i(TAG, "checkData: name n" + editTextTripName.getText());
-//            if (!TextUtils.isEmpty(editTextStartPoint.getText().toString())
-//                    && !TextUtils.isEmpty(editTextEndPoint.getText().toString())) {
-//                if (!TextUtils.isEmpty(textViewDate.getText().toString()) && !TextUtils.isEmpty(textViewTime.getText().toString())) {
-//                    if (adapter.getNotesList() != null) {
-//                        tripModel.setNotes(adapter.getNotesList());
-//                    }
-//                    tripModel.setTripName(editTextTripName.getText().toString());
-//                    tripModel.setLocation(new TripModel.Location(place.getLatLng().latitude, place.getLatLng().longitude));
-//                    tripModel.setDate(new TripModel.Date(day, month, year));
-//                    tripModel.setTime2(new TripModel.Time(hour, minute));
-//                    Log.i(TAG, "checkData: trip ");
-//                    if (!isRound) {
-//                        tripModel.setTripType("one Direction");
-//                        tripModel.setDate2(null);
-//                        tripModel.setTime2(null);
-//                    } else if (!TextUtils.isEmpty(textViewDate2.getText().toString())
-//                            && !TextUtils.isEmpty(textViewTime2.getText().toString())) {
-//                        tripModel.setTripType("round Trip");
-//                        tripModel.setDate2(new TripModel.Date(day, month, year));
-//                        tripModel.setTime2(new TripModel.Time(hour, minute));
-//                    } else {
-//                        textViewDate2.setError("Required");
-//                        textViewTime.setError("Required");
-//                        Toast.makeText(getContext(), "Please Enter Date and Time", Toast.LENGTH_LONG).show();
-//                    }
-//                    Log.i(TAG, "checkData: " + tripModel.getTripName().toString() + "/" + tripModel.getLocation());
-//                } else {
-//                    textViewDate.setError("Required");
-//                    textViewTime.setError("Required");
-//                    Toast.makeText(getContext(), "Please Enter Date and Time", Toast.LENGTH_LONG).show();
-//                }
-//            } else {
-//                editTextStartPoint.setError("Required");
-//                editTextEndPoint.setError("Required");
-//                Toast.makeText(getContext(), "Please Enter Start and End Point", Toast.LENGTH_LONG).show();
-//            }
-//            Log.i(TAG, "checkData: " + tripModel);
-//        } else {
-//            Toast.makeText(getContext(), "Please Enter Valid data", Toast.LENGTH_LONG).show();
-//        }
-//    }
+    public void checkData(){
+        Log.i(TAG, "checkData: ");
+        if(!TextUtils.isEmpty(editTextTripName.getText())){
+            if(!TextUtils.isEmpty(editTextStartPoint.getText())){
+                if(!TextUtils.isEmpty(editTextEndPoint.getText())){
+                    if(!TextUtils.isEmpty(textViewDate.getText())){
+                        if(!TextUtils.isEmpty(textViewTime.getText())){
+                            FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+                            FirebaseUser user = firebaseAuth.getCurrentUser();
+                                //create one obj for one direction
+                                assert user != null;
+                                 trip=new Trip(user.getUid(),editTextTripName.getText().toString(),placeStartPoint.getName(),
+                                        placeEndPoint.getName(),placeEndPoint.getLatLng().latitude,placeEndPoint.getLatLng().longitude,
+                                        textViewDate.getText().toString(),textViewTime.getText().toString(),R.drawable.preview,
+                                        "upcomming");
+                            Log.i(TAG, "checkData:mmmmmm "+trip.getTripName()+trip.getDate()+trip.getTime()+
+                                    trip.getEndPoint()+trip.getStartPoint()+trip.getTripStatus());
+                                insertRoom(trip);
+                            if(resultNotes!=null){
+                                trip.setNotes(resultNotes);
+                            }
 
+                            if(isRound){
+                                if(!TextUtils.isEmpty(textViewDate2.getText())){
+                                    if(!TextUtils.isEmpty(textViewTime2.getText())){
+
+                                //create two obj
+                                Trip tripRound=new Trip(user.getUid(),editTextTripName.getText().toString()+"Round",placeEndPoint.getName(),
+                                        placeStartPoint.getName(),placeStartPoint.getLatLng().latitude,placeStartPoint.getLatLng().longitude,
+                                        textViewDate2.getText().toString(),textViewTime2.getText().toString(),R.drawable.preview,
+                                        "upcomming");
+                                insertRoom(tripRound);
+                                        if(resultNotes!=null){
+                                            tripRound.setNotes(resultNotes);
+                                        }
+                            }else{
+                                        textViewTime2.setError("Valid Time");
+                                        Toast.makeText(getContext(),"Please, Enter Valid Time for round",Toast.LENGTH_LONG).show();
+                                    }
+                                }else{
+                                    textViewDate2.setError("Valid Date");
+                                    Toast.makeText(getContext(),"Please, Enter Valid Date for round",Toast.LENGTH_LONG).show();
+                                }}
+                        }else{
+                            textViewTime.setError("Valid Time");
+                            Toast.makeText(getContext(),"Please, Enter Valid Time",Toast.LENGTH_LONG).show();
+                        }
+                    }else{
+                        textViewDate.setError("Please Enter Valid Date");
+                        Toast.makeText(getContext(),"Please, Enter Valid Date",Toast.LENGTH_LONG).show();
+                    }
+
+                }else{
+                    editTextStartPoint.setError(" Required End Point");
+                    Toast.makeText(getContext(),"Please, Required End Point",Toast.LENGTH_LONG).show();
+                }
+
+            }else{
+                editTextStartPoint.setError("Please Enter Valid Start Point");
+                Toast.makeText(getContext(),"Please, Required Start Point",Toast.LENGTH_LONG).show();
+            }
+        }else{
+            editTextTripName.setError("Required");
+            Toast.makeText(getContext(),"Please, Required Trip Name",Toast.LENGTH_LONG).show();
+
+        }
+    }
+
+    private void insertRoom(Trip trip) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                HomeActivity.database.tripDAO().insert(trip);
+            }
+        }).start();
+
+        Log.i(TAG, "insertRoom: ");
+
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Log.i(TAG, "onPause: ");
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        Log.i(TAG, "onStop: ");
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.i(TAG, "onResume: ");
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        Log.i(TAG, "onStart: ");
+
+
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.i(TAG, "onDestroy: ");
+    }
 }
