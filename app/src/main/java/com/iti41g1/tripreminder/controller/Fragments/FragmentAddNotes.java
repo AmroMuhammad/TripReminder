@@ -34,6 +34,7 @@ public class FragmentAddNotes extends Fragment {
     String date2;
     String time2;
     ArrayList<String> notesl;
+    Bundle result;
 
     public static final String TAG="Notes";
 
@@ -49,11 +50,12 @@ public class FragmentAddNotes extends Fragment {
             public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle bundle) {
                 // We use a String here, but any type that can be put in a Bundle is supported
                 if(bundle!=null){
-                 date = bundle.getString("date");
+                    notesl=bundle.getStringArrayList("list");
+                    date = bundle.getString("date");
                  time=bundle.getString("time");
                  date2 = bundle.getString("date2");
                  time2=bundle.getString("time2");
-                Log.i(TAG, "onFragmentResult:  AddNotes"+date+".."+time+".."+date2+".."+time2);
+                Log.i(TAG, "onFragmentResult:  AddNotes"+notesl+date+".."+time+".."+date2+".."+time2);
                 // Do something with the result
             }}
         });
@@ -72,7 +74,7 @@ public class FragmentAddNotes extends Fragment {
         linearLayoutManager=new LinearLayoutManager(getContext());
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(linearLayoutManager);
-
+        result = new Bundle();
 
         Log.i(TAG, "onCreateView: ");
         btnAddNote.setOnClickListener(new View.OnClickListener() {
@@ -88,30 +90,37 @@ public class FragmentAddNotes extends Fragment {
         btnSaveNotes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Bundle result = new Bundle();
+                 result = new Bundle();
                 if(!notes.isEmpty()) {
                     for (int i = 0; i < notes.size(); i++) {
                         Log.i(TAG, "onClick:Savebutton " + notes.get(i));
                     }
-                    //   Bundle result = new Bundle();
-                    result.putStringArrayList("bundleKey", notes);
+                    result.putStringArrayList("bundleKey",notes);
                 }
-                        if(date!="")
-                        result.putString("date",date);
-                        if(time!="")
-                        result.putString("time",time);
-                        if(date2!="")
-                        result.putString("date2",date2);
-                        if(time2!="")
-                        result.putString("time2",time2);
-                        getParentFragmentManager().setFragmentResult("requestKey", result);
-                    Log.i(TAG, "onClick: addnotes"+result);
-
-
             }
         });
         return view;
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.i(TAG, "onDestroy: ");
+    }
 
+    @Override
+    public void onStop() {
+        super.onStop();
+     //    result = new Bundle();
+        if(date!="")
+            result.putString("date",date);
+        if(time!="")
+            result.putString("time",time);
+        if(date2!="")
+            result.putString("date2",date2);
+        if(time2!="")
+            result.putString("time2",time2);
+        getParentFragmentManager().setFragmentResult("requestKey", result);
+        Log.i(TAG, "onStop: "+result);
+    }
 }

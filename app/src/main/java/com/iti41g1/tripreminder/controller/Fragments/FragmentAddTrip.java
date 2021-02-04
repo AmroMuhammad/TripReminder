@@ -88,7 +88,7 @@ public class FragmentAddTrip extends Fragment {
     boolean isDateTodayRoundTrip=false;
     boolean isFirstTimeSeleceted=false;
 
-    private static final String TAG = "AddTripFragment";
+    public static final String TAG = "AddTripFragment";
     private static final String apiKey = "AIzaSyAKXUZsOm7RLbPEAQQxp6TZsU9YWLeh5Pg";
     private static final int AUTOCOMPLETE_REQUEST_CODE_STARTPOINT = 1;
     private static final int AUTOCOMPLETE_REQUEST_CODE_ENDPOINT = 2;
@@ -126,7 +126,28 @@ public class FragmentAddTrip extends Fragment {
     }
 
     @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        if(savedInstanceState!=null){
+            textViewDate.setText(savedInstanceState.getString("Date"));
+            textViewTime.setText(savedInstanceState.getString("Time"));
+            textViewDate2.setText(savedInstanceState.getString("DateRound"));
+            textViewTime2.setText(savedInstanceState.getString("TimeRound"));
+        }
+        Log.i(TAG, "onActivityCreated: ");
+        
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        if(savedInstanceState!=null){
+            textViewDate.setText(savedInstanceState.getString("Date"));
+            textViewTime.setText(savedInstanceState.getString("Time"));
+            textViewDate2.setText(savedInstanceState.getString("DateRound"));
+            textViewTime2.setText(savedInstanceState.getString("TimeRound"));
+            Log.i(TAG, "onCreateView: ++");
+        }
+        Log.i(TAG, "onCreateView: --");
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_add_trip, container, false);
         editTextTripName = view.findViewById(R.id.ediTxt_tripName);
@@ -158,19 +179,15 @@ public class FragmentAddTrip extends Fragment {
         constraintLayoutNotes = view.findViewById(R.id.layoutOfNotes);
         constraintLayoutRoundTrip = view.findViewById(R.id.constraintLayoutAddRound);
         Log.i(TAG, "onCreateView: ");
-        if(savedInstanceState!=null){
-            textViewDate.setText(savedInstanceState.getString("Date"));
-            textViewTime.setText(savedInstanceState.getString("Time"));
-            textViewDate2.setText(savedInstanceState.getString("DateRound"));
-            textViewTime2.setText(savedInstanceState.getString("TimeRound"));
-        }
 
         getParentFragmentManager().setFragmentResultListener("requestKey", this, new FragmentResultListener() {
             @Override
             public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle bundle) {
                 // We use a String here, but any type that can be put in a Bundle is supported
                 resultNotes=new ArrayList();
+                ArrayList notesl=new ArrayList();
                 resultNotes = bundle.getStringArrayList("bundleKey");
+                notesl=bundle.getStringArrayList("list");
                 String date=bundle.getString("date");
                 String time=bundle.getString("time");
                 String date2=bundle.getString("date2");
@@ -179,7 +196,7 @@ public class FragmentAddTrip extends Fragment {
                 textViewTime.setText(time);
                 textViewDate2.setText(date2);
                 textViewTime2.setText(time2);
-                Log.i(TAG, "onFragmentResult: "+resultNotes+".."+date+".."+time+date2+".."+time2);
+                Log.i(TAG, "onFragmentResult: "+notesl+resultNotes+".."+date+".."+time+date2+".."+time2);
                 // Do something with the result
 
 
@@ -290,7 +307,7 @@ public class FragmentAddTrip extends Fragment {
         });
         return view;
     }
-
+    
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if (requestCode == AUTOCOMPLETE_REQUEST_CODE_STARTPOINT) {
@@ -493,7 +510,6 @@ public class FragmentAddTrip extends Fragment {
         return isRound;
     }
 
-
     public void checkData(){
         Log.i(TAG, "checkData: ");
         if(!TextUtils.isEmpty(editTextTripName.getText())){
@@ -574,4 +590,35 @@ public class FragmentAddTrip extends Fragment {
 
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        Log.i(TAG, "onPause: ");
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        Log.i(TAG, "onStop: ");
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.i(TAG, "onResume: ");
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        Log.i(TAG, "onStart: ");
+
+
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.i(TAG, "onDestroy: ");
+    }
 }
