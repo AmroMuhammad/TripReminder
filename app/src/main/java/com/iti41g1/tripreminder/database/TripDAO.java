@@ -17,23 +17,22 @@ public interface TripDAO {
     void delete(Trip trip);
 
     @Query("DELETE FROM Trip where id=:id AND userID= :userId ")
-    void deleteById(String userId,int id);
+    void deleteById(String userId, int id);
 
     @Query("SELECT * FROM Trip WHERE userID LIKE :userId AND id LIKE :id")
     List<Trip> search(String userId, int id);
 
     @Query("SELECT * FROM Trip WHERE id LIKE :id ")
-    List<Trip> selectById( int id);
+    List<Trip> selectById(int id);
 
     @Query("SELECT * FROM Trip WHERE userId  = :userId And(tripStatus LIKE :cancleStatus Or tripStatus LIKE :finishedStatus) ")
-    List<Trip> selectHistoryTrip(String userId,String cancleStatus , String finishedStatus);
+    List<Trip> selectHistoryTrip(String userId, String cancleStatus, String finishedStatus);
 
     @Query("SELECT * FROM Trip WHERE userId  = :userId And tripStatus LIKE :status ")
     List<Trip> selectUpcomingTrip(String userId, String status);
 
 
-
     @Query("UPDATE Trip SET tripStatus = :tripStatus WHERE id = :id And userID= :userId")
-    int updateTrip(String userId,int id, String tripStatus);
+    int updateTrip(String userId, int id, String tripStatus);
 
 }

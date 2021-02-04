@@ -3,14 +3,13 @@ package com.iti41g1.tripreminder.database;
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
-import androidx.room.TypeConverter;
 import androidx.room.TypeConverters;
 
 import java.io.Serializable;
 import java.util.List;
 
 @Entity(tableName = "Trip")
-public class Trip  implements Serializable {
+public class Trip implements Serializable {
 
     @NonNull
     private String userID;
@@ -22,9 +21,9 @@ public class Trip  implements Serializable {
     @NonNull
     private String tripName;
     @NonNull
-    private  String startPoint;
+    private String startPoint;
     @NonNull
-    private  String endPoint;
+    private String endPoint;
     @NonNull
     private double endPointLat;
     @NonNull
@@ -32,21 +31,13 @@ public class Trip  implements Serializable {
     @NonNull
     private String date;
     @NonNull
-    private  String time;
+    private String time;
     @NonNull
-    private  int tripImg;
+    private int tripImg;
     @NonNull
     private String tripStatus;
     @TypeConverters(DataConverter.class)
     private List<String> notes;
-
-    public List<String> getNotes() {
-        return notes;
-    }
-
-    public void setNotes(List<String> notes) {
-        this.notes = notes;
-    }
 
     public Trip(@NonNull String userID, @NonNull String tripName, @NonNull String startPoint,
                 @NonNull String endPoint, @NonNull double endPointLat, @NonNull double endPointLong,
@@ -61,10 +52,17 @@ public class Trip  implements Serializable {
         this.date = date;
         this.time = time;
         this.tripImg = tripImg;
-       // this.notes = notes;
+        // this.notes = notes;
         this.tripStatus = tripStatus;
     }
 
+    public List<String> getNotes() {
+        return notes;
+    }
+
+    public void setNotes(List<String> notes) {
+        this.notes = notes;
+    }
 
     public int getId() {
         return id;

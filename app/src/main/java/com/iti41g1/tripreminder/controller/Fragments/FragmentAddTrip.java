@@ -524,7 +524,7 @@ public class FragmentAddTrip extends Fragment {
                                  trip=new Trip(user.getUid(),editTextTripName.getText().toString(),placeStartPoint.getName(),
                                         placeEndPoint.getName(),placeEndPoint.getLatLng().latitude,placeEndPoint.getLatLng().longitude,
                                         textViewDate.getText().toString(),textViewTime.getText().toString(),R.drawable.preview,
-                                        "upcomming");
+                                        "upcoming");
                             Log.i(TAG, "checkData:mmmmmm "+trip.getTripName()+trip.getDate()+trip.getTime()+
                                     trip.getEndPoint()+trip.getStartPoint()+trip.getTripStatus());
                                 insertRoom(trip);
@@ -537,10 +537,10 @@ public class FragmentAddTrip extends Fragment {
                                     if(!TextUtils.isEmpty(textViewTime2.getText())){
 
                                 //create two obj
-                                Trip tripRound=new Trip(user.getUid(),editTextTripName.getText().toString()+"Round",placeEndPoint.getName(),
+                                Trip tripRound=new Trip(user.getUid(),editTextTripName.getText().toString()+" Round",placeEndPoint.getName(),
                                         placeStartPoint.getName(),placeStartPoint.getLatLng().latitude,placeStartPoint.getLatLng().longitude,
                                         textViewDate2.getText().toString(),textViewTime2.getText().toString(),R.drawable.preview,
-                                        "upcomming");
+                                        "upcoming");
                                 insertRoom(tripRound);
                                         if(resultNotes!=null){
                                             tripRound.setNotes(resultNotes);
@@ -583,6 +583,7 @@ public class FragmentAddTrip extends Fragment {
             @Override
             public void run() {
                 HomeActivity.database.tripDAO().insert(trip);
+                getActivity().finish(); //added by amr
             }
         }).start();
 
