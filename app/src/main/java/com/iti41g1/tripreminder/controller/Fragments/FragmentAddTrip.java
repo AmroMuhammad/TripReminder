@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -37,6 +38,7 @@ import com.google.android.libraries.places.widget.AutocompleteActivity;
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.iti41g1.tripreminder.Adapters.TripUpcomingRecyclerAdapter;
 import com.iti41g1.tripreminder.R;
 import com.iti41g1.tripreminder.Models.Constants;
 
@@ -46,11 +48,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 
 import com.iti41g1.tripreminder.Adapters.AdapterAddNote;
 import com.iti41g1.tripreminder.Models.NoteModel;
+import com.iti41g1.tripreminder.controller.activity.AddTripActivity;
 import com.iti41g1.tripreminder.controller.activity.HomeActivity;
 import com.iti41g1.tripreminder.database.Trip;
 
@@ -103,6 +107,7 @@ public class FragmentAddTrip extends Fragment {
     Place placeEndPoint;
     ArrayList<String> resultNotes;
     Trip trip;
+    Trip selectedTrip;
 
     public FragmentAddTrip() {
         // Required empty public constructor
@@ -140,12 +145,16 @@ public class FragmentAddTrip extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
         if(savedInstanceState!=null){
             textViewDate.setText(savedInstanceState.getString("Date"));
             textViewTime.setText(savedInstanceState.getString("Time"));
             textViewDate2.setText(savedInstanceState.getString("DateRound"));
             textViewTime2.setText(savedInstanceState.getString("TimeRound"));
             Log.i(TAG, "onCreateView: ++");
+        }
+        if(AddTripActivity.key==2) {
+            new LoadRoomData().execute();
         }
         Log.i(TAG, "onCreateView: --");
         // Inflate the layout for this fragment
@@ -517,42 +526,68 @@ public class FragmentAddTrip extends Fragment {
                 if(!TextUtils.isEmpty(editTextEndPoint.getText())){
                     if(!TextUtils.isEmpty(textViewDate.getText())){
                         if(!TextUtils.isEmpty(textViewTime.getText())){
-                            FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-                            FirebaseUser user = firebaseAuth.getCurrentUser();
+                        //    FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+                          //  FirebaseUser user = firebaseAuth.getCurrentUser();
                                 //create one obj for one direction
-                                assert user != null;
-                                 trip=new Trip(user.getUid(),editTextTripName.getText().toString(),placeStartPoint.getName(),
-                                        placeEndPoint.getName(),placeEndPoint.getLatLng().latitude,placeEndPoint.getLatLng().longitude,
-                                        textViewDate.getText().toString(),textViewTime.getText().toString(),R.drawable.preview,
-                                        "upcoming");
-                            Log.i(TAG, "checkData:mmmmmm "+trip.getTripName()+trip.getDate()+trip.getTime()+
-                                    trip.getEndPoint()+trip.getStartPoint()+trip.getTripStatus());
-                                insertRoom(trip);
-                            if(resultNotes!=null){
-                                trip.setNotes(resultNotes);
+                            //    assert user != null;
+                            if(AddTripActivity.key==2){
+                                Trip editTrip=selectedTrip;
+                                new Thread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        if (placeEndPoint==null) {
+                                            HomeActivity.database.tripDAO().EditTrip(AddTripActivity.ID, editTextTripName.getText().toString(), editTextStartPoint.getText().toString(),
+                                                    editTextEndPoint.getText().toString(), selectedTrip.getEndPointLat(), selectedTrip.getEndPointLong(), textViewDate.getText().toString(), textViewTime.getText().toString());
+                                            getActivity().finish(); //added by amr
+                                            Log.i(TAG, "run: place end null");
+                                            return;
+                                        }else {
+                                            HomeActivity.database.tripDAO().EditTrip(AddTripActivity.ID, editTextTripName.getText().toString(), editTextStartPoint.getText().toString(),
+                                                    editTextEndPoint.getText().toString(), placeEndPoint.getLatLng().latitude, placeEndPoint.getLatLng().longitude, textViewDate.getText().toString(), textViewTime.getText().toString());
+                                            getActivity().finish(); //added by amr
+                                            Log.i(TAG, "run: place end  not null");
+                                        }
+                                    }
+                                }).start();
                             }
 
-                            if(isRound){
-                                if(!TextUtils.isEmpty(textViewDate2.getText())){
-                                    if(!TextUtils.isEmpty(textViewTime2.getText())){
-
-                                //create two obj
-                                Trip tripRound=new Trip(user.getUid(),editTextTripName.getText().toString()+" Round",placeEndPoint.getName(),
-                                        placeStartPoint.getName(),placeStartPoint.getLatLng().latitude,placeStartPoint.getLatLng().longitude,
-                                        textViewDate2.getText().toString(),textViewTime2.getText().toString(),R.drawable.preview,
+                                trip = new Trip(HomeActivity.fireBaseUseerId, editTextTripName.getText().toString(), placeStartPoint.getName(),
+                                        placeEndPoint.getName(), placeEndPoint.getLatLng().latitude, placeEndPoint.getLatLng().longitude,
+                                        textViewDate.getText().toString(), textViewTime.getText().toString(), R.drawable.preview,
                                         "upcoming");
-                                insertRoom(tripRound);
-                                        if(resultNotes!=null){
-                                            tripRound.setNotes(resultNotes);
+                                Log.i(TAG, "checkData:mmmmmm " + trip.getTripName() + trip.getDate() + trip.getTime() +
+                                        trip.getEndPoint() + trip.getStartPoint() + trip.getTripStatus());
+                                insertRoom(trip);
+
+
+                                if (resultNotes != null) {
+                                    trip.setNotes(resultNotes);
+                                }
+
+
+                                if (isRound) {
+                                    if (!TextUtils.isEmpty(textViewDate2.getText())) {
+                                        if (!TextUtils.isEmpty(textViewTime2.getText())) {
+
+                                            //create two obj
+                                            Trip tripRound = new Trip(HomeActivity.fireBaseUseerId, editTextTripName.getText().toString() + " Round", placeEndPoint.getName(),
+                                                    placeStartPoint.getName(), placeStartPoint.getLatLng().latitude, placeStartPoint.getLatLng().longitude,
+                                                    textViewDate2.getText().toString(), textViewTime2.getText().toString(), R.drawable.preview,
+                                                    "upcoming");
+
+                                            insertRoom(tripRound);
+                                            if (resultNotes != null) {
+                                                tripRound.setNotes(resultNotes);
+                                            }
+                                        } else {
+                                            textViewTime2.setError("Valid Time");
+                                            Toast.makeText(getContext(), "Please, Enter Valid Time for round", Toast.LENGTH_LONG).show();
                                         }
-                            }else{
-                                        textViewTime2.setError("Valid Time");
-                                        Toast.makeText(getContext(),"Please, Enter Valid Time for round",Toast.LENGTH_LONG).show();
+                                    } else {
+                                        textViewDate2.setError("Valid Date");
+                                        Toast.makeText(getContext(), "Please, Enter Valid Date for round", Toast.LENGTH_LONG).show();
                                     }
-                                }else{
-                                    textViewDate2.setError("Valid Date");
-                                    Toast.makeText(getContext(),"Please, Enter Valid Date for round",Toast.LENGTH_LONG).show();
-                                }}
+                                }
                         }else{
                             textViewTime.setError("Valid Time");
                             Toast.makeText(getContext(),"Please, Enter Valid Time",Toast.LENGTH_LONG).show();
@@ -579,47 +614,48 @@ public class FragmentAddTrip extends Fragment {
     }
 
     private void insertRoom(Trip trip) {
+        if(AddTripActivity.key==1) {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                HomeActivity.database.tripDAO().insert(trip);
-                getActivity().finish(); //added by amr
+                    HomeActivity.database.tripDAO().insert(trip);
+                    getActivity().finish(); //added by amr
             }
         }).start();
 
+        }
+        /*else if(AddTripActivity.key==2){
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    HomeActivity.database.tripDAO().EditTrip(AddTripActivity.ID,trip.getTripName(),trip.getStartPoint(),
+                            trip.getEndPoint(),trip.getEndPointLat(),trip.getEndPointLong(),trip.getDate(),trip.getTime());
+              //      getActivity().finish(); //added by amr
+                }
+            }).start();
+        }**/
         Log.i(TAG, "insertRoom: ");
-
     }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        Log.i(TAG, "onPause: ");
-    }
+    private class LoadRoomData extends AsyncTask<Void, Void, Trip> {
 
-    @Override
-    public void onStop() {
-        super.onStop();
-        Log.i(TAG, "onStop: ");
-    }
+        @Override
+        protected Trip doInBackground(Void... voids) {
+            return HomeActivity.database.tripDAO().selectById(AddTripActivity.ID);
+        }
+        @Override
+        protected void onPostExecute(Trip trips) {
+            super.onPostExecute(trips);
+            selectedTrip = trips;
+            if (selectedTrip!=null) {
+                editTextTripName.setText(selectedTrip.getTripName());
+                editTextStartPoint.setText(selectedTrip.getStartPoint());
+                editTextEndPoint.setText(selectedTrip.getEndPoint());
+                textViewDate.setText(selectedTrip.getDate());
+                textViewTime.setText(selectedTrip.getTime());
+            }
+            Log.i(TAG, "onPostExecute: "+selectedTrip);
+            }
+        }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        Log.i(TAG, "onResume: ");
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        Log.i(TAG, "onStart: ");
-
-
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        Log.i(TAG, "onDestroy: ");
-    }
 }

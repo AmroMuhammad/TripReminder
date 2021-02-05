@@ -128,7 +128,7 @@ public class TripUpcomingRecyclerAdapter extends RecyclerView.Adapter<TripUpcomi
         bundle.putInt("KEY",2);
         bundle.putInt("ID",trip.getId());
         intent.putExtras(bundle);
-       // context.startActivity(intent);
+        context.startActivity(intent);
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {

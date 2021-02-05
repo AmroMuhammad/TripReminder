@@ -22,8 +22,8 @@ public interface TripDAO {
     @Query("SELECT * FROM Trip WHERE userID LIKE :userId AND id LIKE :id")
     List<Trip> search(String userId, int id);
 
-    @Query("SELECT * FROM Trip WHERE id LIKE :id ")
-    List<Trip> selectById(int id);
+    @Query("SELECT * FROM Trip WHERE id = :id ")
+    Trip selectById(int id);
 
     @Query("SELECT * FROM Trip WHERE userId  = :userId And(tripStatus LIKE :cancleStatus Or tripStatus LIKE :finishedStatus) ")
     List<Trip> selectHistoryTrip(String userId, String cancleStatus, String finishedStatus);
@@ -35,4 +35,6 @@ public interface TripDAO {
     @Query("UPDATE Trip SET tripStatus = :tripStatus WHERE id = :id And userID= :userId")
     int updateTrip(String userId, int id, String tripStatus);
 
+    @Query("UPDATE Trip SET tripName = :tripName , startPoint =:startPoint , endPoint =:endPoint , endPointLat=:endPointLat, endPointLong=:endPointLong, date =:date , time=:time  WHERE id = :id")
+    int EditTrip(int id, String tripName,String startPoint,String endPoint,double endPointLat,double endPointLong,String date,String time);
 }

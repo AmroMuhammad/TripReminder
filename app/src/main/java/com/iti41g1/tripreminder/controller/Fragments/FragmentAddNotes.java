@@ -97,6 +97,7 @@ public class FragmentAddNotes extends Fragment {
                     }
                     result.putStringArrayList("bundleKey",notes);
                 }
+
             }
         });
         return view;

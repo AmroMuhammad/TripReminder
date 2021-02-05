@@ -5,8 +5,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.iti41g1.tripreminder.R;
 
@@ -16,7 +18,8 @@ import com.iti41g1.tripreminder.controller.Fragments.FragmentAddTrip;
 public class AddTripActivity extends AppCompatActivity {
     FragmentManager f;
     Fragment fragmentB;
-
+    public static int key;
+    public static int ID;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,9 +37,11 @@ public class AddTripActivity extends AppCompatActivity {
 
         }
 
-
+        Bundle bundle=getIntent().getExtras();
+        key=bundle.getInt("KEY");
+        ID=bundle.getInt("ID");
+        Toast.makeText(this,key +"key  ID"+ID,Toast.LENGTH_LONG).show();
     }
-
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -44,9 +49,4 @@ public class AddTripActivity extends AppCompatActivity {
         Log.i(FragmentAddTrip.TAG, "onSaveInstanceState:Ac ");
     }
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-        Log.i(FragmentAddTrip.TAG, "onStop: Ac");
-    }
 }
