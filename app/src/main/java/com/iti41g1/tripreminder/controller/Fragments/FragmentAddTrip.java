@@ -16,6 +16,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -78,6 +79,7 @@ public class FragmentAddTrip extends Fragment {
     ImageButton imageButtonTime2;
     RadioButton radioButtonOneDirection;
     RadioButton radioButtonRoundTrip;
+    RadioGroup radioGroup;
     ConstraintLayout constraintLayoutNotes;
     ConstraintLayout constraintLayoutRoundTrip;
     RecyclerView recyclerView;
@@ -153,9 +155,7 @@ public class FragmentAddTrip extends Fragment {
             textViewTime2.setText(savedInstanceState.getString("TimeRound"));
             Log.i(TAG, "onCreateView: ++");
         }
-        if(AddTripActivity.key==2) {
-            new LoadRoomData().execute();
-        }
+
         Log.i(TAG, "onCreateView: --");
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_add_trip, container, false);
@@ -175,6 +175,7 @@ public class FragmentAddTrip extends Fragment {
         imageButtonDate2.setFocusable(false);
         imageButtonTime2 = view.findViewById(R.id.btn_time2);
         imageButtonTime2.setFocusable(false);
+        radioGroup=view.findViewById(R.id.radioGroup_typeTrip);
         radioButtonOneDirection = view.findViewById(R.id.radioBtn_oneDirection);
         radioButtonRoundTrip = view.findViewById(R.id.radioBtn_roundTrip);
         btnSaveTrip = view.findViewById(R.id.btn_saveTrip);
@@ -188,7 +189,14 @@ public class FragmentAddTrip extends Fragment {
         constraintLayoutNotes = view.findViewById(R.id.layoutOfNotes);
         constraintLayoutRoundTrip = view.findViewById(R.id.constraintLayoutAddRound);
         Log.i(TAG, "onCreateView: ");
+        if(AddTripActivity.key==2) {
+            btnSaveTrip.setText("Edit");
+            radioGroup.setVisibility(View.GONE);
+            constraintLayoutRoundTrip.setVisibility(View.GONE);
+            btnAddNotes.setVisibility(View.GONE);
 
+            new LoadRoomData().execute();
+        }
         getParentFragmentManager().setFragmentResultListener("requestKey", this, new FragmentResultListener() {
             @Override
             public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle bundle) {
@@ -311,6 +319,7 @@ public class FragmentAddTrip extends Fragment {
         btnSaveTrip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //know valid time
                 checkData();
             }
         });
@@ -405,6 +414,7 @@ public class FragmentAddTrip extends Fragment {
                             } else {
                                 isDateCorrectRoundTrip = true;
                             }
+                            //calnder
                             textViewDate1.setText(day + "-" + month + "-" + year);
                         } else {
                             Toast.makeText(getContext(), "Date is wrong", Toast.LENGTH_SHORT).show();
@@ -463,6 +473,7 @@ public class FragmentAddTrip extends Fragment {
                         } else {
                             isTimeCorrectRoundTrip = true;
                         }
+
                         textViewTime1.setText(selectedHours + ":" + selectedMinute);
                     } else {
                         if (selectedHours == nowHour) {
@@ -472,6 +483,7 @@ public class FragmentAddTrip extends Fragment {
                                     isTimeCorrect = true;
                                 else
                                     isTimeCorrectRoundTrip = true;
+
                                 textViewTime1.setText(selectedHours + ":" + selectedMinute);
                             } else {
                                 Toast.makeText(getContext(), "time is not 1Correct", Toast.LENGTH_SHORT).show();
@@ -526,12 +538,8 @@ public class FragmentAddTrip extends Fragment {
                 if(!TextUtils.isEmpty(editTextEndPoint.getText())){
                     if(!TextUtils.isEmpty(textViewDate.getText())){
                         if(!TextUtils.isEmpty(textViewTime.getText())){
-                        //    FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-                          //  FirebaseUser user = firebaseAuth.getCurrentUser();
-                                //create one obj for one direction
-                            //    assert user != null;
+                            //when edit trip
                             if(AddTripActivity.key==2){
-                                Trip editTrip=selectedTrip;
                                 new Thread(new Runnable() {
                                     @Override
                                     public void run() {
@@ -540,7 +548,6 @@ public class FragmentAddTrip extends Fragment {
                                                     editTextEndPoint.getText().toString(), selectedTrip.getEndPointLat(), selectedTrip.getEndPointLong(), textViewDate.getText().toString(), textViewTime.getText().toString());
                                             getActivity().finish(); //added by amr
                                             Log.i(TAG, "run: place end null");
-                                            return;
                                         }else {
                                             HomeActivity.database.tripDAO().EditTrip(AddTripActivity.ID, editTextTripName.getText().toString(), editTextStartPoint.getText().toString(),
                                                     editTextEndPoint.getText().toString(), placeEndPoint.getLatLng().latitude, placeEndPoint.getLatLng().longitude, textViewDate.getText().toString(), textViewTime.getText().toString());
@@ -549,8 +556,9 @@ public class FragmentAddTrip extends Fragment {
                                         }
                                     }
                                 }).start();
+                                return;
                             }
-
+                            // add trip object
                                 trip = new Trip(HomeActivity.fireBaseUseerId, editTextTripName.getText().toString(), placeStartPoint.getName(),
                                         placeEndPoint.getName(), placeEndPoint.getLatLng().latitude, placeEndPoint.getLatLng().longitude,
                                         textViewDate.getText().toString(), textViewTime.getText().toString(), R.drawable.preview,
@@ -558,13 +566,9 @@ public class FragmentAddTrip extends Fragment {
                                 Log.i(TAG, "checkData:mmmmmm " + trip.getTripName() + trip.getDate() + trip.getTime() +
                                         trip.getEndPoint() + trip.getStartPoint() + trip.getTripStatus());
                                 insertRoom(trip);
-
-
                                 if (resultNotes != null) {
                                     trip.setNotes(resultNotes);
                                 }
-
-
                                 if (isRound) {
                                     if (!TextUtils.isEmpty(textViewDate2.getText())) {
                                         if (!TextUtils.isEmpty(textViewTime2.getText())) {
@@ -596,7 +600,6 @@ public class FragmentAddTrip extends Fragment {
                         textViewDate.setError("Please Enter Valid Date");
                         Toast.makeText(getContext(),"Please, Enter Valid Date",Toast.LENGTH_LONG).show();
                     }
-
                 }else{
                     editTextStartPoint.setError(" Required End Point");
                     Toast.makeText(getContext(),"Please, Required End Point",Toast.LENGTH_LONG).show();
@@ -614,7 +617,6 @@ public class FragmentAddTrip extends Fragment {
     }
 
     private void insertRoom(Trip trip) {
-        if(AddTripActivity.key==1) {
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -622,21 +624,8 @@ public class FragmentAddTrip extends Fragment {
                     getActivity().finish(); //added by amr
             }
         }).start();
-
-        }
-        /*else if(AddTripActivity.key==2){
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    HomeActivity.database.tripDAO().EditTrip(AddTripActivity.ID,trip.getTripName(),trip.getStartPoint(),
-                            trip.getEndPoint(),trip.getEndPointLat(),trip.getEndPointLong(),trip.getDate(),trip.getTime());
-              //      getActivity().finish(); //added by amr
-                }
-            }).start();
-        }**/
         Log.i(TAG, "insertRoom: ");
     }
-
     private class LoadRoomData extends AsyncTask<Void, Void, Trip> {
 
         @Override

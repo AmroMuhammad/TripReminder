@@ -35,6 +35,6 @@ public interface TripDAO {
     @Query("UPDATE Trip SET tripStatus = :tripStatus WHERE id = :id And userID= :userId")
     int updateTrip(String userId, int id, String tripStatus);
 
-    @Query("UPDATE Trip SET tripName = :tripName , startPoint =:startPoint , endPoint =:endPoint , endPointLat=:endPointLat, endPointLong=:endPointLong, date =:date , time=:time  WHERE id = :id")
+    @Query("UPDATE Trip SET tripName = :tripName , startPoint =:startPoint , endPoint =:endPoint , endPointLat=:endPointLat, endPointLong=:endPointLong, date =:date , time=:time WHERE id = :id")
     int EditTrip(int id, String tripName,String startPoint,String endPoint,double endPointLat,double endPointLong,String date,String time);
 }
