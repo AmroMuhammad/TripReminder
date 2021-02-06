@@ -129,7 +129,7 @@ public class ActivityForAlert extends AppCompatActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                HomeActivity.database.tripDAO().updateTrip(HomeActivity.fireBaseUseerId,tripId,"finished");
+                HomeActivity.database.tripDAO().updateTripStatus(HomeActivity.fireBaseUseerId,tripId,"finished");
             }
         }).start();
     }
@@ -138,7 +138,7 @@ public class ActivityForAlert extends AppCompatActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                HomeActivity.database.tripDAO().updateTrip(HomeActivity.fireBaseUseerId,tripId,"canceled");
+                HomeActivity.database.tripDAO().updateTripStatus(HomeActivity.fireBaseUseerId,tripId,"canceled");
             }
         }).start();
     }

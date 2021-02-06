@@ -25,16 +25,17 @@ public interface TripDAO {
     @Query("SELECT * FROM Trip WHERE id = :id ")
     Trip selectById(int id);
 
-    @Query("SELECT * FROM Trip WHERE userId  = :userId And(tripStatus LIKE :cancleStatus Or tripStatus LIKE :finishedStatus) ")
-    List<Trip> selectHistoryTrip(String userId, String cancleStatus, String finishedStatus);
+    @Query("SELECT * FROM Trip WHERE userId  = :userId And(tripStatus LIKE :cancleStatus Or tripStatus LIKE :finishedStatus Or tripStatus LIKE :missedStatus) ")
+    List<Trip> selectHistoryTrip(String userId, String cancleStatus, String finishedStatus, String missedStatus);
 
     @Query("SELECT * FROM Trip WHERE userId  = :userId And tripStatus LIKE :status ")
     List<Trip> selectUpcomingTrip(String userId, String status);
 
 
     @Query("UPDATE Trip SET tripStatus = :tripStatus WHERE id = :id And userID= :userId")
-    int updateTrip(String userId, int id, String tripStatus);
+    int updateTripStatus(String userId, int id, String tripStatus);
 
-    @Query("UPDATE Trip SET tripName = :tripName , startPoint =:startPoint , endPoint =:endPoint , endPointLat=:endPointLat, endPointLong=:endPointLong, date =:date , time=:time WHERE id = :id")
-    int EditTrip(int id, String tripName,String startPoint,String endPoint,double endPointLat,double endPointLong,String date,String time);
+    @Query("UPDATE Trip SET tripName = :tripName , startPoint =:startPoint , endPoint =:endPoint , endPointLat=:endPointLat, endPointLong=:endPointLong," +
+            " date =:date , time=:time, calendar=:calendar WHERE id = :id")
+    int EditTrip(int id, String tripName,String startPoint,String endPoint,double endPointLat,double endPointLong,String date,String time,double calendar);
 }

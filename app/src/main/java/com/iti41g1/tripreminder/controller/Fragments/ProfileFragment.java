@@ -1,6 +1,9 @@
 package com.iti41g1.tripreminder.controller.Fragments;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -16,8 +19,16 @@ import android.widget.TextView;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.iti41g1.tripreminder.Models.AlarmReceiver;
+import com.iti41g1.tripreminder.Models.Constants;
 import com.iti41g1.tripreminder.R;
+import com.iti41g1.tripreminder.controller.activity.HomeActivity;
 import com.iti41g1.tripreminder.controller.activity.LoginActivity;
+import com.iti41g1.tripreminder.database.Trip;
+
+import java.util.List;
+
+import static android.content.Context.ALARM_SERVICE;
 
 public class ProfileFragment extends Fragment {
     ImageView imgLogout;
@@ -62,6 +73,7 @@ public class ProfileFragment extends Fragment {
                 AuthUI.getInstance().signOut(getContext()).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
+                        new UnregisterData().execute();
                         startActivity(new Intent(getContext(), LoginActivity.class));
                         getActivity().finish();
                     }
@@ -75,6 +87,7 @@ public class ProfileFragment extends Fragment {
                 AuthUI.getInstance().signOut(getContext()).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
+                        new UnregisterData().execute();
                         startActivity(new Intent(getContext(), LoginActivity.class));
                         getActivity().finish();
                     }
@@ -87,5 +100,33 @@ public class ProfileFragment extends Fragment {
 
     public void initializeSync(){
 
+    }
+
+    private class UnregisterData extends AsyncTask<Void, Void, List<Trip>> {
+
+        @Override
+        protected List<Trip> doInBackground(Void... voids) {
+            return HomeActivity.database.tripDAO().selectUpcomingTrip(HomeActivity.fireBaseUseerId, "upcoming");
+        }
+
+        @Override
+        protected void onPostExecute(List<Trip> trips) {
+            super.onPostExecute(trips);
+            for(int i=0;i<trips.size();i++){
+                if(trips.get(i).getTripStatus().equals("upcoming")){
+                    unregisterAlarm(trips.get(i));
+                }
+            }
+        }
+    }
+
+    public void unregisterAlarm(Trip trip) {
+        Intent notifyIntent = new Intent(getContext(), AlarmReceiver.class);
+        PendingIntent notifyPendingIntent = PendingIntent.getBroadcast
+                (getContext(),trip.getId(), notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        AlarmManager alarmManager = (AlarmManager) getContext().getSystemService(ALARM_SERVICE);
+        if (alarmManager != null) {
+            alarmManager.cancel(notifyPendingIntent);
+        }
     }
 }

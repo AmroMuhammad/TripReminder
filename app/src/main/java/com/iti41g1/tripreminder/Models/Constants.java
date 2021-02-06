@@ -10,5 +10,6 @@ public interface Constants {
    String TRIP_LATITUDE = "tripLat";
    String TRIP_USER_ID = "tripUserId";
    String NOTIFICATION_CHANNEL_ID = "trips";
+   String MISSED_TRIP_STATUS = "Missed";
 
 }

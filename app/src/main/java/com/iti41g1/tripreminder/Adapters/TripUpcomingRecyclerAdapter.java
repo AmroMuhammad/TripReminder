@@ -74,7 +74,7 @@ public class TripUpcomingRecyclerAdapter extends RecyclerView.Adapter<TripUpcomi
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        HomeActivity.database.tripDAO().updateTrip(HomeActivity.fireBaseUseerId,((Trip) tripList.get(position)).getId(),"finished");
+                        HomeActivity.database.tripDAO().updateTripStatus(HomeActivity.fireBaseUseerId,((Trip) tripList.get(position)).getId(),"finished");
                     }
                 }).start();
             }
@@ -96,7 +96,7 @@ public class TripUpcomingRecyclerAdapter extends RecyclerView.Adapter<TripUpcomi
                                 new Thread(new Runnable() {
                                     @Override
                                     public void run() {
-                                        HomeActivity.database.tripDAO().updateTrip(HomeActivity.fireBaseUseerId,trip.getId(),"canceled");
+                                        HomeActivity.database.tripDAO().updateTripStatus(HomeActivity.fireBaseUseerId,trip.getId(),"canceled");
                                        // tripList.remove(trip);
                                     }
                                 }).start();

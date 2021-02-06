@@ -557,12 +557,14 @@ public class FragmentAddTrip extends Fragment {
                                     public void run() {
                                         if (placeEndPoint==null) {
                                             HomeActivity.database.tripDAO().EditTrip(AddTripActivity.ID, editTextTripName.getText().toString(), editTextStartPoint.getText().toString(),
-                                                    editTextEndPoint.getText().toString(), selectedTrip.getEndPointLat(), selectedTrip.getEndPointLong(), textViewDate.getText().toString(), textViewTime.getText().toString());
+                                                    editTextEndPoint.getText().toString(), selectedTrip.getEndPointLat(),
+                                                    selectedTrip.getEndPointLong(), textViewDate.getText().toString(), textViewTime.getText().toString(),calenderNormal.getTimeInMillis());
                                             getActivity().finish(); //added by amr
                                             Log.i(TAG, "run: place end null");
                                         }else {
                                             HomeActivity.database.tripDAO().EditTrip(AddTripActivity.ID, editTextTripName.getText().toString(), editTextStartPoint.getText().toString(),
-                                                    editTextEndPoint.getText().toString(), placeEndPoint.getLatLng().latitude, placeEndPoint.getLatLng().longitude, textViewDate.getText().toString(), textViewTime.getText().toString());
+                                                    editTextEndPoint.getText().toString(), placeEndPoint.getLatLng().latitude
+                                                    , placeEndPoint.getLatLng().longitude, textViewDate.getText().toString(), textViewTime.getText().toString(),calenderNormal.getTimeInMillis());
                                             getActivity().finish(); //added by amr
                                             Log.i(TAG, "run: place end  not null");
                                         }
