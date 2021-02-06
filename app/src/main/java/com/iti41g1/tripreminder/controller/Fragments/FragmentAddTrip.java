@@ -570,6 +570,7 @@ public class FragmentAddTrip extends Fragment {
                                                     "upcoming");
 
                                             insertRoom(tripRound);
+                                            getActivity().finish();
                                             if (resultNotes != null) {
                                                 tripRound.setNotes(resultNotes);
                                                 getActivity().finish();

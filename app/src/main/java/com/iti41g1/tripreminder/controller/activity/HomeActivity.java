@@ -37,6 +37,7 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         fireBaseUseerId= FirebaseAuth.getInstance().getCurrentUser().getUid();
+
         //initalize DB
         database = Room.databaseBuilder(this, TripDatabase.class, "tripDB").build();
         //inflating views

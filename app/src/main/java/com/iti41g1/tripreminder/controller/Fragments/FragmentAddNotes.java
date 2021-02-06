@@ -82,9 +82,7 @@ public class FragmentAddNotes extends Fragment {
         Trip trip=new Trip();
         if(AddTripActivity.key==3) {
             btnSaveNotes.setText("Edit");
-
             new FragmentAddNotes.LoadRoomData().execute();
-
             Log.i(TAG, "onCreateView: thread");
         }else {
             selectedNotes=new ArrayList<>();
@@ -97,7 +95,7 @@ public class FragmentAddNotes extends Fragment {
         btnAddNote.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.i(TAG, "onClick:add button "+selectedNotes.toString());
+//                Log.i(TAG, "onClick:add button "+selectedNotes.toString());
                 if(selectedNotes.size()<=10){
                     selectedNotes.add("");
                 Log.i(TAG, selectedNotes.toString());
@@ -105,6 +103,7 @@ public class FragmentAddNotes extends Fragment {
             }else{
                     Toast.makeText(getContext(),"you can only add 10 notes",Toast.LENGTH_SHORT).show();
                 }
+
             }
         });
         btnSaveNotes.setOnClickListener(new View.OnClickListener() {
@@ -112,7 +111,7 @@ public class FragmentAddNotes extends Fragment {
             public void onClick(View v) {
                 if(AddTripActivity.key==1){
                  result = new Bundle();
-                if(!selectedNotes.isEmpty()) {
+                if(selectedNotes.isEmpty()) {
                     for (int i = 0; i < selectedNotes.size(); i++) {
                         Log.i(TAG, "onClick:Savebutton " + selectedNotes.get(i));
                     }
@@ -123,11 +122,11 @@ public class FragmentAddNotes extends Fragment {
                    new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            Log.i(TAG, "run: "+notes);
-                            trip.setNotes(notes);
-                            HomeActivity.database.tripDAO().EditNotes(AddTripActivity.ID,selectedTrip.getNotes().toString());
+                            Log.i(TAG, "run: "+selectedNotes);
+                            trip.setNotes(selectedNotes);
+                            HomeActivity.database.tripDAO().EditNotes(AddTripActivity.ID,selectedNotes.toString());
                             getActivity().finish(); //added by amr
-                            Log.i(TAG, "run: "+notes);
+                            Log.i(TAG, "run: "+selectedNotes);
                         }
                     }).start();
                 }
@@ -152,9 +151,7 @@ public class FragmentAddNotes extends Fragment {
         getParentFragmentManager().setFragmentResult("requestKey", result);
         Log.i(TAG, "onStop: "+result);
         }
-
     }
-
     private class LoadRoomData extends AsyncTask<Void, Void, Trip> {
 
         @Override
@@ -165,17 +162,17 @@ public class FragmentAddNotes extends Fragment {
         protected void onPostExecute(Trip trip) {
             super.onPostExecute(trip);
             selectedTrip = trip;
-        //    if (selectedTrip!=null) {
-          //      ArrayList<String> selectedNotes =selectedTrip.getNotes();
-                //show notes in UI
-
-             //   adapter.notifyDataSetChanged();
-
-       //     }
-            selectedNotes=selectedTrip.getNotes();
-            adapter=new AdapterAddNote(selectedTrip.getNotes(),getContext());
-            recyclerView.setAdapter(adapter);
-            Log.i(TAG, "onPostExecute: "+selectedTrip.getNotes());
+            if (selectedTrip.getNotes()!=null) {
+                selectedNotes = selectedTrip.getNotes();
+                adapter = new AdapterAddNote(selectedTrip.getNotes(), getContext());
+                recyclerView.setAdapter(adapter);
+                Log.i(TAG, "onPostExecute: " + selectedTrip.getNotes());
+            }else {
+                selectedNotes=new ArrayList<>();
+                selectedNotes.add("");
+                adapter=new AdapterAddNote(selectedNotes,getContext());
+                recyclerView.setAdapter(adapter);
+            }
         }
     }
 

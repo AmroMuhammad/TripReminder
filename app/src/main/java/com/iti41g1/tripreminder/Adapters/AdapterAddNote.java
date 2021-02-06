@@ -79,7 +79,6 @@ public class AdapterAddNote extends RecyclerView.Adapter<AdapterAddNote.viewHold
             });
 
         }
-
         public EditText getEditText() {
             return note;
         }
