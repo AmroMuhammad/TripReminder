@@ -34,15 +34,15 @@ public class AdapterAddNote extends RecyclerView.Adapter<AdapterAddNote.viewHold
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.note_row, parent, false);
         EditText editText = view.findViewById(R.id.editTxtNote);
-        editText.setText("");
+      //  editText.setText("");
         Log.i(FragmentAddNotes.TAG, "onCreateViewHolder: " + notesList.toString());
         return new viewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull AdapterAddNote.viewHolder holder, int position) {
-    //    if (notesList.get(position).length() > 0)
-            holder.getEditText().setText(notesList.get(position));
+           String note=notesList.get(position);
+            holder.getEditText().setText(note);
         //  holder.note.setText("");
         Log.i(FragmentAddNotes.TAG, "onBindViewHolder: " + notesList.get(position));
     }

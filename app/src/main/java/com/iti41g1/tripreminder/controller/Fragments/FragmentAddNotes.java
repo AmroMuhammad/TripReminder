@@ -43,7 +43,7 @@ public class FragmentAddNotes extends Fragment {
     String time2;
     Bundle result;
     Trip selectedTrip;
-
+    ArrayList<String> selectedNotes;
     public static final String TAG="Notes";
 
     public FragmentAddNotes() {
@@ -76,28 +76,31 @@ public class FragmentAddNotes extends Fragment {
         btnAddNote=view.findViewById(R.id.btn_addNote);
         btnSaveNotes=view.findViewById(R.id.btn_saveNotes);
         recyclerView=view.findViewById(R.id.recyclerView);
-        notes=new ArrayList<>();
-     //   adapter=new AdapterAddNote(notes,getContext());
-      //  recyclerView.setAdapter(adapter);
-     //   adapterView=new AdapterViewNote(selectedTrip.getNotes(),getContext());
-
-        recyclerView.setLayoutManager(linearLayoutManager);
         result = new Bundle();
-        notes.add("");
+        linearLayoutManager=new LinearLayoutManager(getContext());
+        recyclerView.setLayoutManager(linearLayoutManager);
         Trip trip=new Trip();
         if(AddTripActivity.key==3) {
             btnSaveNotes.setText("Edit");
+
             new FragmentAddNotes.LoadRoomData().execute();
+
             Log.i(TAG, "onCreateView: thread");
+        }else {
+            selectedNotes=new ArrayList<>();
+            selectedNotes.add("");
+            adapter=new AdapterAddNote(selectedNotes,getContext());
+            recyclerView.setAdapter(adapter);
+
         }
         Log.i(TAG, "onCreateView: ");
         btnAddNote.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.i(TAG, "onClick:add button "+notes.toString());
-                if(notes.size()<=10){
-                notes.add("");
-                Log.i(TAG, notes.toString());
+                Log.i(TAG, "onClick:add button "+selectedNotes.toString());
+                if(selectedNotes.size()<=10){
+                    selectedNotes.add("");
+                Log.i(TAG, selectedNotes.toString());
                 adapter.notifyDataSetChanged();
             }else{
                     Toast.makeText(getContext(),"you can only add 10 notes",Toast.LENGTH_SHORT).show();
@@ -109,20 +112,20 @@ public class FragmentAddNotes extends Fragment {
             public void onClick(View v) {
                 if(AddTripActivity.key==1){
                  result = new Bundle();
-                if(!notes.isEmpty()) {
-                    for (int i = 0; i < notes.size(); i++) {
-                        Log.i(TAG, "onClick:Savebutton " + notes.get(i));
+                if(!selectedNotes.isEmpty()) {
+                    for (int i = 0; i < selectedNotes.size(); i++) {
+                        Log.i(TAG, "onClick:Savebutton " + selectedNotes.get(i));
                     }
-                   result.putStringArrayList("bundleKey",notes);
+                   result.putStringArrayList("bundleKey",selectedNotes);
                 }
                 }else if(AddTripActivity.key==3){
-                    Log.i(TAG, "run: "+notes);
+                    Log.i(TAG, "run: "+selectedNotes);
                    new Thread(new Runnable() {
                         @Override
                         public void run() {
                             Log.i(TAG, "run: "+notes);
                             trip.setNotes(notes);
-                            HomeActivity.database.tripDAO().EditNotes(AddTripActivity.ID,notes.toString());
+                            HomeActivity.database.tripDAO().EditNotes(AddTripActivity.ID,selectedTrip.getNotes().toString());
                             getActivity().finish(); //added by amr
                             Log.i(TAG, "run: "+notes);
                         }
@@ -163,17 +166,15 @@ public class FragmentAddNotes extends Fragment {
             super.onPostExecute(trip);
             selectedTrip = trip;
         //    if (selectedTrip!=null) {
-                ArrayList<String> selectedNotes =selectedTrip.getNotes();
+          //      ArrayList<String> selectedNotes =selectedTrip.getNotes();
                 //show notes in UI
 
              //   adapter.notifyDataSetChanged();
 
        //     }
-            adapterView=new AdapterViewNote(selectedNotes,getContext());
-            linearLayoutManager=new LinearLayoutManager(getContext());
-            recyclerView.setLayoutManager(linearLayoutManager);
+            selectedNotes=selectedTrip.getNotes();
+            adapter=new AdapterAddNote(selectedTrip.getNotes(),getContext());
             recyclerView.setAdapter(adapter);
-            adapterView.notifyDataSetChanged();
             Log.i(TAG, "onPostExecute: "+selectedTrip.getNotes());
         }
     }
