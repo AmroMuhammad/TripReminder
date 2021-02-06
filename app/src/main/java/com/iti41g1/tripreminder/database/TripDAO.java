@@ -4,7 +4,9 @@ import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
+import androidx.room.TypeConverter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Dao
@@ -37,4 +39,7 @@ public interface TripDAO {
 
     @Query("UPDATE Trip SET tripName = :tripName , startPoint =:startPoint , endPoint =:endPoint , endPointLat=:endPointLat, endPointLong=:endPointLong, date =:date , time=:time WHERE id = :id")
     int EditTrip(int id, String tripName,String startPoint,String endPoint,double endPointLat,double endPointLong,String date,String time);
+
+    @Query("UPDATE Trip SET notes = :notes WHERE id = :id")
+    int EditNotes(int id, String notes);
 }

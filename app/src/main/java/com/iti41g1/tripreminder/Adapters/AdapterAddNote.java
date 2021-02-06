@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.iti41g1.tripreminder.R;
 import com.iti41g1.tripreminder.controller.Fragments.FragmentAddNotes;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class AdapterAddNote extends RecyclerView.Adapter<AdapterAddNote.viewHolder> {

@@ -109,6 +109,17 @@
                     app:layout_constraintStart_toStartOf="@+id/source_txt"
                     app:layout_constraintTop_toBottomOf="@+id/imageView" />
 
+                <ImageButton
+                    android:id="@+id/btn_editNote"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="24dp"
+                    android:text="@string/EditNotes"
+
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/destination_txt" />
+
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <ImageButton

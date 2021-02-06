@@ -6,10 +6,11 @@ import androidx.room.PrimaryKey;
 import androidx.room.TypeConverters;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity(tableName = "Trip")
-public class Trip implements Serializable {
+public class Trip  {
 
     @NonNull
     private String userID;
@@ -37,7 +38,7 @@ public class Trip implements Serializable {
     @NonNull
     private String tripStatus;
     @TypeConverters(DataConverter.class)
-    private List<String> notes;
+    private ArrayList<String> notes;
 
     public Trip(@NonNull String userID, @NonNull String tripName, @NonNull String startPoint,
                 @NonNull String endPoint, @NonNull double endPointLat, @NonNull double endPointLong,
@@ -52,15 +53,17 @@ public class Trip implements Serializable {
         this.date = date;
         this.time = time;
         this.tripImg = tripImg;
-        // this.notes = notes;
         this.tripStatus = tripStatus;
     }
 
-    public List<String> getNotes() {
+    public Trip() {
+    }
+
+    public ArrayList<String> getNotes() {
         return notes;
     }
 
-    public void setNotes(List<String> notes) {
+    public void setNotes(ArrayList<String> notes) {
         this.notes = notes;
     }
 
@@ -103,14 +106,6 @@ public class Trip implements Serializable {
     public void setEndPointLong(double endPointLong) {
         this.endPointLong = endPointLong;
     }
-
-//    public List<String> getNotes() {
-//        return notes;
-//    }
-//
-//    public void setNotes(List<String> notes) {
-//        this.notes = notes;
-//    }
 
     public String getTripStatus() {
         return tripStatus;
