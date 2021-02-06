@@ -1,5 +1,6 @@
 package com.iti41g1.tripreminder.controller.activity;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.room.Room;
@@ -7,9 +8,14 @@ import androidx.viewpager.widget.ViewPager;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
+import android.content.ComponentName;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.view.View;
 
 import com.google.android.material.tabs.TabLayout;
@@ -82,6 +88,12 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
+        if(!Settings.canDrawOverlays(this)) {
+            checkDrawOverAppsPermissionsDialog();
+        }
+        runBackgroundPermissions();
+
+
     }
 
     @Override
@@ -89,6 +101,57 @@ public class HomeActivity extends AppCompatActivity {
         super.onResume();
         viewPager.getAdapter().notifyDataSetChanged();
         new LoadRoomData().execute();
+    }
+
+    private void checkDrawOverAppsPermissionsDialog(){
+        new AlertDialog.Builder(this).setTitle("Permission request").setCancelable(false).setMessage("Allow Draw Over Apps Permission to be able to use application probably")
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        drawOverAppPermission();
+                    }
+                }).setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                errorWarningForNotGivingDrawOverAppsPermissions();
+            }
+        }).show();
+    }
+
+    // to run broadcast in API == 30
+    // add intent.flag(Intent.FLAG_INCLUDE_STOPPED_PACKAGES) in receiver to run app also if app is killed for API >= Marshmellow
+    public void drawOverAppPermission (){
+        if (!Settings.canDrawOverlays(this)) {
+            Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                    Uri.parse("package:" + getPackageName()));
+            startActivityForResult(intent, 80);
+        }
+    }
+
+    private void errorWarningForNotGivingDrawOverAppsPermissions(){
+        new AlertDialog.Builder(this).setTitle("Warning").setCancelable(false).setMessage("Unfortunately the display over other apps permission" +
+                " is not granted so the application might not behave properly \nTo enable this permission kindly restart the application" )
+                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                }).show();
+    }
+
+    // to run broadcast in API equals to marshmellow (API 26) and add intent.flag(Intent.FLAG_INCLUDE_STOPPED_PACKAGES) in receiver to run app also
+    // if app is killed
+    public void runBackgroundPermissions() {
+        if (Build.VERSION.SDK_INT == Build.VERSION_CODES.M) {
+            if (Build.BRAND.equalsIgnoreCase("xiaomi")) {
+                Intent intent = new Intent();
+                intent.setComponent(new ComponentName("com.miui.securitycenter", "com.miui.permcenter.autostart.AutoStartManagementActivity"));
+                startActivity(intent);
+            } else if (Build.BRAND.equalsIgnoreCase("Honor") || Build.BRAND.equalsIgnoreCase("HUAWEI")) {
+                Intent intent = new Intent();
+                intent.setComponent(new ComponentName("com.huawei.systemmanager", "com.huawei.systemmanager.optimize.process.ProtectActivity"));
+                startActivity(intent);
+            }
+        }
     }
 
     private void fragmentTitlesinit() {

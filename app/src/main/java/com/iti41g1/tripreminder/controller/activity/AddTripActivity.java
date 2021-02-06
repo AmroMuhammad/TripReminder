@@ -1,12 +1,15 @@
 package com.iti41g1.tripreminder.controller.activity;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -23,6 +26,9 @@ public class AddTripActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if(!Settings.canDrawOverlays(this)) {
+            errorWarningForNotGivingDrawOverAppsPermissions();
+        }
         Log.i(FragmentAddTrip.TAG, "onCreate: Ac");
         setContentView(R.layout.activity_add_trip);
 
@@ -42,6 +48,18 @@ public class AddTripActivity extends AppCompatActivity {
         ID=bundle.getInt("ID");
         Toast.makeText(this,key +"key  ID"+ID,Toast.LENGTH_LONG).show();
     }
+
+
+    private void errorWarningForNotGivingDrawOverAppsPermissions(){
+        new AlertDialog.Builder(this).setTitle("Warning").setCancelable(false).setMessage("Unfortunately the display over other apps permission" +
+                " is not granted so the application might not behave properly \nTo enable this permission kindly restart the application" )
+                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                }).show();
+    }
+
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
