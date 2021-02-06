@@ -25,7 +25,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentResultListener;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -37,9 +36,6 @@ import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.widget.Autocomplete;
 import com.google.android.libraries.places.widget.AutocompleteActivity;
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.iti41g1.tripreminder.Adapters.TripUpcomingRecyclerAdapter;
 import com.iti41g1.tripreminder.R;
 import com.iti41g1.tripreminder.Models.Constants;
 
@@ -49,12 +45,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 
 import com.iti41g1.tripreminder.Adapters.AdapterAddNote;
-import com.iti41g1.tripreminder.Models.NoteModel;
 import com.iti41g1.tripreminder.controller.activity.AddTripActivity;
 import com.iti41g1.tripreminder.controller.activity.HomeActivity;
 import com.iti41g1.tripreminder.database.Trip;
@@ -110,6 +104,8 @@ public class FragmentAddTrip extends Fragment {
     ArrayList<String> resultNotes;
     Trip trip;
     Trip selectedTrip;
+    Calendar calenderNormal;
+    Calendar calendarRound;
 
     public FragmentAddTrip() {
         // Required empty public constructor
@@ -147,7 +143,8 @@ public class FragmentAddTrip extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
+        calenderNormal = Calendar.getInstance();
+        calendarRound = Calendar.getInstance();
         if(savedInstanceState!=null){
             textViewDate.setText(savedInstanceState.getString("Date"));
             textViewTime.setText(savedInstanceState.getString("Time"));
@@ -282,7 +279,7 @@ public class FragmentAddTrip extends Fragment {
         imageButtonDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                calenderDate(textViewDate, 1);
+                calenderDate(textViewDate, 1,calenderNormal);
                 textViewTime.setText("");
             }
         });
@@ -290,7 +287,7 @@ public class FragmentAddTrip extends Fragment {
             @Override
             public void onClick(View v) {
                 if (isDateCorrect)
-                    calenderTime(textViewTime, 1);
+                    calenderTime(textViewTime, 1,calenderNormal);
                 else
                     Toast.makeText(getContext(), "Please choose date first", Toast.LENGTH_SHORT).show();
 
@@ -301,7 +298,7 @@ public class FragmentAddTrip extends Fragment {
             @Override
             public void onClick(View v) {
                 if(isDateCorrect) {
-                    calenderDate(textViewDate2, 2);
+                    calenderDate(textViewDate2, 2,calendarRound);
                     textViewTime2.setText("");
                 }else
                     Toast.makeText(getContext(), "Please choose first trip date first", Toast.LENGTH_SHORT).show();
@@ -311,7 +308,7 @@ public class FragmentAddTrip extends Fragment {
             @Override
             public void onClick(View v) {
                 if (isDateCorrectRoundTrip && isFirstTimeSeleceted)
-                    calenderTime(textViewTime2, 2);
+                    calenderTime(textViewTime2, 2,calendarRound);
                 else
                     Toast.makeText(getContext(), "Please choose Round Trip date first", Toast.LENGTH_SHORT).show();
             }
@@ -320,6 +317,8 @@ public class FragmentAddTrip extends Fragment {
             @Override
             public void onClick(View v) {
                 //know valid time
+                Log.i(Constants.LOG_TAG,DateFormat.getDateTimeInstance().format(calenderNormal.getTime())+"  first trip");
+                Log.i(Constants.LOG_TAG,DateFormat.getDateTimeInstance().format(calendarRound.getTime())+"  second trip");
                 checkData();
             }
         });
@@ -371,7 +370,7 @@ public class FragmentAddTrip extends Fragment {
         startActivityForResult(intent, flag);
     }
 
-    public void calenderDate(TextView textViewDate1, int check) {
+    public void calenderDate(TextView textViewDate1, int check, Calendar incomingCal) {
         DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
@@ -416,6 +415,9 @@ public class FragmentAddTrip extends Fragment {
                             }
                             //calnder
                             textViewDate1.setText(day + "-" + month + "-" + year);
+                            incomingCal.set(Calendar.DAY_OF_MONTH,day);
+                            incomingCal.set(Calendar.MONTH,month-1);
+                            incomingCal.set(Calendar.YEAR,year);
                         } else {
                             Toast.makeText(getContext(), "Date is wrong", Toast.LENGTH_SHORT).show();
                             if (check == 1) {
@@ -445,7 +447,7 @@ public class FragmentAddTrip extends Fragment {
         datePickerDialog.show();
     }
 
-    public void calenderTime(TextView textViewTime1, int check) {
+    public void calenderTime(TextView textViewTime1, int check, Calendar incomingCal) {
         TimePickerDialog timePickerDialog = new TimePickerDialog(getContext(), new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker timePicker, int selectedHours, int selectedMinute) {
@@ -475,6 +477,9 @@ public class FragmentAddTrip extends Fragment {
                         }
 
                         textViewTime1.setText(selectedHours + ":" + selectedMinute);
+                        incomingCal.set(Calendar.HOUR_OF_DAY,selectedHours);
+                        incomingCal.set(Calendar.MINUTE,selectedMinute);
+                        incomingCal.set(Calendar.SECOND,0);
                     } else {
                         if (selectedHours == nowHour) {
                             if (selectedMinute > nowMin) {
@@ -485,6 +490,10 @@ public class FragmentAddTrip extends Fragment {
                                     isTimeCorrectRoundTrip = true;
 
                                 textViewTime1.setText(selectedHours + ":" + selectedMinute);
+                                incomingCal.set(Calendar.HOUR_OF_DAY,selectedHours);
+                                incomingCal.set(Calendar.MINUTE,selectedMinute);
+                                incomingCal.set(Calendar.SECOND,0);
+
                             } else {
                                 Toast.makeText(getContext(), "time is not 1Correct", Toast.LENGTH_SHORT).show();
                                 if (check == 1)
@@ -503,6 +512,9 @@ public class FragmentAddTrip extends Fragment {
                 }else{
                     Toast.makeText(getContext(), "DDDD", Toast.LENGTH_SHORT).show();
                     textViewTime1.setText(selectedHours + ":" + selectedMinute);
+                    incomingCal.set(Calendar.HOUR_OF_DAY,selectedHours);
+                    incomingCal.set(Calendar.MINUTE,selectedMinute);
+                    incomingCal.set(Calendar.SECOND,0);
                 }
             }
         }, 12, 0, false);
@@ -562,8 +574,9 @@ public class FragmentAddTrip extends Fragment {
                                 trip = new Trip(HomeActivity.fireBaseUseerId, editTextTripName.getText().toString(), placeStartPoint.getName(),
                                         placeEndPoint.getName(), placeEndPoint.getLatLng().latitude, placeEndPoint.getLatLng().longitude,
                                         textViewDate.getText().toString(), textViewTime.getText().toString(), R.drawable.preview,
-                                        "upcoming");
-                                Log.i(TAG, "checkData:mmmmmm " + trip.getTripName() + trip.getDate() + trip.getTime() +
+                                        "upcoming", calenderNormal.getTimeInMillis());
+
+                            Log.i(TAG, "checkData:mmmmmm " + trip.getTripName() + trip.getDate() + trip.getTime() +
                                         trip.getEndPoint() + trip.getStartPoint() + trip.getTripStatus());
                                 insertRoom(trip);
                                 if (resultNotes != null) {
@@ -577,7 +590,7 @@ public class FragmentAddTrip extends Fragment {
                                             Trip tripRound = new Trip(HomeActivity.fireBaseUseerId, editTextTripName.getText().toString() + " Round", placeEndPoint.getName(),
                                                     placeStartPoint.getName(), placeStartPoint.getLatLng().latitude, placeStartPoint.getLatLng().longitude,
                                                     textViewDate2.getText().toString(), textViewTime2.getText().toString(), R.drawable.preview,
-                                                    "upcoming");
+                                                    "upcoming", calendarRound.getTimeInMillis());
 
                                             insertRoom(tripRound);
                                             if (resultNotes != null) {

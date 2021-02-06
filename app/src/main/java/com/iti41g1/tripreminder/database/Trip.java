@@ -6,6 +6,7 @@ import androidx.room.PrimaryKey;
 import androidx.room.TypeConverters;
 
 import java.io.Serializable;
+import java.util.Calendar;
 import java.util.List;
 
 @Entity(tableName = "Trip")
@@ -38,11 +39,15 @@ public class Trip implements Serializable {
     private String tripStatus;
     @TypeConverters(DataConverter.class)
     private List<String> notes;
+    @NonNull
+    private long calendar;
+
 
     public Trip(@NonNull String userID, @NonNull String tripName, @NonNull String startPoint,
                 @NonNull String endPoint, @NonNull double endPointLat, @NonNull double endPointLong,
-                @NonNull String date, @NonNull String time, @NonNull int tripImg, String tripStatus) {
+                @NonNull String date, @NonNull String time, @NonNull int tripImg, String tripStatus, @NonNull long calendar) {
         this.userID = userID;
+        this.calendar = calendar;
         this.id = id;
         this.tripName = tripName;
         this.startPoint = startPoint;
@@ -160,12 +165,13 @@ public class Trip implements Serializable {
         this.endPoint = endPoint;
     }
 
-   /* public String getFirstNote() {
-        return notes[0];
+    public long getCalendar() {
+        return calendar;
     }
-    public void setFirstNote(String firstNote) {
-        this.notes[0] = firstNote;
-    }*/
+
+    public void setCalendar(long calendar) {
+        this.calendar = calendar;
+    }
 
 
 }

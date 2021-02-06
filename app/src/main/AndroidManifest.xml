@@ -4,12 +4,16 @@
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <uses-permission android:name="android.permission.ACTION_MANAGE_OVERLAY_PERMISSION" />
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/ic_travel_bag"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@drawable/ic_travel_bag"
         android:supportsRtl="true"
         android:theme="@style/Theme.TripReminder">
         <activity android:name=".controller.activity.AddTripActivity"/>
@@ -22,6 +26,16 @@
         </activity>
         <activity android:name=".controller.activity.HomeActivity"/>
         <activity android:name=".controller.activity.LoginActivity"/>
+
+        <receiver
+            android:name=".Models.AlarmReceiver"
+            android:enabled="true"
+            android:exported="false" />
+
+        <activity
+            android:name=".controller.activity.ActivityForAlert"
+            android:theme="@style/Theme.AppCompat.Transparent.NoActionBar" />
+
     </application>
 
 </manifest>
