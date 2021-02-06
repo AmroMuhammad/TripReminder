@@ -1,10 +1,13 @@
 package com.iti41g1.tripreminder.Adapters;
 
+import android.app.AlarmManager;
 import android.app.AlertDialog;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +19,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.iti41g1.tripreminder.Models.AlarmReceiver;
 import com.iti41g1.tripreminder.R;
 import com.iti41g1.tripreminder.controller.activity.AddTripActivity;
 import com.iti41g1.tripreminder.controller.activity.HomeActivity;
@@ -23,6 +27,8 @@ import com.iti41g1.tripreminder.controller.activity.LoginActivity;
 import com.iti41g1.tripreminder.database.Trip;
 
 import java.util.List;
+
+import static android.content.Context.ALARM_SERVICE;
 
 public class TripUpcomingRecyclerAdapter extends RecyclerView.Adapter<TripUpcomingRecyclerAdapter.MyViewHolder> {
     List tripList;
@@ -71,6 +77,7 @@ public class TripUpcomingRecyclerAdapter extends RecyclerView.Adapter<TripUpcomi
             @Override
             public void onClick(View v) {
                 initMap(((Trip) tripList.get(position)).getEndPointLat(),((Trip) tripList.get(position)).getEndPointLong());
+                unregisterAlarm((Trip) tripList.get(position));
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
@@ -97,6 +104,7 @@ public class TripUpcomingRecyclerAdapter extends RecyclerView.Adapter<TripUpcomi
                                     @Override
                                     public void run() {
                                         HomeActivity.database.tripDAO().updateTripStatus(HomeActivity.fireBaseUseerId,trip.getId(),"canceled");
+                                        unregisterAlarm(trip);
                                        // tripList.remove(trip);
                                     }
                                 }).start();
@@ -146,6 +154,16 @@ public class TripUpcomingRecyclerAdapter extends RecyclerView.Adapter<TripUpcomi
             start_btn= itemView.findViewById(R.id.start_btn);
         }
 
+    }
+
+    public void unregisterAlarm(Trip trip) {
+        Intent notifyIntent = new Intent(context, AlarmReceiver.class);
+        PendingIntent notifyPendingIntent = PendingIntent.getBroadcast
+                (context,trip.getId(), notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(ALARM_SERVICE);
+        if (alarmManager != null) {
+            alarmManager.cancel(notifyPendingIntent);
+        }
     }
 
 
