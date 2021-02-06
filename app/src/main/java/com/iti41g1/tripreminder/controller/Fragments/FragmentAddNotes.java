@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.iti41g1.tripreminder.Adapters.AdapterViewNote;
 import com.iti41g1.tripreminder.R;
 
 import java.util.ArrayList;
@@ -31,6 +32,7 @@ import com.iti41g1.tripreminder.database.Trip;
 public class FragmentAddNotes extends Fragment {
     RecyclerView recyclerView;
     AdapterAddNote adapter;
+    AdapterViewNote adapterView;
     LinearLayoutManager linearLayoutManager;
     Button   btnAddNote;
     Button   btnSaveNotes;
@@ -75,9 +77,10 @@ public class FragmentAddNotes extends Fragment {
         btnSaveNotes=view.findViewById(R.id.btn_saveNotes);
         recyclerView=view.findViewById(R.id.recyclerView);
         notes=new ArrayList<>();
-        adapter=new AdapterAddNote(notes,getContext());
-        linearLayoutManager=new LinearLayoutManager(getContext());
-        recyclerView.setAdapter(adapter);
+     //   adapter=new AdapterAddNote(notes,getContext());
+      //  recyclerView.setAdapter(adapter);
+     //   adapterView=new AdapterViewNote(selectedTrip.getNotes(),getContext());
+
         recyclerView.setLayoutManager(linearLayoutManager);
         result = new Bundle();
         notes.add("");
@@ -85,7 +88,7 @@ public class FragmentAddNotes extends Fragment {
         if(AddTripActivity.key==3) {
             btnSaveNotes.setText("Edit");
             new FragmentAddNotes.LoadRoomData().execute();
-           Log.i(TAG, "onCreateView: thread");
+            Log.i(TAG, "onCreateView: thread");
         }
         Log.i(TAG, "onCreateView: ");
         btnAddNote.setOnClickListener(new View.OnClickListener() {
@@ -133,7 +136,6 @@ public class FragmentAddNotes extends Fragment {
     @Override
     public void onStop() {
         super.onStop();
-     //    result = new Bundle();
         //edit in all methods
         if(AddTripActivity.key==1){
         if(date!="")
@@ -160,12 +162,18 @@ public class FragmentAddNotes extends Fragment {
         protected void onPostExecute(Trip trip) {
             super.onPostExecute(trip);
             selectedTrip = trip;
-            if (selectedTrip!=null) {
-                List<String> selectedNotes =selectedTrip.getNotes();
+        //    if (selectedTrip!=null) {
+                ArrayList<String> selectedNotes =selectedTrip.getNotes();
                 //show notes in UI
-             //   adapter=new AdapterAddNote(selectedNotes,getContext());
 
-            }
+             //   adapter.notifyDataSetChanged();
+
+       //     }
+            adapterView=new AdapterViewNote(selectedNotes,getContext());
+            linearLayoutManager=new LinearLayoutManager(getContext());
+            recyclerView.setLayoutManager(linearLayoutManager);
+            recyclerView.setAdapter(adapter);
+            adapterView.notifyDataSetChanged();
             Log.i(TAG, "onPostExecute: "+selectedTrip.getNotes());
         }
     }

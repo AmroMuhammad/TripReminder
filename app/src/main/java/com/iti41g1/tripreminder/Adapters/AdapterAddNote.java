@@ -41,7 +41,7 @@ public class AdapterAddNote extends RecyclerView.Adapter<AdapterAddNote.viewHold
 
     @Override
     public void onBindViewHolder(@NonNull AdapterAddNote.viewHolder holder, int position) {
-        if (notesList.get(position).length() > 0)
+    //    if (notesList.get(position).length() > 0)
             holder.getEditText().setText(notesList.get(position));
         //  holder.note.setText("");
         Log.i(FragmentAddNotes.TAG, "onBindViewHolder: " + notesList.get(position));
@@ -67,11 +67,8 @@ public class AdapterAddNote extends RecyclerView.Adapter<AdapterAddNote.viewHold
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
                 }
-
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    // notesList.set(getAdapterPosition(),new NoteModel(s.toString(),
-                    //notesList.get(getAdapterPosition()).getChecked()));
                     notesList.set(getAdapterPosition(), s.toString());
                 }
 
