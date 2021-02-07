@@ -1,5 +1,6 @@
 package com.iti41g1.tripreminder.controller.Fragments;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -14,7 +15,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
+import com.iti41g1.tripreminder.Adapters.AdapterViewNote;
 import com.iti41g1.tripreminder.R;
 
 import java.util.ArrayList;
@@ -22,9 +25,14 @@ import java.util.List;
 
 import com.iti41g1.tripreminder.Adapters.AdapterAddNote;
 import com.iti41g1.tripreminder.Models.NoteModel;
+import com.iti41g1.tripreminder.controller.activity.AddTripActivity;
+import com.iti41g1.tripreminder.controller.activity.HomeActivity;
+import com.iti41g1.tripreminder.database.Trip;
+
 public class FragmentAddNotes extends Fragment {
     RecyclerView recyclerView;
     AdapterAddNote adapter;
+    AdapterViewNote adapterView;
     LinearLayoutManager linearLayoutManager;
     Button   btnAddNote;
     Button   btnSaveNotes;
@@ -33,9 +41,9 @@ public class FragmentAddNotes extends Fragment {
     String time;
     String date2;
     String time2;
-    ArrayList<String> notesl;
     Bundle result;
-
+    Trip selectedTrip;
+    ArrayList<String> selectedNotes;
     public static final String TAG="Notes";
 
     public FragmentAddNotes() {
@@ -50,12 +58,11 @@ public class FragmentAddNotes extends Fragment {
             public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle bundle) {
                 // We use a String here, but any type that can be put in a Bundle is supported
                 if(bundle!=null){
-                    notesl=bundle.getStringArrayList("list");
                     date = bundle.getString("date");
                  time=bundle.getString("time");
                  date2 = bundle.getString("date2");
                  time2=bundle.getString("time2");
-                Log.i(TAG, "onFragmentResult:  AddNotes"+notesl+date+".."+time+".."+date2+".."+time2);
+                Log.i(TAG, "onFragmentResult:  AddNotes"+date+".."+time+".."+date2+".."+time2);
                 // Do something with the result
             }}
         });
@@ -69,50 +76,73 @@ public class FragmentAddNotes extends Fragment {
         btnAddNote=view.findViewById(R.id.btn_addNote);
         btnSaveNotes=view.findViewById(R.id.btn_saveNotes);
         recyclerView=view.findViewById(R.id.recyclerView);
-        notes=new ArrayList<>();
-        adapter=new AdapterAddNote(notes,getContext());
-        linearLayoutManager=new LinearLayoutManager(getContext());
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(linearLayoutManager);
         result = new Bundle();
+        linearLayoutManager=new LinearLayoutManager(getContext());
+        recyclerView.setLayoutManager(linearLayoutManager);
+        Trip trip=new Trip();
+        if(AddTripActivity.key==3) {
+            btnSaveNotes.setText("Edit");
+            new FragmentAddNotes.LoadRoomData().execute();
+            Log.i(TAG, "onCreateView: thread");
+        }else {
+            selectedNotes=new ArrayList<>();
+            selectedNotes.add("");
+            adapter=new AdapterAddNote(selectedNotes,getContext());
+            recyclerView.setAdapter(adapter);
 
+        }
         Log.i(TAG, "onCreateView: ");
         btnAddNote.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.i(TAG, "onClick:add button "+notes.toString());
-             //   notes.add(new NoteModel("", false));
-                notes.add("");
-                Log.i(TAG, notes.toString());
+//                Log.i(TAG, "onClick:add button "+selectedNotes.toString());
+                if(selectedNotes.size()<=10){
+                    selectedNotes.add("");
+                Log.i(TAG, selectedNotes.toString());
                 adapter.notifyDataSetChanged();
+            }else{
+                    Toast.makeText(getContext(),"you can only add 10 notes",Toast.LENGTH_SHORT).show();
+                }
+
             }
         });
         btnSaveNotes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(AddTripActivity.key==1){
                  result = new Bundle();
-                if(!notes.isEmpty()) {
-                    for (int i = 0; i < notes.size(); i++) {
-                        Log.i(TAG, "onClick:Savebutton " + notes.get(i));
+                if(selectedNotes.isEmpty()) {
+                    for (int i = 0; i < selectedNotes.size(); i++) {
+                        Log.i(TAG, "onClick:Savebutton " + selectedNotes.get(i));
                     }
-                    result.putStringArrayList("bundleKey",notes);
+                   result.putStringArrayList("bundleKey",selectedNotes);
                 }
-
+                }else if(AddTripActivity.key==3){
+                    Log.i(TAG, "run: "+selectedNotes);
+                   new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Log.i(TAG, "run: "+selectedNotes);
+                            trip.setNotes(selectedNotes);
+                            HomeActivity.database.tripDAO().EditNotes(AddTripActivity.ID,selectedNotes.toString());
+                            getActivity().finish(); //added by amr
+                            Log.i(TAG, "run: "+selectedNotes);
+                        }
+                    }).start();
+                }
+                FragmentManager fm = getActivity()
+                        .getSupportFragmentManager();
+                fm.popBackStack ("name", FragmentManager.POP_BACK_STACK_INCLUSIVE);
             }
         });
         return view;
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
-        Log.i(TAG, "onDestroy: ");
-    }
-
-    @Override
     public void onStop() {
         super.onStop();
-     //    result = new Bundle();
+        //edit in all methods
+        if(AddTripActivity.key==1){
         if(date!="")
             result.putString("date",date);
         if(time!="")
@@ -123,5 +153,30 @@ public class FragmentAddNotes extends Fragment {
             result.putString("time2",time2);
         getParentFragmentManager().setFragmentResult("requestKey", result);
         Log.i(TAG, "onStop: "+result);
+        }
     }
+    private class LoadRoomData extends AsyncTask<Void, Void, Trip> {
+
+        @Override
+        protected Trip doInBackground(Void... voids) {
+            return HomeActivity.database.tripDAO().selectById(AddTripActivity.ID);
+        }
+        @Override
+        protected void onPostExecute(Trip trip) {
+            super.onPostExecute(trip);
+            selectedTrip = trip;
+            if (selectedTrip.getNotes()!=null) {
+                selectedNotes = selectedTrip.getNotes();
+                adapter = new AdapterAddNote(selectedTrip.getNotes(), getContext());
+                recyclerView.setAdapter(adapter);
+                Log.i(TAG, "onPostExecute: " + selectedTrip.getNotes());
+            }else {
+                selectedNotes=new ArrayList<>();
+                selectedNotes.add("");
+                adapter=new AdapterAddNote(selectedNotes,getContext());
+                recyclerView.setAdapter(adapter);
+            }
+        }
+    }
+
 }

@@ -74,12 +74,7 @@ public class FragmentAddTrip extends Fragment {
     RadioButton radioButtonOneDirection;
     RadioButton radioButtonRoundTrip;
     RadioGroup radioGroup;
-    ConstraintLayout constraintLayoutNotes;
     ConstraintLayout constraintLayoutRoundTrip;
-    RecyclerView recyclerView;
-    AdapterAddNote adapter;
-    LinearLayoutManager linearLayoutManager;
-    ArrayList<String> notes;
     boolean isDateCorrect = false;
     boolean isTimeCorrect = false;
     boolean isDateCorrectRoundTrip = false;
@@ -87,6 +82,7 @@ public class FragmentAddTrip extends Fragment {
     boolean isDateToday=false;
     boolean isDateTodayRoundTrip=false;
     boolean isFirstTimeSeleceted=false;
+    boolean isFirstAddNotes=true;
 
     public static final String TAG = "AddTripFragment";
     private static final String apiKey = "AIzaSyAKXUZsOm7RLbPEAQQxp6TZsU9YWLeh5Pg";
@@ -106,10 +102,6 @@ public class FragmentAddTrip extends Fragment {
     Trip selectedTrip;
     Calendar calenderNormal;
     Calendar calendarRound;
-
-    public FragmentAddTrip() {
-        // Required empty public constructor
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -177,21 +169,14 @@ public class FragmentAddTrip extends Fragment {
         radioButtonRoundTrip = view.findViewById(R.id.radioBtn_roundTrip);
         btnSaveTrip = view.findViewById(R.id.btn_saveTrip);
         btnAddNotes = view.findViewById(R.id.btn_addNotes);
-        recyclerView = view.findViewById(R.id.recyclerView);
-        notes = new ArrayList<>();
-        adapter = new AdapterAddNote(notes, getContext());
-        linearLayoutManager = new LinearLayoutManager(getContext());
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(linearLayoutManager);
-        constraintLayoutNotes = view.findViewById(R.id.layoutOfNotes);
-        constraintLayoutRoundTrip = view.findViewById(R.id.constraintLayoutAddRound);
+        constraintLayoutRoundTrip=view.findViewById(R.id.constraintLayoutAddRound);
+
         Log.i(TAG, "onCreateView: ");
         if(AddTripActivity.key==2) {
             btnSaveTrip.setText("Edit");
             radioGroup.setVisibility(View.GONE);
             constraintLayoutRoundTrip.setVisibility(View.GONE);
             btnAddNotes.setVisibility(View.GONE);
-
             new LoadRoomData().execute();
         }
         getParentFragmentManager().setFragmentResultListener("requestKey", this, new FragmentResultListener() {
@@ -199,9 +184,7 @@ public class FragmentAddTrip extends Fragment {
             public void onFragmentResult(@NonNull String requestKey, @NonNull Bundle bundle) {
                 // We use a String here, but any type that can be put in a Bundle is supported
                 resultNotes=new ArrayList();
-                ArrayList notesl=new ArrayList();
                 resultNotes = bundle.getStringArrayList("bundleKey");
-                notesl=bundle.getStringArrayList("list");
                 String date=bundle.getString("date");
                 String time=bundle.getString("time");
                 String date2=bundle.getString("date2");
@@ -210,21 +193,26 @@ public class FragmentAddTrip extends Fragment {
                 textViewTime.setText(time);
                 textViewDate2.setText(date2);
                 textViewTime2.setText(time2);
-                Log.i(TAG, "onFragmentResult: "+notesl+resultNotes+".."+date+".."+time+date2+".."+time2);
+                Log.i(TAG, "onFragmentResult: "+resultNotes+".."+date+".."+time+date2+".."+time2);
                 // Do something with the result
 
 
             }
         });
+        if (!isFirstAddNotes){
+            btnAddNotes.setVisibility(View.GONE);
+        }
         btnAddNotes.setOnClickListener(new View.OnClickListener() {
             @SuppressLint("ResourceType")
             @Override
             public void onClick(View v) {
+                if(isFirstAddNotes){
                 FragmentTransaction transaction = getFragmentManager().beginTransaction();
                 transaction.setReorderingAllowed(true);
 // Replace whatever is in the fragment_container view with this fragment
                 transaction.replace(R.id.fragmentB, FragmentAddNotes.class,null);
-                transaction.addToBackStack(null);
+                transaction.addToBackStack("name");
+                   transaction. setReorderingAllowed(true);
                 transaction.commit();
                 // send data
            //     if(!TextUtils.isEmpty(textViewTime.getText())||!TextUtils.isEmpty(textViewDate.getText())) {
@@ -240,6 +228,8 @@ public class FragmentAddTrip extends Fragment {
                     getParentFragmentManager().setFragmentResult("datakey", result);
                     Log.i(TAG, "onClick: addtrip" + result);
          //       }
+                    isFirstAddNotes=false;
+            }
             }
         });
         radioButtonOneDirection.setOnClickListener(new View.OnClickListener() {
@@ -581,7 +571,8 @@ public class FragmentAddTrip extends Fragment {
                             Log.i(TAG, "checkData:mmmmmm " + trip.getTripName() + trip.getDate() + trip.getTime() +
                                         trip.getEndPoint() + trip.getStartPoint() + trip.getTripStatus());
                                 insertRoom(trip);
-                                if (resultNotes != null) {
+                                if (resultNotes != null)
+                                {
                                     trip.setNotes(resultNotes);
                                 }
                                 if (isRound) {
@@ -595,8 +586,10 @@ public class FragmentAddTrip extends Fragment {
                                                     "upcoming", calendarRound.getTimeInMillis());
 
                                             insertRoom(tripRound);
+                                            getActivity().finish();
                                             if (resultNotes != null) {
                                                 tripRound.setNotes(resultNotes);
+                                                getActivity().finish();
                                             }
                                         } else {
                                             textViewTime2.setError("Valid Time");
@@ -606,6 +599,8 @@ public class FragmentAddTrip extends Fragment {
                                         textViewDate2.setError("Valid Date");
                                         Toast.makeText(getContext(), "Please, Enter Valid Date for round", Toast.LENGTH_LONG).show();
                                     }
+                                }else {
+                                    getActivity().finish();
                                 }
                         }else{
                             textViewTime.setError("Valid Time");
@@ -636,11 +631,12 @@ public class FragmentAddTrip extends Fragment {
             @Override
             public void run() {
                     HomeActivity.database.tripDAO().insert(trip);
-                    getActivity().finish(); //added by amr
+                   // getActivity().finish(); //added by amr
             }
         }).start();
         Log.i(TAG, "insertRoom: ");
     }
+
     private class LoadRoomData extends AsyncTask<Void, Void, Trip> {
 
         @Override
@@ -648,9 +644,9 @@ public class FragmentAddTrip extends Fragment {
             return HomeActivity.database.tripDAO().selectById(AddTripActivity.ID);
         }
         @Override
-        protected void onPostExecute(Trip trips) {
-            super.onPostExecute(trips);
-            selectedTrip = trips;
+        protected void onPostExecute(Trip trip) {
+            super.onPostExecute(trip);
+            selectedTrip = trip;
             if (selectedTrip!=null) {
                 editTextTripName.setText(selectedTrip.getTripName());
                 editTextStartPoint.setText(selectedTrip.getStartPoint());

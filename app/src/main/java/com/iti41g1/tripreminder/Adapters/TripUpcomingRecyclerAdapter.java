@@ -97,6 +97,13 @@ public class TripUpcomingRecyclerAdapter extends RecyclerView.Adapter<TripUpcomi
                 }).start();
             }
         });
+        //edit notes
+        holder.editNotes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                editNotes((Trip) tripList.get(position));
+            }
+        });
     }
 
     @Override
@@ -149,11 +156,20 @@ public class TripUpcomingRecyclerAdapter extends RecyclerView.Adapter<TripUpcomi
         intent.putExtras(bundle);
         context.startActivity(intent);
     }
+    public void editNotes(Trip trip){
+        Intent intent = new Intent(context,AddTripActivity.class);
+        Bundle bundle=new Bundle();
+        bundle.putInt("KEY",3);
+        bundle.putInt("ID",trip.getId());
+        intent.putExtras(bundle);
+        context.startActivity(intent);
+    }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         TextView sourceTxt,destinationTxt,nameTxt,timeTxt,dateTxt;
         ImageView trip_img;
         ImageButton start_btn;
+        ImageButton editNotes;
         public MyViewHolder(View itemView) {
             super(itemView);
             sourceTxt=itemView.findViewById(R.id.source_txt);
@@ -163,6 +179,7 @@ public class TripUpcomingRecyclerAdapter extends RecyclerView.Adapter<TripUpcomi
             dateTxt=itemView.findViewById(R.id.date_txt);
             trip_img=itemView.findViewById(R.id.trip_img);
             start_btn= itemView.findViewById(R.id.start_btn);
+            editNotes=itemView.findViewById(R.id.btn_editNote);
         }
 
     }
