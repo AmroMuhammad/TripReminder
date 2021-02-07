@@ -180,7 +180,7 @@ public class FloatingViewService extends Service {
     }
 
     private void attachNotesToCheckBoxes(){
-        if(!notes.isEmpty()) {
+        if(notes != null && !notes.isEmpty()) {
             for (int i = 0; i < notes.size(); i++) {
                 checkBoxes.get(i).setText(notes.get(i).toString());
                 checkBoxes.get(i).setVisibility(View.VISIBLE);
