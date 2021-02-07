@@ -22,6 +22,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.iti41g1.tripreminder.Models.Constants;
 import com.iti41g1.tripreminder.R;
+import com.iti41g1.tripreminder.controller.services.FloatingViewService;
 import com.iti41g1.tripreminder.database.Trip;
 
 public class ActivityForAlert extends AppCompatActivity {
@@ -68,7 +69,7 @@ public class ActivityForAlert extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
                 Log.i(Constants.LOG_TAG,"hello from start screen");
                 initMap();
-                //initBubble();
+                initBubble();
                 finishTrip();
                 finish();
                 mp.stop();
@@ -142,21 +143,25 @@ public class ActivityForAlert extends AppCompatActivity {
             }
         }).start();
     }
-//    public void initBubble(){
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !Settings.canDrawOverlays(this)) {
-//            askPermission();
-//        }
-//        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-//            startService(new Intent(this, FloatingViewService.class));
-//            finish();
-//        } else if (Settings.canDrawOverlays(this)) {
-//            startService(new Intent(this, FloatingViewService.class));
-//            finish();
-//        } else {
-//            askPermission();
-//            Toast.makeText(this, "You need System Alert Window Permission to do this", Toast.LENGTH_SHORT).show();
-//        }
-//    }
+    public void initBubble(){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !Settings.canDrawOverlays(this)) {
+            askPermission();
+        }
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            Intent intent = new Intent(this, FloatingViewService.class);
+            intent.putExtra(Constants.TRIP_ID,tripId);
+            startService(intent);
+            finish();
+        } else if (Settings.canDrawOverlays(this)) {
+            Intent intent = new Intent(this, FloatingViewService.class);
+            intent.putExtra(Constants.TRIP_ID,tripId);
+            startService(intent);
+            finish();
+        } else {
+            askPermission();
+            Toast.makeText(this, "You need System Alert Window Permission to do this", Toast.LENGTH_SHORT).show();
+        }
+    }
 
     private void askPermission() {
         Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,

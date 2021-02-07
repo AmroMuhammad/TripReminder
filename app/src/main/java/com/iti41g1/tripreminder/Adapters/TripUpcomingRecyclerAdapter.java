@@ -1,5 +1,6 @@
 package com.iti41g1.tripreminder.Adapters;
 
+import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.PendingIntent;
@@ -8,22 +9,28 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.iti41g1.tripreminder.Models.AlarmReceiver;
+import com.iti41g1.tripreminder.Models.Constants;
 import com.iti41g1.tripreminder.R;
 import com.iti41g1.tripreminder.controller.activity.AddTripActivity;
 import com.iti41g1.tripreminder.controller.activity.HomeActivity;
 import com.iti41g1.tripreminder.controller.activity.LoginActivity;
+import com.iti41g1.tripreminder.controller.services.FloatingViewService;
 import com.iti41g1.tripreminder.database.Trip;
 
 import java.util.List;
@@ -33,9 +40,11 @@ import static android.content.Context.ALARM_SERVICE;
 public class TripUpcomingRecyclerAdapter extends RecyclerView.Adapter<TripUpcomingRecyclerAdapter.MyViewHolder> {
     List tripList;
     Context context;
-    public TripUpcomingRecyclerAdapter(Context context, List TrripInfoList) {
+    Activity activity;
+    public TripUpcomingRecyclerAdapter(Context context, List TrripInfoList, Activity activity) {
         this.context = context;
         this.tripList=TrripInfoList;
+        this.activity = activity;
     }
     @NonNull
     @Override
@@ -77,6 +86,7 @@ public class TripUpcomingRecyclerAdapter extends RecyclerView.Adapter<TripUpcomi
             @Override
             public void onClick(View v) {
                 initMap(((Trip) tripList.get(position)).getEndPointLat(),((Trip) tripList.get(position)).getEndPointLong());
+                initBubble(((Trip) tripList.get(position)).getId(),((Trip) tripList.get(position)).getUserID());
                 unregisterAlarm((Trip) tripList.get(position));
                 new Thread(new Runnable() {
                     @Override
@@ -164,6 +174,32 @@ public class TripUpcomingRecyclerAdapter extends RecyclerView.Adapter<TripUpcomi
         if (alarmManager != null) {
             alarmManager.cancel(notifyPendingIntent);
         }
+    }
+
+    public void initBubble(int tripId, String tripUserId){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !Settings.canDrawOverlays(context)) {
+            askPermission();
+        }
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            Intent intent = new Intent(context, FloatingViewService.class);
+            intent.putExtra(Constants.TRIP_ID,tripId);
+            context.startService(intent);
+            activity.finish();
+        } else if (Settings.canDrawOverlays(context)) {
+            Intent intent = new Intent(context, FloatingViewService.class);
+            intent.putExtra(Constants.TRIP_ID,tripId);
+            context.startService(intent);
+            activity.finish();
+        } else {
+            askPermission();
+            Toast.makeText(context, "You need System Alert Window Permission to do this", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void askPermission() {
+        Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                Uri.parse("package:" + context.getPackageName()));
+        activity.startActivityForResult(intent, 2084);
     }
 
 

@@ -37,7 +37,7 @@ public class UpcomingFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         new LoadRoomData().execute();
         tripRecyclerView = view.findViewById(R.id.trip_recycleView);
-        tripUpcomingRecyclerAdapter = new TripUpcomingRecyclerAdapter(getContext(), tripsList);
+        tripUpcomingRecyclerAdapter = new TripUpcomingRecyclerAdapter(getContext(), tripsList,getActivity());
         Log.i(Constants.LOG_TAG, "onViewCreatedUpcoming");
         emptyListImg = view.findViewById(R.id.emptyList_img);
         floatingBtnAdd = view.findViewById(R.id.add_flout_btn);
@@ -87,7 +87,7 @@ public class UpcomingFragment extends Fragment {
             } else {
                 emptyListImg.setVisibility(View.GONE);
             }
-            tripUpcomingRecyclerAdapter = new TripUpcomingRecyclerAdapter(getContext(), tripsList);
+            tripUpcomingRecyclerAdapter = new TripUpcomingRecyclerAdapter(getContext(), tripsList,getActivity());
             tripRecyclerView.setAdapter(tripUpcomingRecyclerAdapter);
         }
     }
