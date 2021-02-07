@@ -1,5 +1,6 @@
 package com.iti41g1.tripreminder.Adapters;
 
+
 import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.AlertDialog;
