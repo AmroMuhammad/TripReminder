@@ -2,7 +2,9 @@ package com.iti41g1.tripreminder.controller.Fragments;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
@@ -10,15 +12,21 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.iti41g1.tripreminder.Models.AlarmReceiver;
 import com.iti41g1.tripreminder.Models.Constants;
 import com.iti41g1.tripreminder.R;
@@ -26,15 +34,22 @@ import com.iti41g1.tripreminder.controller.activity.HomeActivity;
 import com.iti41g1.tripreminder.controller.activity.LoginActivity;
 import com.iti41g1.tripreminder.database.Trip;
 
+import java.io.IOException;
+import java.net.InetAddress;
 import java.util.List;
-
 import static android.content.Context.ALARM_SERVICE;
+import static android.content.Context.CONNECTIVITY_SERVICE;
+import static androidx.core.content.ContextCompat.getSystemService;
 
 public class ProfileFragment extends Fragment {
     ImageView imgLogout;
     ImageView imgSync;
     TextView txtLogout;
     TextView txtSync;
+public static final String TAG="profile";
+    List<Trip> trips;
+    private DatabaseReference mDatabase =FirebaseDatabase.getInstance().getReference();
+    private DatabaseReference mDatabasepush =FirebaseDatabase.getInstance().getReference();
 
 
     public ProfileFragment() {
@@ -64,6 +79,14 @@ public class ProfileFragment extends Fragment {
         txtLogout = view.findViewById(R.id.txtLogout);
         txtSync = view.findViewById(R.id.txtSync);
         initializeLogOut();
+        new readData().execute();
+        imgSync.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                writeOnFireBase(trips);
+
+            }
+        });
     }
 
     public void initializeLogOut(){
@@ -94,14 +117,10 @@ public class ProfileFragment extends Fragment {
                 });
             }
         });
-
-
     }
-
     public void initializeSync(){
 
     }
-
     private class UnregisterData extends AsyncTask<Void, Void, List<Trip>> {
 
         @Override
@@ -119,7 +138,6 @@ public class ProfileFragment extends Fragment {
             }
         }
     }
-
     public void unregisterAlarm(Trip trip) {
         Intent notifyIntent = new Intent(getContext(), AlarmReceiver.class);
         PendingIntent notifyPendingIntent = PendingIntent.getBroadcast
@@ -129,4 +147,63 @@ public class ProfileFragment extends Fragment {
             alarmManager.cancel(notifyPendingIntent);
         }
     }
+    public void writeOnFireBase(List<Trip>trips){
+        if(isOnline()) {
+            Trip trip;
+            mDatabase.child("TripReminder").child("userID").child(trips.get(0).getUserID()).child("trips").removeValue();
+
+            for (int i = 0; i < trips.size(); i++) {
+                trip = new Trip(trips.get(i).getUserID(), trips.get(i).getTripName(), trips.get(i).getStartPoint(),
+                        trips.get(i).getEndPoint(), trips.get(i).getEndPointLat(), trips.get(i).getEndPointLong(),
+                        trips.get(i).getDate(), trips.get(i).getTime(), trips.get(i).getTripImg(), trips.get(i).getTripStatus(), trips.get(i).getCalendar());
+
+                Log.i(TAG, "writeOnFireBase: " + trip.getTripName() + trip.getId() + trip.getStartPoint());
+                mDatabase.child("TripReminder").child("userID").child(trip.getUserID()).child("trips").push().setValue(trip).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        task.addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Toast.makeText(getContext(), "Success Store Data in FireBase", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                        task.addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Toast.makeText(getContext(), "Failure Store Data in FireBase", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+                });
+            }
+        }else{
+            Toast.makeText(getContext(), "No Internet ", Toast.LENGTH_SHORT).show();
+        }
+       Log.i(TAG, "writeOnFireBase: ");
+    }
+    public static boolean isOnline() {
+        Runtime runtime = Runtime.getRuntime();
+        try {
+            Process ipProcess = runtime.exec("/system/bin/ping -c 1 8.8.8.8");
+            int     exitValue = ipProcess.waitFor();
+            return (exitValue == 0);
+        }
+        catch (IOException | InterruptedException e) { e.printStackTrace(); }
+
+        return false;
+    }
+    private class readData extends AsyncTask<Void, Void, List<Trip>> {
+
+        @Override
+        protected List<Trip> doInBackground(Void... voids) {
+            return  HomeActivity.database.tripDAO().selectAll(HomeActivity.fireBaseUseerId);
+
+        }
+        @Override
+        protected void onPostExecute(List<Trip> tripsl) {
+            super.onPostExecute(trips);
+            trips=tripsl;
+        }
+    }
+
 }
