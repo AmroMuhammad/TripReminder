@@ -79,7 +79,6 @@ public class FragmentAddNotes extends Fragment {
         result = new Bundle();
         linearLayoutManager=new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(linearLayoutManager);
-        Trip trip=new Trip();
         if(AddTripActivity.key==3) {
             btnSaveNotes.setText("Edit");
             new FragmentAddNotes.LoadRoomData().execute();
@@ -115,15 +114,15 @@ public class FragmentAddNotes extends Fragment {
                     for (int i = 0; i < selectedNotes.size(); i++) {
                         Log.i(TAG, "onClick:Savebutton " + selectedNotes.get(i));
                     }
-                   result.putStringArrayList("bundleKey",selectedNotes);
                 }
+                result.putStringArrayList("bundleKey",selectedNotes);
+
                 }else if(AddTripActivity.key==3){
                     Log.i(TAG, "run: "+selectedNotes);
                    new Thread(new Runnable() {
                         @Override
                         public void run() {
                             Log.i(TAG, "run: "+selectedNotes);
-                            trip.setNotes(selectedNotes);
                             HomeActivity.database.tripDAO().EditNotes(AddTripActivity.ID,selectedNotes.toString());
                             getActivity().finish(); //added by amr
                             Log.i(TAG, "run: "+selectedNotes);
@@ -142,6 +141,7 @@ public class FragmentAddNotes extends Fragment {
     public void onStop() {
         super.onStop();
         //edit in all methods
+        result.putStringArrayList("bundleKey",selectedNotes);
         if(AddTripActivity.key==1){
         if(date!="")
             result.putString("date",date);
