@@ -130,6 +130,9 @@ public class FragmentAddNotes extends Fragment {
                         }
                     }).start();
                 }
+                FragmentManager fm = getActivity()
+                        .getSupportFragmentManager();
+                fm.popBackStack ("name", FragmentManager.POP_BACK_STACK_INCLUSIVE);
             }
         });
         return view;

@@ -214,7 +214,8 @@ public class FragmentAddTrip extends Fragment {
                 transaction.setReorderingAllowed(true);
 // Replace whatever is in the fragment_container view with this fragment
                 transaction.replace(R.id.fragmentB, FragmentAddNotes.class,null);
-                transaction.addToBackStack(null);
+                transaction.addToBackStack("name");
+                   transaction. setReorderingAllowed(true);
                 transaction.commit();
                 // send data
            //     if(!TextUtils.isEmpty(textViewTime.getText())||!TextUtils.isEmpty(textViewDate.getText())) {
