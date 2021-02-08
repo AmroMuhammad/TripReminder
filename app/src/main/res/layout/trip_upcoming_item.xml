@@ -13,16 +13,17 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         card_view:cardCornerRadius="30dp">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:weightSum="6">
+            android:weightSum="9">
 
 
             <ImageView
                 android:id="@+id/trip_img"
-                android:layout_width="38dp"
+                android:layout_width="46dp"
                 android:layout_height="61dp"
                 android:layout_gravity="center"
                 android:layout_margin="5dp"
@@ -45,8 +46,8 @@
                     android:layout_marginTop="4dp"
                     android:layout_weight="1"
                     android:text="TextView"
-                    android:textSize="15sp"
                     android:textColor="@color/design_default_color_primary"
+                    android:textSize="15sp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -57,9 +58,9 @@
                     android:layout_marginStart="56dp"
                     android:layout_marginTop="4dp"
                     android:layout_weight="1"
-                    android:textSize="15sp"
-                    android:textColor="@color/design_default_color_primary"
                     android:text="TextView"
+                    android:textColor="@color/design_default_color_primary"
+                    android:textSize="15sp"
                     app:layout_constraintStart_toEndOf="@+id/date_txt"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -88,7 +89,7 @@
                     app:layout_constraintTop_toBottomOf="@+id/name_txt" />
 
                 <ImageView
-                    android:id="@+id/imageView"
+                    android:id="@+id/imgProfilePhoto"
                     android:layout_width="30dp"
                     android:layout_height="21dp"
                     android:layout_marginStart="8dp"
@@ -107,31 +108,33 @@
                     android:textColor="@color/design_default_color_primary"
                     android:textSize="20sp"
                     app:layout_constraintStart_toStartOf="@+id/source_txt"
-                    app:layout_constraintTop_toBottomOf="@+id/imageView" />
+                    app:layout_constraintTop_toBottomOf="@+id/imgProfilePhoto" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="3"
+                android:orientation="vertical">
+
+                <ImageButton
+                    android:id="@+id/start_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="70dp"
+                    android:layout_marginRight="10dp"
+                    android:background="@drawable/ic_baseline_play_arrow_24"
+                    app:srcCompat="@drawable/ic_send_24" />
 
                 <ImageButton
                     android:id="@+id/btn_editNote"
                     android:layout_width="wrap_content"
+                    android:layout_marginTop="20dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="24dp"
-                    android:text="@string/EditNotes"
-
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/destination_txt" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <ImageButton
-                android:id="@+id/start_btn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center|right"
-                android:layout_marginRight="35dp"
-                android:layout_weight="1"
-                android:background="@drawable/ic_baseline_play_arrow_24"
-                app:srcCompat="@drawable/ic_send_24" />
-
+                    android:background="@drawable/ic_baseline_play_arrow_24"
+                    android:src="@drawable/ic_baseline_note_add_24" />
+            </LinearLayout>
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 

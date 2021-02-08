@@ -7,12 +7,12 @@
     tools:context=".controller.Fragments.ProfileFragment">
 
     <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/imageView"
+        android:id="@+id/imgProfilePhoto"
         android:layout_width="83dp"
         android:layout_height="70dp"
         android:layout_gravity="center"
         android:layout_marginStart="4dp"
-        android:layout_marginTop="48dp"
+        android:layout_marginTop="32dp"
         android:padding="5dp"
         android:src="@drawable/ic_baseline_face_24"
         app:civ_border_width="2dp"
@@ -23,26 +23,38 @@
         android:id="@+id/name_txt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="68dp"
+        android:layout_marginTop="32dp"
         android:text="Nermeen Abdel Azeem"
         android:textColor="@color/design_default_color_primary"
         android:textSize="25sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.136"
-        app:layout_constraintStart_toEndOf="@+id/imageView"
+        app:layout_constraintHorizontal_bias="0.397"
+        app:layout_constraintStart_toEndOf="@+id/imgProfilePhoto"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/profile"
+        android:id="@+id/email_txt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="88dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="40dp"
+        android:text="nermeen123@gmail.com"
+        android:textColor="@color/design_default_color_primary"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="@+id/name_txt"
+        app:layout_constraintTop_toTopOf="@+id/name_txt" />
+
+    <TextView
+        android:id="@+id/txtTripsReport"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="112dp"
         android:clickable="true"
+        android:text="@string/tripsReport"
         android:textColor="@color/design_default_color_primary"
         android:textSize="17sp"
-        android:text="@string/profile"
-        app:layout_constraintStart_toEndOf="@+id/imageView2"
+        app:layout_constraintStart_toEndOf="@+id/imgTripsReport"
         app:layout_constraintTop_toBottomOf="@+id/name_txt" />
 
     <TextView
@@ -50,56 +62,105 @@
         android:layout_width="52dp"
         android:layout_height="20dp"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="56dp"
         android:text="@string/sync"
         android:textColor="@color/design_default_color_primary"
         android:textSize="17sp"
         app:layout_constraintStart_toEndOf="@+id/imgSync"
-        app:layout_constraintTop_toBottomOf="@+id/profile" />
+        app:layout_constraintTop_toBottomOf="@+id/txtTripsReport" />
 
     <TextView
         android:id="@+id/txtLogout"
         android:layout_width="74dp"
         android:layout_height="28dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="36dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="48dp"
         android:clickable="true"
+        android:text="@string/logout"
         android:textColor="@color/design_default_color_primary"
         android:textSize="17sp"
-        android:text="@string/logout"
         app:layout_constraintStart_toEndOf="@+id/imgLogout"
+        app:layout_constraintTop_toBottomOf="@+id/txtAboutAs" />
+
+    <TextView
+        android:id="@+id/txtAboutAs"
+        android:layout_width="74dp"
+        android:layout_height="28dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="56dp"
+        android:clickable="true"
+        android:text="@string/aboutAs"
+        android:textColor="@color/design_default_color_primary"
+        android:textSize="17sp"
+        app:layout_constraintStart_toEndOf="@+id/imgAboutAs"
+        app:layout_constraintTop_toBottomOf="@+id/txtHowToUse" />
+
+    <TextView
+        android:id="@+id/txtHowToUse"
+        android:layout_width="124dp"
+        android:layout_height="29dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="56dp"
+        android:clickable="true"
+        android:text="@string/howToUse"
+        android:textColor="@color/design_default_color_primary"
+        android:textSize="17sp"
+        app:layout_constraintStart_toEndOf="@+id/imgHowToUse"
         app:layout_constraintTop_toBottomOf="@+id/txtSync" />
 
     <ImageView
-        android:id="@+id/imageView2"
+        android:id="@+id/imgTripsReport"
         android:layout_width="56dp"
         android:layout_height="74dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="44dp"
-        android:src="@drawable/ic_baseline_person_profile_24"
+        android:layout_marginTop="48dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+        app:layout_constraintTop_toBottomOf="@+id/imgProfilePhoto"
+        app:srcCompat="@drawable/ic_baseline_article_24" />
 
     <ImageView
         android:id="@+id/imgSync"
         android:layout_width="52dp"
         android:layout_height="53dp"
-        android:layout_marginStart="4dp"
-        android:layout_marginTop="4dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:clickable="true"
         android:src="@drawable/ic_baseline_sync_24"
-        app:layout_constraintStart_toStartOf="@+id/imageView2"
-        app:layout_constraintTop_toBottomOf="@+id/imageView2"
-        android:clickable="true"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imgTripsReport" />
+
+    <ImageView
+        android:id="@+id/imgAboutAs"
+        android:layout_width="50dp"
+        android:layout_height="51dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="32dp"
+        android:clickable="true"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imgHowToUse"
+        app:srcCompat="@drawable/ic_baseline_people_outline_24" />
+
+    <ImageView
+        android:id="@+id/imgHowToUse"
+        android:layout_width="50dp"
+        android:layout_height="51dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
+        android:clickable="true"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imgSync"
+        app:srcCompat="@drawable/ic_baseline_help_24" />
 
     <ImageView
         android:id="@+id/imgLogout"
         android:layout_width="50dp"
         android:layout_height="51dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="32dp"
+        android:clickable="true"
         android:src="@drawable/ic_baseline_aout_24"
-        app:layout_constraintStart_toStartOf="@+id/imgSync"
-        app:layout_constraintTop_toBottomOf="@+id/imgSync"
-        android:clickable="true"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imgAboutAs" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

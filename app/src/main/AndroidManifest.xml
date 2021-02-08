@@ -16,7 +16,7 @@
         android:roundIcon="@drawable/ic_travel_bag"
         android:supportsRtl="true"
         android:theme="@style/Theme.TripReminder">
-        <activity android:name=".controller.activity.AddTripActivity"/>
+        <activity android:name=".controller.activity.AddTripActivity" />
         <activity android:name=".controller.activity.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
