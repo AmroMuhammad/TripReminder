@@ -158,10 +158,11 @@ public static final String TAG="profile";
             databaseRef.child("TripReminder").child("userID").child(HomeActivity.fireBaseUseerId).child("trips").removeValue();
 
             for (int i = 0; i < trips.size(); i++) {
-                trip = new Trip(trips.get(i).getUserID(), trips.get(i).getTripName(), trips.get(i).getStartPoint(),trips.get(i).getId(),trips.get(i).getNotes(),
-                        trips.get(i).getEndPoint(), trips.get(i).getEndPointLat(), trips.get(i).getEndPointLong(),
-                        trips.get(i).getDate(), trips.get(i).getTime(), trips.get(i).getTripImg(), trips.get(i).getTripStatus(), trips.get(i).getCalendar());
-
+                trip = new Trip(trips.get(i).getUserID(),trips.get(i).getTripName(),trips.get(i).getStartPoint(),
+                        trips.get(i).getStartPointLat(),trips.get(i).getStartPointLong(),trips.get(i).getEndPoint(),
+                        trips.get(i).getEndPointLat(),trips.get(i).getEndPointLong(),trips.get(i).getDate(),
+                        trips.get(i).getTime(),trips.get(i).getTripImg(),trips.get(i).getTripStatus(),
+                        trips.get(i).getCalendar(), trips.get(i).getNotes());
                 Log.i(TAG, "writeOnFireBase: " + trip.getTripName() + trip.getId() + trip.getStartPoint()+trip.getNotes());
                 databaseRef.child("TripReminder").child("userID").child(HomeActivity.fireBaseUseerId).child("trips").push().setValue(trip).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override

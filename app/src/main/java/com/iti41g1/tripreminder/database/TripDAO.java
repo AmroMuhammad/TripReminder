@@ -16,7 +16,8 @@ public interface TripDAO {
     long insert(Trip trip);
     @Delete
     void delete(Trip trip);
-
+    @Query("DELETE FROM Trip")
+    void clear();
     @Query("DELETE FROM Trip where id=:id AND userID= :userId ")
     void deleteById(String userId, int id);
 

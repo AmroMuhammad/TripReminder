@@ -68,7 +68,7 @@ public class Trip  {
 
     public Trip(@NonNull String userID, @NonNull String tripName, @NonNull String startPoint,@NonNull double startPointLat, @NonNull double startPointLong,
                 @NonNull String endPoint, @NonNull double endPointLat, @NonNull double endPointLong,
-                @NonNull String date, @NonNull String time, @NonNull int tripImg, String tripStatus, @NonNull long calendar) {
+                @NonNull String date, @NonNull String time, @NonNull int tripImg, String tripStatus, @NonNull long calendar,ArrayList<String> notes) {
         this.userID = userID;
         this.calendar = calendar;
         this.id = id;
@@ -83,23 +83,7 @@ public class Trip  {
         this.time = time;
         this.tripImg = tripImg;
         this.tripStatus = tripStatus;
-    }
-    public Trip(@NonNull String userID, @NonNull String tripName, @NonNull String startPoint,@NonNull int id,ArrayList<String>notes
-                ,@NonNull String endPoint, @NonNull double endPointLat, @NonNull double endPointLong,
-                @NonNull String date, @NonNull String time, @NonNull int tripImg, String tripStatus, @NonNull long calendar) {
-        this.userID = userID;
-        this.calendar = calendar;
-        this.id = id;
         this.notes=notes;
-        this.tripName = tripName;
-        this.startPoint = startPoint;
-        this.endPoint = endPoint;
-        this.endPointLat = endPointLat;
-        this.endPointLong = endPointLong;
-        this.date = date;
-        this.time = time;
-        this.tripImg = tripImg;
-        this.tripStatus = tripStatus;
     }
 
 

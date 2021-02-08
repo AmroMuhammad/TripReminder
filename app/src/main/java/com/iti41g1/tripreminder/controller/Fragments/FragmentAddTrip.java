@@ -570,18 +570,19 @@ public class FragmentAddTrip extends Fragment {
                                 return;
                             }
                             // add trip object
+                            insertRoom(trip);
+                            if (resultNotes != null)
+                            {
+                                trip.setNotes(resultNotes);
+                            }
                                 trip = new Trip(HomeActivity.fireBaseUseerId, editTextTripName.getText().toString(), placeStartPoint.getName(),placeStartPoint.getLatLng().latitude,
                                         placeStartPoint.getLatLng().longitude,placeEndPoint.getName(), placeEndPoint.getLatLng().latitude, placeEndPoint.getLatLng().longitude,
                                         textViewDate.getText().toString(), textViewTime.getText().toString(), R.drawable.preview,
-                                        "upcoming",myPref.getLong("CalendarNormal",0));
+                                        "upcoming",myPref.getLong("CalendarNormal",0), resultNotes);
 
                             Log.i(TAG, "checkData:mmmmmm " + trip.getTripName() + trip.getDate() + trip.getTime() +
                                         trip.getEndPoint() + trip.getStartPoint() + trip.getTripStatus());
-                                insertRoom(trip);
-                                if (resultNotes != null)
-                                {
-                                    trip.setNotes(resultNotes);
-                                }
+
                                 if (isRound) {
                                     if (!TextUtils.isEmpty(textViewDate2.getText())) {
                                         if (!TextUtils.isEmpty(textViewTime2.getText())) {
@@ -590,7 +591,7 @@ public class FragmentAddTrip extends Fragment {
                                             Trip tripRound = new Trip(HomeActivity.fireBaseUseerId, editTextTripName.getText().toString() + " Round", placeEndPoint.getName(),placeEndPoint.getLatLng().latitude,placeEndPoint.getLatLng().longitude,
                                                     placeStartPoint.getName(), placeStartPoint.getLatLng().latitude, placeStartPoint.getLatLng().longitude,
                                                     textViewDate2.getText().toString(), textViewTime2.getText().toString(), R.drawable.preview,
-                                                    "upcoming",myPref.getLong("CalendarRound",0));
+                                                    "upcoming",myPref.getLong("CalendarRound",0),resultNotes);
 
                                             insertRoom(tripRound);
                                             getActivity().finish();

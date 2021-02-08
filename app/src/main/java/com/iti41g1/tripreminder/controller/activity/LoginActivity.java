@@ -23,16 +23,12 @@ import com.iti41g1.tripreminder.database.Trip;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-
 public class LoginActivity extends AppCompatActivity {
     public static String userUID;
     private FirebaseAuth firebaseAuth;
     private List<AuthUI.IdpConfig> providers; //to get sign in  with email and google
     private FirebaseUser user;
     List<Trip>tripsl;
-    List<Trip>trips;
-
     public static final String TAG="Login";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +36,6 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         Log.i(Constants.LOG_TAG, "onCreate");
         initializeSignInProcess();
-
     }
 
     //initialize FireBaseUI to take care of Sign in and sign up
@@ -114,31 +109,30 @@ public class LoginActivity extends AppCompatActivity {
     public void insertTripsINRoom(List<Trip> trips) {
         Log.i(TAG, "insertTripsINRoom: "+trips.size());
         for (int i = 0; i < trips.size(); i++) {
-            Trip trip = new Trip(trips.get(i).getUserID(), trips.get(i).getTripName(), trips.get(i).getStartPoint(),trips.get(i).getStartPointLat(),trips.get(i).getStartPointLong(),
+           Trip trip = new Trip(trips.get(i).getUserID(),trips.get(i).getTripName(),trips.get(i).getStartPoint(),
+                    trips.get(i).getStartPointLat(),trips.get(i).getStartPointLong(),trips.get(i).getEndPoint(),
+                    trips.get(i).getEndPointLat(),trips.get(i).getEndPointLong(),trips.get(i).getDate(),
+                    trips.get(i).getTime(),trips.get(i).getTripImg(),trips.get(i).getTripStatus(),
+                    trips.get(i).getCalendar(), trips.get(i).getNotes());
 
-                    trips.get(i).getEndPoint(), trips.get(i).getEndPointLat(), trips.get(i).getEndPointLong(),
-                    trips.get(i).getDate(), trips.get(i).getTime(), trips.get(i).getTripImg(), trips.get(i).getTripStatus(), trips.get(i).getCalendar());
-            FragmentAddTrip.insertRoom(trip);
+              FragmentAddTrip.insertRoom(trip);
             Log.i(TAG, "insertTripsINRoom: "+trip.getTripName());
 
         }
     }
-    private class check extends AsyncTask<Void, Void, List<Trip>> {
+    private class check extends AsyncTask<Void, Void, Void> {
         @Override
-        protected List<Trip> doInBackground(Void... voids) {
-            return  HomeActivity.database.tripDAO().selectAll(HomeActivity.fireBaseUseerId);
+        protected Void doInBackground(Void... voids) {
+            HomeActivity.database.tripDAO().clear();
+            readOnFireBase();
+            return null;
         }
+
         @Override
-        protected void onPostExecute(List<Trip> tripsl) {
-            super.onPostExecute(tripsl);
-            trips=tripsl;
-            Log.i(TAG, "onPostExecute: "+trips.size());
-            if(trips.size()==0)
-                readOnFireBase();
-            //   Log.i(TAG, "onActivityResult: "+trips.size());
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
             startActivity(new Intent(LoginActivity.this, HomeActivity.class));
             finish();
-
         }
     }
 }
