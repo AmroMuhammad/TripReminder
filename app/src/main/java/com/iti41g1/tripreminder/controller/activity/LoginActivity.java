@@ -4,9 +4,9 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.room.Room;
 
 import com.firebase.ui.auth.AuthUI;
 import com.google.firebase.auth.FirebaseAuth;
@@ -18,27 +18,29 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.iti41g1.tripreminder.Models.Constants;
 import com.iti41g1.tripreminder.R;
-import com.iti41g1.tripreminder.controller.Fragments.FragmentAddTrip;
-import com.iti41g1.tripreminder.controller.Fragments.ProfileFragment;
 import com.iti41g1.tripreminder.database.Trip;
+import com.iti41g1.tripreminder.database.TripDatabase;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
 public class LoginActivity extends AppCompatActivity {
     public static String userUID;
     private FirebaseAuth firebaseAuth;
     private List<AuthUI.IdpConfig> providers; //to get sign in  with email and google
     private FirebaseUser user;
-    List<Trip>tripsl;
-    public static final String TAG="Login";
-    public  static DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference();
+    List<Trip> tripsl;
+    public static final String TAG = "Login";
+    TripDatabase database;
+    public static DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         Log.i(Constants.LOG_TAG, "onCreate");
+        database = Room.databaseBuilder(this, TripDatabase.class, "tripDB").build();
         initializeSignInProcess();
     }
 
@@ -65,6 +67,7 @@ public class LoginActivity extends AppCompatActivity {
                     .setAvailableProviders(providers).build(), Constants.AUTH_REQUEST_CODE);
         }
     }
+
     //result of FirebaseUI auth process
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -83,25 +86,27 @@ public class LoginActivity extends AppCompatActivity {
             }
         }
     }
-    public  void readOnFireBase(){
-        tripsl=new ArrayList<>();
+
+    public void readOnFireBase() {
+        tripsl = new ArrayList<>();
         databaseRef.child("TripReminder").child("userID").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("trips").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if(dataSnapshot.exists()){
-                    Trip[] tripList=new Trip[(int) dataSnapshot.getChildrenCount()];
-                    int i=0;
-                    for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
+                if (dataSnapshot.exists()) {
+                    Trip[] tripList = new Trip[(int) dataSnapshot.getChildrenCount()];
+                    int i = 0;
+                    for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                         // TODO: handle the post
-                        Trip trip= postSnapshot.getValue(Trip.class);
-                        tripList[i]=trip;
+                        Trip trip = postSnapshot.getValue(Trip.class);
+                        tripList[i] = trip;
                         tripsl.add(trip);
                         i++;
                     }
-                    Log.i(TAG, "onDataChange: "+tripList.length);
+                    Log.i(TAG, "onDataChange: " + tripList.length);
                 }
                 insertTripsINRoom(tripsl);
             }
+
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 // Getting Post failed, log a message
@@ -110,24 +115,30 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
     }
+
     public void insertTripsINRoom(List<Trip> trips) {
-        Log.i(TAG, "insertTripsINRoom: "+trips.size());
-        for (int i = 0; i < trips.size(); i++) {
-           Trip trip = new Trip(trips.get(i).getUserID(),trips.get(i).getTripName(),trips.get(i).getStartPoint(),
-                    trips.get(i).getStartPointLat(),trips.get(i).getStartPointLong(),trips.get(i).getEndPoint(),
-                    trips.get(i).getEndPointLat(),trips.get(i).getEndPointLong(),trips.get(i).getDate(),
-                    trips.get(i).getTime(),trips.get(i).getTripImg(),trips.get(i).getTripStatus(),
-                    trips.get(i).getCalendar(), trips.get(i).getNotes());
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Log.i(TAG, "insertTripsINRoom: " + trips.size());
+                for (int i = 0; i < trips.size(); i++) {
+                    Trip trip = new Trip(trips.get(i).getUserID(), trips.get(i).getTripName(), trips.get(i).getStartPoint(),
+                            trips.get(i).getStartPointLat(), trips.get(i).getStartPointLong(), trips.get(i).getEndPoint(),
+                            trips.get(i).getEndPointLat(), trips.get(i).getEndPointLong(), trips.get(i).getDate(),
+                            trips.get(i).getTime(), trips.get(i).getTripImg(), trips.get(i).getTripStatus(),
+                            trips.get(i).getCalendar(), trips.get(i).getNotes());
 
-              FragmentAddTrip.insertRoom(trip);
-            Log.i(TAG, "insertTripsINRoom: "+trip.getTripName());
-
-        }
+                    database.tripDAO().insert(trip);
+                    Log.i(TAG, "insertTripsINRoom: " + trip.getTripName());
+                }
+            }
+        }).start();
     }
+
     private class check extends AsyncTask<Void, Void, Void> {
         @Override
         protected Void doInBackground(Void... voids) {
-            HomeActivity.database.tripDAO().clear();
+            database.tripDAO().clear();
             readOnFireBase();
             return null;
         }

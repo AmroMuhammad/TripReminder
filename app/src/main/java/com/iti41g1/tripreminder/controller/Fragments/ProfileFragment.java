@@ -5,6 +5,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
@@ -156,7 +157,7 @@ public static final String TAG="profile";
         }
     }
     public void writeOnFireBase(List<Trip>trips){
-        if(isOnline()) {
+        if(isNetworkAvailable(getContext())) {
             Trip trip;
             LoginActivity.databaseRef.child("TripReminder").child("userID").child(HomeActivity.fireBaseUseerId).child("trips").removeValue();
 
@@ -185,21 +186,25 @@ public static final String TAG="profile";
                     }
                 });
             }
-        }else{
+        }
+        else{
             Toast.makeText(getContext(), "No Internet ", Toast.LENGTH_SHORT).show();
         }
        Log.i(TAG, "writeOnFireBase: ");
     }
 
-    public static boolean isOnline() {
-        Runtime runtime = Runtime.getRuntime();
+    public static boolean isNetworkAvailable(Context con) {
         try {
-            Process ipProcess = runtime.exec("/system/bin/ping -c 1 8.8.8.8");
-            int     exitValue = ipProcess.waitFor();
-            return (exitValue == 0);
-        }
-        catch (IOException | InterruptedException e) { e.printStackTrace(); }
+            ConnectivityManager cm = (ConnectivityManager) con
+                    .getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo networkInfo = cm.getActiveNetworkInfo();
 
+            if (networkInfo != null && networkInfo.isConnected()) {
+                return true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return false;
     }
 
