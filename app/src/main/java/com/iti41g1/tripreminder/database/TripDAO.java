@@ -44,4 +44,7 @@ public interface TripDAO {
 
     @Query("UPDATE Trip SET notes = :notes WHERE id = :id")
     int EditNotes(int id, String notes);
+
+    @Query("SELECT COUNT(*) FROM Trip WHERE userId  = :userId And tripStatus LIKE :status" )
+    int getCountTripType(String userId ,String status);
 }

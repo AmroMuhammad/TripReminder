@@ -19,5 +19,13 @@
     <string name="sync">Sync</string>
     <string name="logout">Logout</string>
     <string name="EditNotes">EditNotes</string>
+    <string name="howToUse">How To Use</string>
+    <string name="aboutAs">About As</string>
+    <string name="email">Email</string>
+    <string name="numberOfUpcomingTrips"> Number Of Upcoming Trips : </string>
+    <string name="numberOfFinishedTrips"> Number Of Finished Trips : </string>
+    <string name="numberOfCancelledTrips"> Number Of Cancelled Trips : </string>
+    <string name="numberOfMissedTrips"> Number Of Missed Trips : </string>
+    <string name="tripsReport">Trips Report</string>
     <string name="Delete_Note">Delete Note</string>
 </resources>

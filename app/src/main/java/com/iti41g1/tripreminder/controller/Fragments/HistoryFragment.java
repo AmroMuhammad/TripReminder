@@ -48,7 +48,7 @@ public class HistoryFragment extends Fragment {
         @Override
         protected List<Trip> doInBackground(Void... voids) {
 
-            return HomeActivity.database.tripDAO().selectHistoryTrip(HomeActivity.fireBaseUseerId, "canceled", "finished","missed");
+            return HomeActivity.database.tripDAO().selectHistoryTrip(HomeActivity.fireBaseUseerId, "cancelled", "finished","missed");
         }
 
         @Override

@@ -121,7 +121,7 @@ public class TripUpcomingRecyclerAdapter extends RecyclerView.Adapter<TripUpcomi
                                 new Thread(new Runnable() {
                                     @Override
                                     public void run() {
-                                        HomeActivity.database.tripDAO().updateTripStatus(HomeActivity.fireBaseUseerId,trip.getId(),"canceled");
+                                        HomeActivity.database.tripDAO().updateTripStatus(HomeActivity.fireBaseUseerId,trip.getId(),"cancelled");
                                         unregisterAlarm(trip);
                                        // tripList.remove(trip);
                                     }

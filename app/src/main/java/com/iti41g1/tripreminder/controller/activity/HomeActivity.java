@@ -38,6 +38,9 @@ public class HomeActivity extends AppCompatActivity {
 
     public static TripDatabase database;
     public static String fireBaseUseerId;
+    public static String fireBaseUserName;
+    public static String fireBaseEmail;
+    public static Uri fireBaseUserPhotoUri;
     public ViewPager viewPager;
     public ViewPagerAdaptor adaptor;
     private TabLayout tabLayout;
@@ -52,6 +55,9 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         fireBaseUseerId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        fireBaseUserName=FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
+        fireBaseEmail=FirebaseAuth.getInstance().getCurrentUser().getEmail();
+        fireBaseUserPhotoUri=FirebaseAuth.getInstance().getCurrentUser().getPhotoUrl();
         //initalize DB
         database = Room.databaseBuilder(this, TripDatabase.class, "tripDB").build();
         //inflating views

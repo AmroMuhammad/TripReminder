@@ -101,7 +101,7 @@
                     app:layout_constraintTop_toBottomOf="@+id/name_txt" />
 
                 <ImageView
-                    android:id="@+id/imageView"
+                    android:id="@+id/imgProfilePhoto"
                     android:layout_width="30dp"
                     android:layout_height="21dp"
                     android:layout_marginStart="8dp"
@@ -120,7 +120,7 @@
                     android:textColor="@color/design_default_color_primary"
                     android:textSize="20sp"
                     app:layout_constraintStart_toStartOf="@+id/source_txt"
-                    app:layout_constraintTop_toBottomOf="@+id/imageView" />
+                    app:layout_constraintTop_toBottomOf="@+id/imgProfilePhoto" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
