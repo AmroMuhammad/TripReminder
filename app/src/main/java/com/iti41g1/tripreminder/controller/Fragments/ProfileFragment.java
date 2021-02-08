@@ -55,7 +55,7 @@ public class ProfileFragment extends Fragment {
     TextView txtLogout;
     TextView txtSync;
 public static final String TAG="profile";
-    public static DatabaseReference databaseRef =FirebaseDatabase.getInstance().getReference();
+   // public DatabaseReference databaseRef =FirebaseDatabase.getInstance().getReference();
      List<Trip>trips;
 
     public ProfileFragment() {
@@ -87,9 +87,12 @@ public static final String TAG="profile";
             @Override
             public void onClick(View v) {
              writeOnFireBase(trips);
-          //   readOnFireBase();
-              //  insertTripsINRoom(result);
-
+            }
+        });
+        txtSync.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                writeOnFireBase(trips);
             }
         });
     }
@@ -155,7 +158,7 @@ public static final String TAG="profile";
     public void writeOnFireBase(List<Trip>trips){
         if(isOnline()) {
             Trip trip;
-            databaseRef.child("TripReminder").child("userID").child(HomeActivity.fireBaseUseerId).child("trips").removeValue();
+            LoginActivity.databaseRef.child("TripReminder").child("userID").child(HomeActivity.fireBaseUseerId).child("trips").removeValue();
 
             for (int i = 0; i < trips.size(); i++) {
                 trip = new Trip(trips.get(i).getUserID(),trips.get(i).getTripName(),trips.get(i).getStartPoint(),
@@ -164,7 +167,7 @@ public static final String TAG="profile";
                         trips.get(i).getTime(),trips.get(i).getTripImg(),trips.get(i).getTripStatus(),
                         trips.get(i).getCalendar(), trips.get(i).getNotes());
                 Log.i(TAG, "writeOnFireBase: " + trip.getTripName() + trip.getId() + trip.getStartPoint()+trip.getNotes());
-                databaseRef.child("TripReminder").child("userID").child(HomeActivity.fireBaseUseerId).child("trips").push().setValue(trip).addOnCompleteListener(new OnCompleteListener<Void>() {
+                 LoginActivity.databaseRef.child("TripReminder").child("userID").child(HomeActivity.fireBaseUseerId).child("trips").push().setValue(trip).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         task.addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -204,7 +207,6 @@ public static final String TAG="profile";
         @Override
         protected List<Trip> doInBackground(Void... voids) {
             return  HomeActivity.database.tripDAO().selectAll(HomeActivity.fireBaseUseerId);
-
         }
         @Override
         protected void onPostExecute(List<Trip> tripsl) {
