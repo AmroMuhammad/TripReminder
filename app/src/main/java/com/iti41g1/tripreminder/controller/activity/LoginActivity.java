@@ -11,6 +11,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.iti41g1.tripreminder.Models.Constants;
 import com.iti41g1.tripreminder.R;
+import com.iti41g1.tripreminder.controller.Fragments.ProfileFragment;
+import com.iti41g1.tripreminder.database.Trip;
 
 import java.util.Arrays;
 import java.util.List;
@@ -55,6 +57,9 @@ public class LoginActivity extends AppCompatActivity {
                     .setAvailableProviders(providers).build(), Constants.AUTH_REQUEST_CODE);
         }
 
+        //read from FireBase
+//       List<Trip> tripList= ProfileFragment.readOnFireBase();
+  //      Log.i(ProfileFragment.TAG, "initializeSignInProcess: "+tripList.size());
 
     }
 

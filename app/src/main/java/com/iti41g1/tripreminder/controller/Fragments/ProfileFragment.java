@@ -20,13 +20,18 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.airbnb.lottie.L;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.iti41g1.tripreminder.Models.AlarmReceiver;
 import com.iti41g1.tripreminder.Models.Constants;
 import com.iti41g1.tripreminder.R;
@@ -34,8 +39,11 @@ import com.iti41g1.tripreminder.controller.activity.HomeActivity;
 import com.iti41g1.tripreminder.controller.activity.LoginActivity;
 import com.iti41g1.tripreminder.database.Trip;
 
+import org.w3c.dom.Comment;
+
 import java.io.IOException;
 import java.net.InetAddress;
+import java.util.ArrayList;
 import java.util.List;
 import static android.content.Context.ALARM_SERVICE;
 import static android.content.Context.CONNECTIVITY_SERVICE;
@@ -47,23 +55,17 @@ public class ProfileFragment extends Fragment {
     TextView txtLogout;
     TextView txtSync;
 public static final String TAG="profile";
-    List<Trip> trips;
-    private DatabaseReference mDatabase =FirebaseDatabase.getInstance().getReference();
-    private DatabaseReference mDatabasepush =FirebaseDatabase.getInstance().getReference();
-
-
+    public static DatabaseReference databaseRef =FirebaseDatabase.getInstance().getReference();
+    static List<Trip>trips;
     public ProfileFragment() {
         // Required empty public constructor
     }
-
-
-
+    
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
     }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -83,7 +85,8 @@ public static final String TAG="profile";
         imgSync.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                writeOnFireBase(trips);
+           //  writeOnFireBase(trips);
+                readOnFireBase();
 
             }
         });
@@ -150,15 +153,16 @@ public static final String TAG="profile";
     public void writeOnFireBase(List<Trip>trips){
         if(isOnline()) {
             Trip trip;
-            mDatabase.child("TripReminder").child("userID").child(trips.get(0).getUserID()).child("trips").removeValue();
+            databaseRef.child("TripReminder").child("userID").child(trips.get(0).getUserID()).child("trips").removeValue();
 
             for (int i = 0; i < trips.size(); i++) {
-                trip = new Trip(trips.get(i).getUserID(), trips.get(i).getTripName(), trips.get(i).getStartPoint(),
+                trip = new Trip(trips.get(i).getUserID(), trips.get(i).getTripName(), trips.get(i).getStartPoint(),trips.get(i).getId(),trips.get(i).getNotes(),
                         trips.get(i).getEndPoint(), trips.get(i).getEndPointLat(), trips.get(i).getEndPointLong(),
                         trips.get(i).getDate(), trips.get(i).getTime(), trips.get(i).getTripImg(), trips.get(i).getTripStatus(), trips.get(i).getCalendar());
-
-                Log.i(TAG, "writeOnFireBase: " + trip.getTripName() + trip.getId() + trip.getStartPoint());
-                mDatabase.child("TripReminder").child("userID").child(trip.getUserID()).child("trips").push().setValue(trip).addOnCompleteListener(new OnCompleteListener<Void>() {
+              //  trip.getId();
+              //  trip.getNotes();
+                Log.i(TAG, "writeOnFireBase: " + trip.getTripName() + trip.getId() + trip.getStartPoint()+trip.getNotes());
+                databaseRef.child("TripReminder").child("userID").child(HomeActivity.fireBaseUseerId).child("trips").push().setValue(trip).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         task.addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -181,6 +185,40 @@ public static final String TAG="profile";
         }
        Log.i(TAG, "writeOnFireBase: ");
     }
+    public static   List<Trip> readOnFireBase(){
+
+        databaseRef.child("TripReminder").child("userID").child(HomeActivity.fireBaseUseerId).child("trips").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()){
+                Trip[] tripList=new Trip[(int) dataSnapshot.getChildrenCount()];
+                int i=0;
+                for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
+                    // TODO: handle the post
+                 Trip trip= postSnapshot.getValue(Trip.class);
+                 tripList[i]=trip;
+                 trips.add(trip);
+                 i++;
+
+                }
+                    Log.i(TAG, "onDataChange: "+tripList.length);
+
+
+                }}
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // Getting Post failed, log a message
+                Log.w(TAG, "loadPost:onCancelled", databaseError.toException());
+                // ...
+            }
+        });
+      Log.i(TAG, "readOnFireBase: "+trips.size());
+
+        return trips;
+//
+    }
+
     public static boolean isOnline() {
         Runtime runtime = Runtime.getRuntime();
         try {
@@ -193,7 +231,6 @@ public static final String TAG="profile";
         return false;
     }
     private class readData extends AsyncTask<Void, Void, List<Trip>> {
-
         @Override
         protected List<Trip> doInBackground(Void... voids) {
             return  HomeActivity.database.tripDAO().selectAll(HomeActivity.fireBaseUseerId);
