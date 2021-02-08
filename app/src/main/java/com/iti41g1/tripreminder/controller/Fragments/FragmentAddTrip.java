@@ -626,7 +626,7 @@ public class FragmentAddTrip extends Fragment {
         }
     }
 
-    private void insertRoom(Trip trip) {
+    public static void insertRoom(Trip trip) {
         new Thread(new Runnable() {
             @Override
             public void run() {

@@ -56,11 +56,6 @@ public class LoginActivity extends AppCompatActivity {
                     .setTheme(R.style.AuthenticationTheme)
                     .setAvailableProviders(providers).build(), Constants.AUTH_REQUEST_CODE);
         }
-
-        //read from FireBase
-//       List<Trip> tripList= ProfileFragment.readOnFireBase();
-  //      Log.i(ProfileFragment.TAG, "initializeSignInProcess: "+tripList.size());
-
     }
 
     //result of FirebaseUI auth process

@@ -56,7 +56,8 @@ public class ProfileFragment extends Fragment {
     TextView txtSync;
 public static final String TAG="profile";
     public static DatabaseReference databaseRef =FirebaseDatabase.getInstance().getReference();
-    static List<Trip>trips;
+     List<Trip>trips;
+    List<Trip>tripsl;
     public ProfileFragment() {
         // Required empty public constructor
     }
@@ -86,12 +87,12 @@ public static final String TAG="profile";
             @Override
             public void onClick(View v) {
            //  writeOnFireBase(trips);
-                readOnFireBase();
+             readOnFireBase();
+              //  insertTripsINRoom(result);
 
             }
         });
     }
-
     public void initializeLogOut(){
         imgLogout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -185,8 +186,8 @@ public static final String TAG="profile";
         }
        Log.i(TAG, "writeOnFireBase: ");
     }
-    public static   List<Trip> readOnFireBase(){
-
+    public   void readOnFireBase(){
+        tripsl=new ArrayList<>();
         databaseRef.child("TripReminder").child("userID").child(HomeActivity.fireBaseUseerId).child("trips").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -197,15 +198,14 @@ public static final String TAG="profile";
                     // TODO: handle the post
                  Trip trip= postSnapshot.getValue(Trip.class);
                  tripList[i]=trip;
-                 trips.add(trip);
+                 tripsl.add(trip);
                  i++;
-
                 }
                     Log.i(TAG, "onDataChange: "+tripList.length);
+                }
+               insertTripsINRoom(tripsl);
 
-
-                }}
-
+            }
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 // Getting Post failed, log a message
@@ -213,10 +213,6 @@ public static final String TAG="profile";
                 // ...
             }
         });
-      Log.i(TAG, "readOnFireBase: "+trips.size());
-
-        return trips;
-//
     }
 
     public static boolean isOnline() {
@@ -229,6 +225,17 @@ public static final String TAG="profile";
         catch (IOException | InterruptedException e) { e.printStackTrace(); }
 
         return false;
+    }
+    public void insertTripsINRoom(List<Trip> trips) {
+        Log.i(TAG, "insertTripsINRoom: "+trips.size());
+        for (int i = 0; i < trips.size(); i++) {
+            Trip trip = new Trip(trips.get(i).getUserID(), trips.get(i).getTripName(), trips.get(i).getStartPoint(),
+                    trips.get(i).getEndPoint(), trips.get(i).getEndPointLat(), trips.get(i).getEndPointLong(),
+                    trips.get(i).getDate(), trips.get(i).getTime(), trips.get(i).getTripImg(), trips.get(i).getTripStatus(), trips.get(i).getCalendar());
+            FragmentAddTrip.insertRoom(trip);
+            Log.i(TAG, "insertTripsINRoom: "+trip.getTripName());
+
+        }
     }
     private class readData extends AsyncTask<Void, Void, List<Trip>> {
         @Override

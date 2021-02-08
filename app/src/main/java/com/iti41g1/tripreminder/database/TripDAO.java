@@ -14,7 +14,6 @@ public interface TripDAO {
 
     @Insert
     long insert(Trip trip);
-
     @Delete
     void delete(Trip trip);
 
