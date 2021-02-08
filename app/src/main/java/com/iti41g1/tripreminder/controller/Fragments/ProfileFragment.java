@@ -119,9 +119,6 @@ public static final String TAG="profile";
         getTripsReport();
         intializeAboutUs();
         intializeHowToUse();
-    }
-
-
 
         imgSync.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -136,7 +133,7 @@ public static final String TAG="profile";
             }
         });
     }
-    public void initializeLogOut(){
+    
     public void initializeLogOut() {
         imgLogout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -319,7 +316,7 @@ public static final String TAG="profile";
         AlertDialog alertDialog = alertDialogBuilder.create();
         alertDialog.show();
     }
-    private class GetCountTrips extends AsyncTask<Void, Void,String> {
+     class GetCountTrips extends AsyncTask<Void, Void,String> {
 
         @Override
         protected  String doInBackground(Void... voids) {
