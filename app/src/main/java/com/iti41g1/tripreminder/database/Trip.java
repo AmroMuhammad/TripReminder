@@ -25,7 +25,28 @@ public class Trip  {
     @NonNull
     private String startPoint;
     @NonNull
+    private double startPointLat;
+    @NonNull
+    private double startPointLong;
+    @NonNull
     private String endPoint;
+
+    public double getStartPointLat() {
+        return startPointLat;
+    }
+
+    public void setStartPointLat(double startPointLat) {
+        this.startPointLat = startPointLat;
+    }
+
+    public double getStartPointLong() {
+        return startPointLong;
+    }
+
+    public void setStartPointLong(double startPointLong) {
+        this.startPointLong = startPointLong;
+    }
+
     @NonNull
     private double endPointLat;
     @NonNull
@@ -45,7 +66,7 @@ public class Trip  {
 
 
 
-    public Trip(@NonNull String userID, @NonNull String tripName, @NonNull String startPoint,
+    public Trip(@NonNull String userID, @NonNull String tripName, @NonNull String startPoint,@NonNull double startPointLat, @NonNull double startPointLong,
                 @NonNull String endPoint, @NonNull double endPointLat, @NonNull double endPointLong,
                 @NonNull String date, @NonNull String time, @NonNull int tripImg, String tripStatus, @NonNull long calendar) {
         this.userID = userID;
@@ -53,6 +74,8 @@ public class Trip  {
         this.id = id;
         this.tripName = tripName;
         this.startPoint = startPoint;
+        this.startPointLat=startPointLat;
+        this.startPointLong=startPointLong;
         this.endPoint = endPoint;
         this.endPointLat = endPointLat;
         this.endPointLong = endPointLong;

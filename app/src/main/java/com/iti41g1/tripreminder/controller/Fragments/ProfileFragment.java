@@ -116,7 +116,7 @@ public static final String TAG="profile";
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         new UnregisterData().execute();
-              //          writeOnFireBase(trips);
+                        writeOnFireBase(trips);
                         startActivity(new Intent(getContext(), LoginActivity.class));
                         getActivity().finish();
                     }
@@ -133,7 +133,6 @@ public static final String TAG="profile";
         protected List<Trip> doInBackground(Void... voids) {
             return HomeActivity.database.tripDAO().selectUpcomingTrip(HomeActivity.fireBaseUseerId, "upcoming");
         }
-
         @Override
         protected void onPostExecute(List<Trip> trips) {
             super.onPostExecute(trips);
@@ -187,7 +186,6 @@ public static final String TAG="profile";
         }
        Log.i(TAG, "writeOnFireBase: ");
     }
-
 
     public static boolean isOnline() {
         Runtime runtime = Runtime.getRuntime();

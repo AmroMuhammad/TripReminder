@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.google.android.gms.common.SignInButton;
 import com.iti41g1.tripreminder.Adapters.AdapterViewNote;
 import com.iti41g1.tripreminder.R;
 
@@ -108,14 +109,21 @@ public class FragmentAddNotes extends Fragment {
         btnSaveNotes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                notes=new ArrayList<>();
                 if(AddTripActivity.key==1){
                  result = new Bundle();
-                if(selectedNotes.isEmpty()) {
+                if(!selectedNotes.isEmpty()) {
                     for (int i = 0; i < selectedNotes.size(); i++) {
-                        Log.i(TAG, "onClick:Savebutton " + selectedNotes.get(i));
+                        if(!selectedNotes.get(i).isEmpty()&&selectedNotes.get(i)!=null) {
+                            notes.add(selectedNotes.get(i));
+                          //  result.putStringArrayList("bundleKey", selectedNotes);
+                            Log.i(TAG, "onClick:Savebutton " + selectedNotes.get(i));
+                        }
                     }
+                    Log.i(TAG, "onClick: "+notes);
+                     result.putStringArrayList("bundleKey", notes);
                 }
-                result.putStringArrayList("bundleKey",selectedNotes);
+
 
                 }else if(AddTripActivity.key==3){
                     Log.i(TAG, "run: "+selectedNotes);
@@ -141,7 +149,7 @@ public class FragmentAddNotes extends Fragment {
     public void onStop() {
         super.onStop();
         //edit in all methods
-        result.putStringArrayList("bundleKey",selectedNotes);
+     //   result.putStringArrayList("bundleKey",selectedNotes);
         if(AddTripActivity.key==1){
         if(date!="")
             result.putString("date",date);

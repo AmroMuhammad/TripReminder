@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -55,6 +56,7 @@ import com.iti41g1.tripreminder.database.Trip;
 
 import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
+import android.content.SharedPreferences;
 
 public class FragmentAddTrip extends Fragment {
     EditText editTextTripName;
@@ -102,11 +104,15 @@ public class FragmentAddTrip extends Fragment {
     Trip selectedTrip;
     Calendar calenderNormal;
     Calendar calendarRound;
-
+    public static final String PREF_NAME="MY_PREF";
+    SharedPreferences myPref;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Places.initialize(getContext(), apiKey);
+
+        myPref=getActivity().getSharedPreferences(PREF_NAME,0);
+
         Log.i(TAG, "onCreate: ");
     }
 
@@ -505,6 +511,7 @@ public class FragmentAddTrip extends Fragment {
                     incomingCal.set(Calendar.HOUR_OF_DAY,selectedHours);
                     incomingCal.set(Calendar.MINUTE,selectedMinute);
                     incomingCal.set(Calendar.SECOND,0);
+                    writeSp();
                 }
             }
         }, 12, 0, false);
@@ -563,10 +570,10 @@ public class FragmentAddTrip extends Fragment {
                                 return;
                             }
                             // add trip object
-                                trip = new Trip(HomeActivity.fireBaseUseerId, editTextTripName.getText().toString(), placeStartPoint.getName(),
-                                        placeEndPoint.getName(), placeEndPoint.getLatLng().latitude, placeEndPoint.getLatLng().longitude,
+                                trip = new Trip(HomeActivity.fireBaseUseerId, editTextTripName.getText().toString(), placeStartPoint.getName(),placeStartPoint.getLatLng().latitude,
+                                        placeStartPoint.getLatLng().longitude,placeEndPoint.getName(), placeEndPoint.getLatLng().latitude, placeEndPoint.getLatLng().longitude,
                                         textViewDate.getText().toString(), textViewTime.getText().toString(), R.drawable.preview,
-                                        "upcoming", calenderNormal.getTimeInMillis());
+                                        "upcoming",myPref.getLong("CalendarNormal",0));
 
                             Log.i(TAG, "checkData:mmmmmm " + trip.getTripName() + trip.getDate() + trip.getTime() +
                                         trip.getEndPoint() + trip.getStartPoint() + trip.getTripStatus());
@@ -580,10 +587,10 @@ public class FragmentAddTrip extends Fragment {
                                         if (!TextUtils.isEmpty(textViewTime2.getText())) {
 
                                             //create two obj
-                                            Trip tripRound = new Trip(HomeActivity.fireBaseUseerId, editTextTripName.getText().toString() + " Round", placeEndPoint.getName(),
+                                            Trip tripRound = new Trip(HomeActivity.fireBaseUseerId, editTextTripName.getText().toString() + " Round", placeEndPoint.getName(),placeEndPoint.getLatLng().latitude,placeEndPoint.getLatLng().longitude,
                                                     placeStartPoint.getName(), placeStartPoint.getLatLng().latitude, placeStartPoint.getLatLng().longitude,
                                                     textViewDate2.getText().toString(), textViewTime2.getText().toString(), R.drawable.preview,
-                                                    "upcoming", calendarRound.getTimeInMillis());
+                                                    "upcoming",myPref.getLong("CalendarRound",0));
 
                                             insertRoom(tripRound);
                                             getActivity().finish();
@@ -657,5 +664,12 @@ public class FragmentAddTrip extends Fragment {
             Log.i(TAG, "onPostExecute: "+selectedTrip);
             }
         }
+     public void writeSp(){
+         SharedPreferences.Editor editor=myPref.edit();
+         editor.putLong("CalendarNormal",calenderNormal.getTimeInMillis());
+         editor.putLong("CalendarRound",calendarRound.getTimeInMillis());
+         editor.commit();
+
+     }
 
 }

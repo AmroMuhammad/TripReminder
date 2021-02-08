@@ -39,7 +39,6 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         Log.i(Constants.LOG_TAG, "onCreate");
-        new check().execute();
         initializeSignInProcess();
 
     }
@@ -77,12 +76,8 @@ public class LoginActivity extends AppCompatActivity {
             if (resultCode == RESULT_OK) {
                 Log.i(Constants.LOG_TAG, "signed in successfully");
                 //check room isEmpty
+                new check().execute();
 
-                if(trips.size()==0)
-                   readOnFireBase();
-                 //   Log.i(TAG, "onActivityResult: "+trips.size());
-                startActivity(new Intent(LoginActivity.this, HomeActivity.class));
-                finish();
             } else {
                 Log.i(Constants.LOG_TAG, "not signed in successfully");
                 finish();
@@ -119,7 +114,8 @@ public class LoginActivity extends AppCompatActivity {
     public void insertTripsINRoom(List<Trip> trips) {
         Log.i(TAG, "insertTripsINRoom: "+trips.size());
         for (int i = 0; i < trips.size(); i++) {
-            Trip trip = new Trip(trips.get(i).getUserID(), trips.get(i).getTripName(), trips.get(i).getStartPoint(),
+            Trip trip = new Trip(trips.get(i).getUserID(), trips.get(i).getTripName(), trips.get(i).getStartPoint(),trips.get(i).getStartPointLat(),trips.get(i).getStartPointLong(),
+
                     trips.get(i).getEndPoint(), trips.get(i).getEndPointLat(), trips.get(i).getEndPointLong(),
                     trips.get(i).getDate(), trips.get(i).getTime(), trips.get(i).getTripImg(), trips.get(i).getTripStatus(), trips.get(i).getCalendar());
             FragmentAddTrip.insertRoom(trip);
@@ -137,6 +133,11 @@ public class LoginActivity extends AppCompatActivity {
             super.onPostExecute(tripsl);
             trips=tripsl;
             Log.i(TAG, "onPostExecute: "+trips.size());
+            if(trips.size()==0)
+                readOnFireBase();
+            //   Log.i(TAG, "onActivityResult: "+trips.size());
+            startActivity(new Intent(LoginActivity.this, HomeActivity.class));
+            finish();
 
         }
     }
