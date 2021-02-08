@@ -57,7 +57,7 @@ public class ProfileFragment extends Fragment {
 public static final String TAG="profile";
     public static DatabaseReference databaseRef =FirebaseDatabase.getInstance().getReference();
      List<Trip>trips;
-    List<Trip>tripsl;
+
     public ProfileFragment() {
         // Required empty public constructor
     }
@@ -65,7 +65,6 @@ public static final String TAG="profile";
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -81,13 +80,14 @@ public static final String TAG="profile";
         imgSync = view.findViewById(R.id.imgSync);
         txtLogout = view.findViewById(R.id.txtLogout);
         txtSync = view.findViewById(R.id.txtSync);
-        initializeLogOut();
         new readData().execute();
+        initializeLogOut();
+
         imgSync.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-           //  writeOnFireBase(trips);
-             readOnFireBase();
+             writeOnFireBase(trips);
+          //   readOnFireBase();
               //  insertTripsINRoom(result);
 
             }
@@ -101,6 +101,7 @@ public static final String TAG="profile";
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         new UnregisterData().execute();
+                        writeOnFireBase(trips);
                         startActivity(new Intent(getContext(), LoginActivity.class));
                         getActivity().finish();
                     }
@@ -115,6 +116,7 @@ public static final String TAG="profile";
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         new UnregisterData().execute();
+              //          writeOnFireBase(trips);
                         startActivity(new Intent(getContext(), LoginActivity.class));
                         getActivity().finish();
                     }
@@ -154,14 +156,13 @@ public static final String TAG="profile";
     public void writeOnFireBase(List<Trip>trips){
         if(isOnline()) {
             Trip trip;
-            databaseRef.child("TripReminder").child("userID").child(trips.get(0).getUserID()).child("trips").removeValue();
+            databaseRef.child("TripReminder").child("userID").child(HomeActivity.fireBaseUseerId).child("trips").removeValue();
 
             for (int i = 0; i < trips.size(); i++) {
                 trip = new Trip(trips.get(i).getUserID(), trips.get(i).getTripName(), trips.get(i).getStartPoint(),trips.get(i).getId(),trips.get(i).getNotes(),
                         trips.get(i).getEndPoint(), trips.get(i).getEndPointLat(), trips.get(i).getEndPointLong(),
                         trips.get(i).getDate(), trips.get(i).getTime(), trips.get(i).getTripImg(), trips.get(i).getTripStatus(), trips.get(i).getCalendar());
-              //  trip.getId();
-              //  trip.getNotes();
+
                 Log.i(TAG, "writeOnFireBase: " + trip.getTripName() + trip.getId() + trip.getStartPoint()+trip.getNotes());
                 databaseRef.child("TripReminder").child("userID").child(HomeActivity.fireBaseUseerId).child("trips").push().setValue(trip).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
@@ -186,34 +187,7 @@ public static final String TAG="profile";
         }
        Log.i(TAG, "writeOnFireBase: ");
     }
-    public   void readOnFireBase(){
-        tripsl=new ArrayList<>();
-        databaseRef.child("TripReminder").child("userID").child(HomeActivity.fireBaseUseerId).child("trips").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if(dataSnapshot.exists()){
-                Trip[] tripList=new Trip[(int) dataSnapshot.getChildrenCount()];
-                int i=0;
-                for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
-                    // TODO: handle the post
-                 Trip trip= postSnapshot.getValue(Trip.class);
-                 tripList[i]=trip;
-                 tripsl.add(trip);
-                 i++;
-                }
-                    Log.i(TAG, "onDataChange: "+tripList.length);
-                }
-               insertTripsINRoom(tripsl);
 
-            }
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                // Getting Post failed, log a message
-                Log.w(TAG, "loadPost:onCancelled", databaseError.toException());
-                // ...
-            }
-        });
-    }
 
     public static boolean isOnline() {
         Runtime runtime = Runtime.getRuntime();
@@ -226,17 +200,7 @@ public static final String TAG="profile";
 
         return false;
     }
-    public void insertTripsINRoom(List<Trip> trips) {
-        Log.i(TAG, "insertTripsINRoom: "+trips.size());
-        for (int i = 0; i < trips.size(); i++) {
-            Trip trip = new Trip(trips.get(i).getUserID(), trips.get(i).getTripName(), trips.get(i).getStartPoint(),
-                    trips.get(i).getEndPoint(), trips.get(i).getEndPointLat(), trips.get(i).getEndPointLong(),
-                    trips.get(i).getDate(), trips.get(i).getTime(), trips.get(i).getTripImg(), trips.get(i).getTripStatus(), trips.get(i).getCalendar());
-            FragmentAddTrip.insertRoom(trip);
-            Log.i(TAG, "insertTripsINRoom: "+trip.getTripName());
 
-        }
-    }
     private class readData extends AsyncTask<Void, Void, List<Trip>> {
         @Override
         protected List<Trip> doInBackground(Void... voids) {
