@@ -91,6 +91,7 @@ public class ProfileFragment extends Fragment {
         txtEmail.setText(HomeActivity.fireBaseEmail);
         txtName.setText(HomeActivity.fireBaseUserName);
         if(HomeActivity.fireBaseUserPhotoUri!=null) {
+            
             Picasso.with(getContext()).load(HomeActivity.fireBaseUserPhotoUri).into(imgProfilePhoto);
         }
         initializeLogOut();
