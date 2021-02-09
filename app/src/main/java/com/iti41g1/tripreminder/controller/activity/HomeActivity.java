@@ -95,7 +95,7 @@ public class HomeActivity extends AppCompatActivity {
         if (!Settings.canDrawOverlays(this)) {
             checkDrawOverAppsPermissionsDialog();
         }
-        runBackgroundPermissions();
+        //runBackgroundPermissions();
 
 
     }
