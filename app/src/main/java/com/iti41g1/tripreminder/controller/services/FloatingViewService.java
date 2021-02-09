@@ -3,9 +3,11 @@ package com.iti41g1.tripreminder.controller.services;
 import android.app.Service;
 import android.content.Intent;
 import android.graphics.PixelFormat;
+import android.nfc.Tag;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.IBinder;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -14,12 +16,14 @@ import android.view.WindowManager;
 import android.widget.CheckBox;
 
 import androidx.annotation.Nullable;
+import androidx.room.Room;
 
 import com.iti41g1.tripreminder.Adapters.TripUpcomingRecyclerAdapter;
 import com.iti41g1.tripreminder.Models.Constants;
 import com.iti41g1.tripreminder.R;
 import com.iti41g1.tripreminder.controller.activity.HomeActivity;
 import com.iti41g1.tripreminder.database.Trip;
+import com.iti41g1.tripreminder.database.TripDatabase;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -34,6 +38,7 @@ public class FloatingViewService extends Service {
     private List<CheckBox> checkBoxes;
     private List<String> notes;
     private int tripId;
+    private TripDatabase database;
 
     public FloatingViewService() {
     }
@@ -46,7 +51,7 @@ public class FloatingViewService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        tripId = intent.getExtras().getInt(Constants.TRIP_ID);
+        tripId = getSharedPreferences("tripInfo",MODE_PRIVATE).getInt(Constants.TRIP_ID,-1);
         new LoadNotes().execute();
         return super.onStartCommand(intent, flags, startId);
     }
@@ -55,6 +60,7 @@ public class FloatingViewService extends Service {
     public void onCreate() {
         super.onCreate();
         //getting the widget layout from xml using layout inflater
+        database = Room.databaseBuilder(this, TripDatabase.class, "tripDB").build();
         mFloatingView = LayoutInflater.from(this).inflate(R.layout.layout_floating_widget, null);
         initializeCheckBoxes();
         notes = new ArrayList();
@@ -192,8 +198,8 @@ public class FloatingViewService extends Service {
 
         @Override
         protected Trip doInBackground(Void... voids) {
-
-            return HomeActivity.database.tripDAO().selectById(tripId);
+            Log.e(Constants.LOG_TAG,tripId+"");
+            return database.tripDAO().selectById(tripId);
         }
 
         @Override
