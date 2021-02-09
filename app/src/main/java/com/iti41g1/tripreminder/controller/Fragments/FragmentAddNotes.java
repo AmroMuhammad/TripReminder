@@ -17,15 +17,11 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.google.android.gms.common.SignInButton;
-import com.iti41g1.tripreminder.Adapters.AdapterViewNote;
 import com.iti41g1.tripreminder.R;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import com.iti41g1.tripreminder.Adapters.AdapterAddNote;
-import com.iti41g1.tripreminder.Models.NoteModel;
 import com.iti41g1.tripreminder.controller.activity.AddTripActivity;
 import com.iti41g1.tripreminder.controller.activity.HomeActivity;
 import com.iti41g1.tripreminder.database.Trip;
@@ -33,7 +29,6 @@ import com.iti41g1.tripreminder.database.Trip;
 public class FragmentAddNotes extends Fragment {
     RecyclerView recyclerView;
     AdapterAddNote adapter;
-    AdapterViewNote adapterView;
     LinearLayoutManager linearLayoutManager;
     Button   btnAddNote;
     Button   btnSaveNotes;

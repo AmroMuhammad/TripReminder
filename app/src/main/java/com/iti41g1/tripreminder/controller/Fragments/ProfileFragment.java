@@ -112,7 +112,7 @@ public static final String TAG="profile";
         txtName.setText(HomeActivity.fireBaseUserName);
         if(HomeActivity.fireBaseUserPhotoUri!=null) {
 
-            Picasso.with(getContext()).load(HomeActivity.fireBaseUserPhotoUri).into(imgProfilePhoto);
+            Picasso.get().load(HomeActivity.fireBaseUserPhotoUri).into(imgProfilePhoto);
         }
         new readData().execute();
         initializeLogOut();

@@ -1,5 +1,6 @@
 package com.iti41g1.tripreminder.controller.Fragments;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -12,8 +13,10 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.iti41g1.tripreminder.Adapters.TripHistoryRecyclerAdapter;
 import com.iti41g1.tripreminder.R;
+import com.iti41g1.tripreminder.controller.activity.HistoryMapActivity;
 import com.iti41g1.tripreminder.controller.activity.HomeActivity;
 import com.iti41g1.tripreminder.database.Trip;
 
@@ -25,6 +28,7 @@ public class HistoryFragment extends Fragment {
     ImageView emptyListImg;
     private TripHistoryRecyclerAdapter tripRecyclerAdapter;
     private List tripsList = new ArrayList<Trip>();
+    FloatingActionButton historyMapBtn;
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -34,6 +38,14 @@ public class HistoryFragment extends Fragment {
         tripRecyclerAdapter = new TripHistoryRecyclerAdapter(getContext(), tripsList);
         tripRecyclerView.setAdapter(tripRecyclerAdapter);
         emptyListImg = view.findViewById(R.id.emptyList_img);
+        historyMapBtn = view.findViewById(R.id.map_float_btn);
+
+        historyMapBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getContext(), HistoryMapActivity.class));
+            }
+        });
     }
 
     @Override
@@ -42,6 +54,7 @@ public class HistoryFragment extends Fragment {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_history, container, false);
     }
+
 
     private class LoadRoomData extends AsyncTask<Void, Void, List<Trip>> {
 

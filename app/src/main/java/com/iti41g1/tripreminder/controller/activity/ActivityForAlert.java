@@ -19,11 +19,15 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.room.Room;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.iti41g1.tripreminder.Models.Constants;
 import com.iti41g1.tripreminder.R;
 import com.iti41g1.tripreminder.controller.services.FloatingViewService;
 import com.iti41g1.tripreminder.database.Trip;
+import com.iti41g1.tripreminder.database.TripDatabase;
 
 public class ActivityForAlert extends AppCompatActivity {
     NotificationManager manager;
@@ -35,11 +39,15 @@ public class ActivityForAlert extends AppCompatActivity {
     String tripUserId;
     double tripLong;
     double tripLat;
+    TripDatabase database;
+    String firebaseUser;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        sharedPreferences = getPreferences(MODE_PRIVATE);
+        database = Room.databaseBuilder(this, TripDatabase.class, "tripDB").build();
+        firebaseUser = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        sharedPreferences = getSharedPreferences("tripInfo",MODE_PRIVATE);
         sharedEditor = sharedPreferences.edit();
         if(getIntent().hasExtra(Constants.TRIP_ID)){
             sharedEditor.putString(Constants.TRIP_NAME,getIntent().getExtras().getString(Constants.TRIP_NAME));
@@ -130,7 +138,7 @@ public class ActivityForAlert extends AppCompatActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                HomeActivity.database.tripDAO().updateTripStatus(HomeActivity.fireBaseUseerId,tripId,"finished");
+                database.tripDAO().updateTripStatus(firebaseUser,tripId,"finished");
             }
         }).start();
     }
@@ -139,7 +147,7 @@ public class ActivityForAlert extends AppCompatActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                HomeActivity.database.tripDAO().updateTripStatus(HomeActivity.fireBaseUseerId,tripId,"canceled");
+                database.tripDAO().updateTripStatus(firebaseUser,tripId,"canceled");
             }
         }).start();
     }

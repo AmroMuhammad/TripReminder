@@ -11,5 +11,7 @@ public interface Constants {
    String TRIP_USER_ID = "tripUserId";
    String NOTIFICATION_CHANNEL_ID = "trips";
    String MISSED_TRIP_STATUS = "Missed";
-
+   String UPCOMING_TRIP_STATUS = "upcoming";
+   String FINISHED_TRIP_STATUS = "finished";
+   String API_KEY = "AIzaSyAKXUZsOm7RLbPEAQQxp6TZsU9YWLeh5Pg";
 }
