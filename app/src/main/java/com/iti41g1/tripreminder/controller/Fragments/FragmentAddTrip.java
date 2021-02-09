@@ -584,7 +584,7 @@ public class FragmentAddTrip extends Fragment {
                                 trip = new Trip(HomeActivity.fireBaseUseerId, editTextTripName.getText().toString(), placeStartPoint.getName(), placeStartPoint.getLatLng().latitude,
                                         placeStartPoint.getLatLng().longitude, placeEndPoint.getName(), placeEndPoint.getLatLng().latitude, placeEndPoint.getLatLng().longitude,
                                         textViewDate.getText().toString(), textViewTime.getText().toString(), R.drawable.preview,
-                                        "upcoming", calenderNormal.getTimeInMillis(), null);
+                                        "upcoming", myPref.getLong("CalendarNormal", 0), null);
 
                                 Log.i(TAG, "checkData:mmmmmm " + trip.getTripName() + trip.getDate() + trip.getTime() +
                                         trip.getEndPoint() + trip.getStartPoint() + trip.getTripStatus());
@@ -607,7 +607,7 @@ public class FragmentAddTrip extends Fragment {
                                                 Trip tripRound = new Trip(HomeActivity.fireBaseUseerId, editTextTripName.getText().toString() + " Round", placeEndPoint.getName(), placeEndPoint.getLatLng().latitude, placeEndPoint.getLatLng().longitude,
                                                         placeStartPoint.getName(), placeStartPoint.getLatLng().latitude, placeStartPoint.getLatLng().longitude,
                                                         textViewDate2.getText().toString(), textViewTime2.getText().toString(), R.drawable.preview,
-                                                        "upcoming", calendarRound.getTimeInMillis(), null);
+                                                        "upcoming", myPref.getLong("CalendarRound", 0), null);
 
                                                 insertRoom(tripRound);
                                                 getActivity().finish();
