@@ -21,6 +21,8 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.room.Room;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.iti41g1.tripreminder.Models.Constants;
 import com.iti41g1.tripreminder.R;
 import com.iti41g1.tripreminder.controller.services.FloatingViewService;
@@ -38,11 +40,13 @@ public class ActivityForAlert extends AppCompatActivity {
     double tripLong;
     double tripLat;
     TripDatabase database;
+    String firebaseUser;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         database = Room.databaseBuilder(this, TripDatabase.class, "tripDB").build();
+        firebaseUser = FirebaseAuth.getInstance().getCurrentUser().getUid();
         sharedPreferences = getSharedPreferences("tripInfo",MODE_PRIVATE);
         sharedEditor = sharedPreferences.edit();
         if(getIntent().hasExtra(Constants.TRIP_ID)){
@@ -134,7 +138,7 @@ public class ActivityForAlert extends AppCompatActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                database.tripDAO().updateTripStatus(HomeActivity.fireBaseUseerId,tripId,"finished");
+                database.tripDAO().updateTripStatus(firebaseUser,tripId,"finished");
             }
         }).start();
     }
@@ -143,7 +147,7 @@ public class ActivityForAlert extends AppCompatActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                database.tripDAO().updateTripStatus(HomeActivity.fireBaseUseerId,tripId,"canceled");
+                database.tripDAO().updateTripStatus(firebaseUser,tripId,"canceled");
             }
         }).start();
     }
