@@ -26,6 +26,7 @@ public interface TripDAO {
 
     @Query("SELECT * FROM Trip WHERE userID LIKE :userId")
     List<Trip> selectRoom(String userId);
+
     @Query("SELECT * FROM Trip WHERE id = :id ")
     Trip selectById(int id);
 
