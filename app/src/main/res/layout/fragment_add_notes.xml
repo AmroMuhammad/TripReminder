@@ -48,12 +48,11 @@
             android:id="@+id/btn_deleteNote"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="92dp"
-            android:layout_marginEnd="8dp"
+            android:layout_marginTop="20dp"
             android:background="@drawable/ic_remove"
             android:text="Button"
-            app:layout_constraintEnd_toStartOf="@+id/btn_addNote"
-            app:layout_constraintTop_toBottomOf="@+id/imageView" />
+            app:layout_constraintEnd_toEndOf="@+id/btn_addNote"
+            app:layout_constraintTop_toBottomOf="@+id/btn_addNote" />
 
         <ImageView
             android:id="@+id/imageView"
