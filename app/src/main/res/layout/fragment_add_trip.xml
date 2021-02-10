@@ -16,14 +16,17 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_saveTrip"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="60dp"
+                android:layout_marginStart="50dp"
+                android:layout_marginTop="148dp"
+                android:layout_marginEnd="50dp"
                 android:text="@string/Add"
+                android:background="@drawable/custom_button"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.537"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/constraintLayoutAddRound" />
 
@@ -71,12 +74,16 @@
                 android:id="@+id/btn_addNotes"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
                 android:background="@drawable/ic_reminders"
                 android:text="@string/AddNotes"
                 app:layout_constraintBottom_toTopOf="@+id/btn_saveTrip"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.188"
-                app:layout_constraintStart_toStartOf="parent" />
+                app:layout_constraintHorizontal_bias="0.164"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/radioGroup_typeTrip"
+                app:layout_constraintVertical_bias="0.79" />
 
             <ImageButton
                 android:id="@+id/btn_date"
