@@ -51,7 +51,7 @@ public class FloatingViewService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        tripId = getSharedPreferences("tripInfo",MODE_PRIVATE).getInt(Constants.TRIP_ID,-1);
+        tripId = intent.getExtras().getInt(Constants.TRIP_ID);
         new LoadNotes().execute();
         return super.onStartCommand(intent, flags, startId);
     }
@@ -185,10 +185,10 @@ public class FloatingViewService extends Service {
         checkBoxes.add(mFloatingView.findViewById(R.id.checkBox10));
     }
 
-    private void attachNotesToCheckBoxes(){
-        if(notes != null && !notes.isEmpty()) {
-            for (int i = 0; i < notes.size(); i++) {
-                checkBoxes.get(i).setText(notes.get(i));
+    private void attachNotesToCheckBoxes(Trip trip){
+        if(trip.getNotes() != null && !trip.getNotes().isEmpty()) {
+            for (int i = 0; i < trip.getNotes().size(); i++) {
+                checkBoxes.get(i).setText(trip.getNotes().get(i));
                 checkBoxes.get(i).setVisibility(View.VISIBLE);
             }
         }
@@ -205,8 +205,10 @@ public class FloatingViewService extends Service {
         @Override
         protected void onPostExecute(Trip trip) {
             super.onPostExecute(trip);
-            notes = trip.getNotes();
-            attachNotesToCheckBoxes();
+            if(trip != null){
+                //notes = trip.getNotes();
+                attachNotesToCheckBoxes(trip);
+            }
         }
     }
 

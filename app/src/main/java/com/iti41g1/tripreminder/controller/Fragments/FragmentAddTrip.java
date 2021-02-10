@@ -375,9 +375,9 @@ public class FragmentAddTrip extends Fragment {
                 Log.i(Constants.LOG_TAG,date);
                 if(check == 1) {
                     String[] dateTotal = date.split("-");
-                     nowYear = Integer.valueOf(dateTotal[2]);
-                     nowMonth = Integer.valueOf(dateTotal[1]);
-                     nowDay = Integer.valueOf(dateTotal[0]);
+                    nowYear = Integer.valueOf(dateTotal[2]);
+                    nowMonth = Integer.valueOf(dateTotal[1]);
+                    nowDay = Integer.valueOf(dateTotal[0]);
                 }
                 else{
                     String oneTripDate = textViewDate.getText().toString();
@@ -397,20 +397,49 @@ public class FragmentAddTrip extends Fragment {
                     else
                         isDateTodayRoundTrip=false;
                 }
-                if (year >= nowYear) {
-                    if (month >= nowMonth) {
+                if (year > nowYear) {
+                    Toast.makeText(getContext(), "Date is Choosen", Toast.LENGTH_SHORT).show();
+                    if (check == 1) {
+                        isDateCorrect = true;
+                    } else {
+                        isDateCorrectRoundTrip = true;
+                    }
+                    //calnder
+                    incomingCal.set(Calendar.DAY_OF_MONTH,day);
+                    incomingCal.set(Calendar.MONTH,month-1);
+                    incomingCal.set(Calendar.YEAR,year);
+                    SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
+                    textViewDate1.setText(format.format(incomingCal.getTime()));
+                }else if(year == nowYear){
+                    if (month > nowMonth) {
+                        Toast.makeText(getContext(), "Date is Choosen", Toast.LENGTH_SHORT).show();
+                        if (check == 1) {
+                            isDateCorrect = true;
+                        } else {
+                            isDateCorrectRoundTrip = true;
+                        }
+                        //calnder
+                        incomingCal.set(Calendar.DAY_OF_MONTH, day);
+                        incomingCal.set(Calendar.MONTH, month - 1);
+                        incomingCal.set(Calendar.YEAR, year);
+                        SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
+                        textViewDate1.setText(format.format(incomingCal.getTime()));
+                    } else if(month == nowMonth){
                         if (day >= nowDay) {
+                            Toast.makeText(getContext(), "Date is Choosen", Toast.LENGTH_SHORT).show();
                             if (check == 1) {
                                 isDateCorrect = true;
                             } else {
                                 isDateCorrectRoundTrip = true;
                             }
-                            textViewDate1.setText(day + "-" + month + "-" + year);
+                            //calnder
                             incomingCal.set(Calendar.DAY_OF_MONTH,day);
                             incomingCal.set(Calendar.MONTH,month-1);
                             incomingCal.set(Calendar.YEAR,year);
+                            SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
+                            textViewDate1.setText(format.format(incomingCal.getTime()));
                         } else {
-                            Toast.makeText(getContext(), "Invalid Date", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), "Date is wrong", Toast.LENGTH_SHORT).show();
                             if (check == 1) {
                                 isDateCorrect = false;
                             } else {
@@ -418,7 +447,7 @@ public class FragmentAddTrip extends Fragment {
                             }
                         }
                     } else {
-                        Toast.makeText(getContext(), "Invalid Date", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "Date is wrong", Toast.LENGTH_SHORT).show();
                         if (check == 1) {
                             isDateCorrect = false;
                         } else {
@@ -426,7 +455,7 @@ public class FragmentAddTrip extends Fragment {
                         }
                     }
                 } else {
-                    Toast.makeText(getContext(), "Invalid Date", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Date is wrong", Toast.LENGTH_SHORT).show();
                     if (check == 1) {
                         isDateCorrect = false;
                     } else {
@@ -466,32 +495,36 @@ public class FragmentAddTrip extends Fragment {
                         } else {
                             isTimeCorrectRoundTrip = true;
                         }
-                        textViewTime1.setText(selectedHours + ":" + selectedMinute);
+
                         incomingCal.set(Calendar.HOUR_OF_DAY,selectedHours);
                         incomingCal.set(Calendar.MINUTE,selectedMinute);
                         incomingCal.set(Calendar.SECOND,0);
-                        writeSp();
+                        SimpleDateFormat format = new SimpleDateFormat("HH:mm");
+                        textViewTime1.setText(format.format(incomingCal.getTime()));
                     } else {
                         if (selectedHours == nowHour) {
                             if (selectedMinute > nowMin) {
+                                Toast.makeText(getContext(), "time is correct", Toast.LENGTH_SHORT).show();
                                 if (check == 1)
                                     isTimeCorrect = true;
                                 else
                                     isTimeCorrectRoundTrip = true;
-                                textViewTime1.setText(selectedHours + ":" + selectedMinute);
+
                                 incomingCal.set(Calendar.HOUR_OF_DAY,selectedHours);
                                 incomingCal.set(Calendar.MINUTE,selectedMinute);
                                 incomingCal.set(Calendar.SECOND,0);
+                                SimpleDateFormat format = new SimpleDateFormat("HH:mm");
+                                textViewTime1.setText(format.format(incomingCal.getTime()));
 
                             } else {
-                                Toast.makeText(getContext(), "Invalid Time", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getContext(), "time is not 1Correct", Toast.LENGTH_SHORT).show();
                                 if (check == 1)
                                     isTimeCorrect = false;
                                 else
                                     isTimeCorrectRoundTrip = false;
                             }
                         } else {
-                            Toast.makeText(getContext(), "Invalid Time", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), "time is not 2Correct", Toast.LENGTH_SHORT).show();
                             if (check == 1)
                                 isTimeCorrect = false;
                             else
@@ -499,11 +532,12 @@ public class FragmentAddTrip extends Fragment {
                         }
                     }
                 }else{
-                    textViewTime1.setText(selectedHours + ":" + min);
-                    textViewTime1.setText(selectedHours + ":" + selectedMinute);
+                    Toast.makeText(getContext(), "DDDD", Toast.LENGTH_SHORT).show();
                     incomingCal.set(Calendar.HOUR_OF_DAY,selectedHours);
                     incomingCal.set(Calendar.MINUTE,selectedMinute);
                     incomingCal.set(Calendar.SECOND,0);
+                    SimpleDateFormat format = new SimpleDateFormat("HH:mm");
+                    textViewTime1.setText(format.format(incomingCal.getTime()));
                     writeSp();
                 }
             }

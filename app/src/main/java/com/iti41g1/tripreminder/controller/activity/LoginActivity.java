@@ -1,5 +1,7 @@
 package com.iti41g1.tripreminder.controller.activity;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -16,6 +18,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.iti41g1.tripreminder.Models.AlarmReceiver;
 import com.iti41g1.tripreminder.Models.Constants;
 import com.iti41g1.tripreminder.R;
 import com.iti41g1.tripreminder.database.Trip;
@@ -23,6 +26,7 @@ import com.iti41g1.tripreminder.database.TripDatabase;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.List;
 
 public class LoginActivity extends AppCompatActivity {
@@ -123,6 +127,9 @@ public class LoginActivity extends AppCompatActivity {
             public void run() {
                 Log.i(TAG, "insertTripsINRoom: " + trips.size());
                 for (int i = 0; i < trips.size(); i++) {
+                    if(Calendar.getInstance().getTimeInMillis() > trips.get(i).getCalendar()){
+                        trips.get(i).setTripStatus(Constants.MISSED_TRIP_STATUS);
+                    }
                     Trip trip = new Trip(trips.get(i).getUserID(), trips.get(i).getTripName(), trips.get(i).getStartPoint(),
                             trips.get(i).getStartPointLat(), trips.get(i).getStartPointLong(), trips.get(i).getEndPoint(),
                             trips.get(i).getEndPointLat(), trips.get(i).getEndPointLong(), trips.get(i).getDate(),
@@ -130,6 +137,7 @@ public class LoginActivity extends AppCompatActivity {
                             trips.get(i).getCalendar(), trips.get(i).getNotes());
 
                     database.tripDAO().insert(trip);
+                    initAlarm(trips.get(i));
                     Log.i(TAG, "insertTripsINRoom: " + trip.getTripName());
                 }
             }
@@ -150,5 +158,19 @@ public class LoginActivity extends AppCompatActivity {
             startActivity(new Intent(LoginActivity.this, HomeActivity.class));
             finish();
         }
+    }
+
+    public void initAlarm(Trip trip) {
+        Intent notifyIntent = new Intent(this, AlarmReceiver.class);
+        notifyIntent.putExtra(Constants.TRIP_NAME, trip.getTripName());
+        notifyIntent.putExtra(Constants.TRIP_ID, trip.getId());
+        notifyIntent.putExtra(Constants.TRIP_USER_ID, trip.getUserID());
+        notifyIntent.putExtra(Constants.TRIP_LATITUDE, trip.getEndPointLat());
+        notifyIntent.putExtra(Constants.TRIP_LONGITUDE, trip.getEndPointLong());
+
+        PendingIntent notifyPendingIntent = PendingIntent.getBroadcast
+                (this, trip.getId(), notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+        alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, trip.getCalendar(), notifyPendingIntent);
     }
 }
