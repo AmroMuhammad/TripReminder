@@ -9,57 +9,74 @@
     <androidx.constraintlayout.widget.ConstraintLayout
 
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/background">
 
 
-        <Button
+        <ImageButton
             android:id="@+id/btn_addNote"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="167dp"
-            android:layout_marginTop="208dp"
-            android:layout_marginEnd="4dp"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/ic_add"
             android:text="@string/AddNote"
+            android:textAllCaps="false"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/btn_saveNotes"
-            app:layout_constraintTop_toBottomOf="@+id/txtView_noteTitle" />
+            app:layout_constraintTop_toBottomOf="@+id/txtView_noteTitle"
+            app:layout_constraintVertical_bias="0.23" />
 
         <Button
             android:id="@+id/btn_saveNotes"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="228dp"
+            android:layout_marginBottom="60dp"
+            android:shadowRadius="@android:integer/config_shortAnimTime"
             android:text="@string/SaveNotes"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.446"
+            app:layout_constraintHorizontal_bias="0.471"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btn_addNote" />
+            app:layout_constraintTop_toBottomOf="@+id/recyclerView"
+            app:layout_constraintVertical_bias="0.825" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="144dp"
-            app:layout_constraintBottom_toTopOf="@+id/btn_saveNotes"
-            app:layout_constraintEnd_toStartOf="@+id/btn_addNote"
-            app:layout_constraintHorizontal_bias="0.0"
+            android:layout_marginStart="36dp"
+            android:layout_marginTop="96dp"
+            app:layout_constraintEnd_toStartOf="@+id/btn_deleteNote"
+            app:layout_constraintHorizontal_bias="0.255"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/txtView_noteTitle"
-            app:layout_constraintVertical_bias="0.344" />
+            app:layout_constraintTop_toBottomOf="@+id/txtView_noteTitle" />
 
         <TextView
             android:id="@+id/txtView_noteTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="44dp"
-            android:text="TextView"
+            android:layout_marginTop="64dp"
+            android:text="@string/Title"
+            android:textSize="30sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.447"
+            app:layout_constraintHorizontal_bias="0.417"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageButton
+            android:id="@+id/btn_deleteNote"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="117dp"
+            android:layout_marginTop="132dp"
+            android:layout_marginEnd="32dp"
+            android:background="@drawable/ic_remove"
+            android:text="Button"
+            app:layout_constraintEnd_toStartOf="@+id/btn_addNote"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="@+id/btn_saveNotes"
+            app:layout_constraintTop_toBottomOf="@+id/txtView_noteTitle" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>

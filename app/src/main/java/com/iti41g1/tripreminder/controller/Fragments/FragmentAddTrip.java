@@ -65,7 +65,7 @@ public class FragmentAddTrip extends Fragment {
     TextView textViewTripName;
     TextView textViewDate;
     TextView textViewDate2;
-    Button btnAddNotes;
+    ImageButton btnAddNotes;
     Button btnSaveTrip;
     ImageButton imageButtonDate;
     ImageButton imageButtonDate2;

@@ -5,7 +5,7 @@
     <string name="StartPoint">Start Point</string>
     <string name="EndPoint">End Point</string>
     <string name="ChooseDate">Choose Date</string>
-    <string name="Add">Add</string>
+    <string name="Add">Add Trip</string>
     <string name="ChooseTime">Choose Time</string>
     <string name="AddNotes">Add Notes</string>
     <string name="SingleTrip">One Direction</string>
@@ -28,4 +28,8 @@
     <string name="numberOfMissedTrips"> Number Of Missed Trips : </string>
     <string name="tripsReport">Trips Report</string>
     <string name="Delete_Note">Delete Note</string>
+    <string name="Hint_TripName">Enter Trip Name</string>
+    <string name="Hint_StPoint">Enter The Start Point</string>
+    <string name="Hint_EndPoint">Enter The End Point</string>
+    <string name="Title">Add Your Notes</string>
 </resources>
