@@ -5,6 +5,7 @@
     android:id="@+id/frame"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/background"
     tools:context=".controller.Fragments.FragmentAddTrip">
 
     <androidx.core.widget.NestedScrollView
@@ -78,6 +79,7 @@
                 android:layout_marginEnd="24dp"
                 android:background="@color/white"
                 android:contentDescription="TODO"
+                android:backgroundTint="@color/background"
                 android:src="@drawable/ic_calendar"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.563"
@@ -93,6 +95,7 @@
                 android:layout_marginEnd="24dp"
                 android:background="@color/white"
                 android:contentDescription="TODO"
+                android:backgroundTint="@color/background"
                 android:src="@drawable/ic_clock"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.557"
@@ -248,6 +251,7 @@
                     android:layout_marginEnd="8dp"
                     android:background="@color/white"
                     android:contentDescription="TODO"
+                    android:backgroundTint="@color/background"
                     android:src="@drawable/ic_calendar"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -260,6 +264,7 @@
                     android:layout_marginEnd="8dp"
                     android:background="@color/white"
                     android:contentDescription="TODO"
+                    android:backgroundTint="@color/background"
                     android:src="@drawable/ic_clock"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/btn_date2" />

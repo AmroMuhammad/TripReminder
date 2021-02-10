@@ -94,8 +94,6 @@ public class FragmentAddTrip extends Fragment {
     final int year = calender.get(Calendar.YEAR);
     final int month = calender.get(Calendar.MONTH);
     final int day = calender.get(Calendar.DAY_OF_MONTH);
-    String d;
-    String m;
     String min;
 
     Boolean isRound = false;
@@ -407,15 +405,7 @@ public class FragmentAddTrip extends Fragment {
                             } else {
                                 isDateCorrectRoundTrip = true;
                             }
-                            //calnder
-                            if(day<9)
-                            {  d= "0"+day;}
-                           else d=day+"";
-                            if(month<9)
-                            {  m= "0"+month;}
-                            else m=month+"";
-                           textViewDate1.setText(d + "/" + m + "/" + year);
-                       //     textViewDate1.setText(day + "-" + month + "-" + year);
+                            textViewDate1.setText(day + "-" + month + "-" + year);
                             incomingCal.set(Calendar.DAY_OF_MONTH,day);
                             incomingCal.set(Calendar.MONTH,month-1);
                             incomingCal.set(Calendar.YEAR,year);
@@ -476,13 +466,7 @@ public class FragmentAddTrip extends Fragment {
                         } else {
                             isTimeCorrectRoundTrip = true;
                         }
-
-                        if(selectedMinute<9)
-                            min="0"+selectedMinute;
-                        else
-                            min=selectedMinute+"";
-                        textViewTime1.setText(selectedHours + ":" + min);
-                   //     textViewTime1.setText(selectedHours + ":" + selectedMinute);
+                        textViewTime1.setText(selectedHours + ":" + selectedMinute);
                         incomingCal.set(Calendar.HOUR_OF_DAY,selectedHours);
                         incomingCal.set(Calendar.MINUTE,selectedMinute);
                         incomingCal.set(Calendar.SECOND,0);
@@ -494,12 +478,6 @@ public class FragmentAddTrip extends Fragment {
                                     isTimeCorrect = true;
                                 else
                                     isTimeCorrectRoundTrip = true;
-                                if(selectedMinute<9)
-                                    min="0"+selectedMinute;
-                                else
-                                    min=selectedMinute+"";
-                                textViewTime1.setText(selectedHours + ":" + min);
-
                                 textViewTime1.setText(selectedHours + ":" + selectedMinute);
                                 incomingCal.set(Calendar.HOUR_OF_DAY,selectedHours);
                                 incomingCal.set(Calendar.MINUTE,selectedMinute);
@@ -521,12 +499,8 @@ public class FragmentAddTrip extends Fragment {
                         }
                     }
                 }else{
-                    if(selectedMinute<9)
-                        min="0"+selectedMinute;
-                    else
-                       min=selectedMinute+"";
                     textViewTime1.setText(selectedHours + ":" + min);
-               //     textViewTime1.setText(selectedHours + ":" + selectedMinute);
+                    textViewTime1.setText(selectedHours + ":" + selectedMinute);
                     incomingCal.set(Calendar.HOUR_OF_DAY,selectedHours);
                     incomingCal.set(Calendar.MINUTE,selectedMinute);
                     incomingCal.set(Calendar.SECOND,0);
