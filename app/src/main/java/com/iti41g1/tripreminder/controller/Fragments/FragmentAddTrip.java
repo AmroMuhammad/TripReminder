@@ -476,6 +476,7 @@ public class FragmentAddTrip extends Fragment {
                         incomingCal.set(Calendar.HOUR_OF_DAY,selectedHours);
                         incomingCal.set(Calendar.MINUTE,selectedMinute);
                         incomingCal.set(Calendar.SECOND,0);
+                        writeSp();
                     } else {
                         if (selectedHours == nowHour) {
                             if (selectedMinute > nowMin) {
@@ -576,42 +577,17 @@ public class FragmentAddTrip extends Fragment {
                                         placeStartPoint.getLatLng().longitude, placeEndPoint.getName(), placeEndPoint.getLatLng().latitude, placeEndPoint.getLatLng().longitude,
                                         textViewDate.getText().toString(), textViewTime.getText().toString(), R.drawable.preview,
                                         "upcoming", myPref.getLong("CalendarNormal", 0), resultNotes);
-
-                                Log.i(TAG, "checkData:mmmmmm " + trip.getTripName() + trip.getDate() + trip.getTime() +
-                                        trip.getEndPoint() + trip.getStartPoint() + trip.getTripStatus());
-                                insertRoom(trip);
-                            }else{
-                                trip = new Trip(HomeActivity.fireBaseUseerId, editTextTripName.getText().toString(), placeStartPoint.getName(), placeStartPoint.getLatLng().latitude,
-                                        placeStartPoint.getLatLng().longitude, placeEndPoint.getName(), placeEndPoint.getLatLng().latitude, placeEndPoint.getLatLng().longitude,
-                                        textViewDate.getText().toString(), textViewTime.getText().toString(), R.drawable.preview,
-                                        "upcoming", myPref.getLong("CalendarNormal", 0), null);
-
-                                Log.i(TAG, "checkData:mmmmmm " + trip.getTripName() + trip.getDate() + trip.getTime() +
-                                        trip.getEndPoint() + trip.getStartPoint() + trip.getTripStatus());
-                                insertRoom(trip);
-                            }
                                 if (isRound) {
                                     if (!TextUtils.isEmpty(textViewDate2.getText())) {
                                         if (!TextUtils.isEmpty(textViewTime2.getText())) {
-                                            if (resultNotes != null) {
-                                                //create two obj
-                                                Trip tripRound = new Trip(HomeActivity.fireBaseUseerId, editTextTripName.getText().toString() + " Round", placeEndPoint.getName(), placeEndPoint.getLatLng().latitude, placeEndPoint.getLatLng().longitude,
-                                                        placeStartPoint.getName(), placeStartPoint.getLatLng().latitude, placeStartPoint.getLatLng().longitude,
-                                                        textViewDate2.getText().toString(), textViewTime2.getText().toString(), R.drawable.preview,
-                                                        "upcoming", myPref.getLong("CalendarRound", 0), resultNotes);
-
-                                                insertRoom(tripRound);
-                                                getActivity().finish();
-                                            }else{
-                                                //create two obj
-                                                Trip tripRound = new Trip(HomeActivity.fireBaseUseerId, editTextTripName.getText().toString() + " Round", placeEndPoint.getName(), placeEndPoint.getLatLng().latitude, placeEndPoint.getLatLng().longitude,
-                                                        placeStartPoint.getName(), placeStartPoint.getLatLng().latitude, placeStartPoint.getLatLng().longitude,
-                                                        textViewDate2.getText().toString(), textViewTime2.getText().toString(), R.drawable.preview,
-                                                        "upcoming", myPref.getLong("CalendarRound", 0), null);
-
-                                                insertRoom(tripRound);
-                                                getActivity().finish();
-                                            }
+                                            //create two obj
+                                            Trip tripRound = new Trip(HomeActivity.fireBaseUseerId, editTextTripName.getText().toString() + " Round", placeEndPoint.getName(), placeEndPoint.getLatLng().latitude, placeEndPoint.getLatLng().longitude,
+                                                    placeStartPoint.getName(), placeStartPoint.getLatLng().latitude, placeStartPoint.getLatLng().longitude,
+                                                    textViewDate2.getText().toString(), textViewTime2.getText().toString(), R.drawable.preview,
+                                                    "upcoming", myPref.getLong("CalendarRound", 0), resultNotes);
+                                            insertRoom(trip);
+                                            insertRoom(tripRound);
+                                            getActivity().finish();
                                         } else {
                                             textViewTime2.setError("Valid Time");
                                             Toast.makeText(getContext(), "Please, Enter Valid Time for round", Toast.LENGTH_LONG).show();
@@ -620,9 +596,44 @@ public class FragmentAddTrip extends Fragment {
                                         textViewDate2.setError("Valid Date");
                                         Toast.makeText(getContext(), "Please, Enter Valid Date for round", Toast.LENGTH_LONG).show();
                                     }
-                                }else {
+                                }
+                                else {
+                                    insertRoom(trip);
                                     getActivity().finish();
                                 }
+                            }else{
+                                trip = new Trip(HomeActivity.fireBaseUseerId, editTextTripName.getText().toString(), placeStartPoint.getName(), placeStartPoint.getLatLng().latitude,
+                                        placeStartPoint.getLatLng().longitude, placeEndPoint.getName(), placeEndPoint.getLatLng().latitude, placeEndPoint.getLatLng().longitude,
+                                        textViewDate.getText().toString(), textViewTime.getText().toString(), R.drawable.preview,
+                                        "upcoming", calenderNormal.getTimeInMillis(), null);
+
+                                if (isRound) {
+                                    if (!TextUtils.isEmpty(textViewDate2.getText())) {
+                                        if (!TextUtils.isEmpty(textViewTime2.getText())) {
+                                            //create two obj
+                                            Trip tripRound = new Trip(HomeActivity.fireBaseUseerId, editTextTripName.getText().toString() + " Round", placeEndPoint.getName(), placeEndPoint.getLatLng().latitude, placeEndPoint.getLatLng().longitude,
+                                                    placeStartPoint.getName(), placeStartPoint.getLatLng().latitude, placeStartPoint.getLatLng().longitude,
+                                                    textViewDate2.getText().toString(), textViewTime2.getText().toString(), R.drawable.preview,
+                                                    "upcoming", calendarRound.getTimeInMillis(), null);
+                                            insertRoom(trip);
+                                            insertRoom(tripRound);
+                                            getActivity().finish();
+
+                                        } else {
+                                            textViewTime2.setError("Valid Time");
+                                            Toast.makeText(getContext(), "Please, Enter Valid Time for round", Toast.LENGTH_LONG).show();
+                                        }
+                                    } else {
+                                        textViewDate2.setError("Valid Date");
+                                        Toast.makeText(getContext(), "Please, Enter Valid Date for round", Toast.LENGTH_LONG).show();
+                                    }
+                                }
+                                else {
+                                    insertRoom(trip);
+                                    getActivity().finish();
+                                }
+                            }
+
                         }else{
                             textViewTime.setError("Valid Time");
                             Toast.makeText(getContext(),"Please, Enter Valid Time",Toast.LENGTH_LONG).show();
@@ -672,8 +683,8 @@ public class FragmentAddTrip extends Fragment {
                 editTextTripName.setText(selectedTrip.getTripName());
                 editTextStartPoint.setText(selectedTrip.getStartPoint());
                 editTextEndPoint.setText(selectedTrip.getEndPoint());
-                textViewDate.setText(selectedTrip.getDate());
-                textViewTime.setText(selectedTrip.getTime());
+           //     textViewDate.setText(selectedTrip.getDate());
+             //   textViewTime.setText(selectedTrip.getTime());
             }
             Log.i(TAG, "onPostExecute: "+selectedTrip);
             }

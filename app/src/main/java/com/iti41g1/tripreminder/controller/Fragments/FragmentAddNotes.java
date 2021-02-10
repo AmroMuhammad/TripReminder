@@ -108,12 +108,11 @@ public class FragmentAddNotes extends Fragment {
         btnDeleteNote.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(selectedNotes.size()>=0){
+                if(selectedNotes.size()>0){
                     adapter.removeItem();
+                    if(selectedNotes.size()==0)
+                        btnDeleteNote.setVisibility(View.GONE);
                     adapter.notifyDataSetChanged();
-                }else{
-                    Toast.makeText(getContext(),"No notes",Toast.LENGTH_SHORT).show();
-
                 }
             }
         });
@@ -127,12 +126,12 @@ public class FragmentAddNotes extends Fragment {
                     for (int i = 0; i < selectedNotes.size(); i++) {
                         if(!selectedNotes.get(i).isEmpty()&&selectedNotes.get(i)!=null) {
                             notes.add(selectedNotes.get(i));
-                          //  result.putStringArrayList("bundleKey", selectedNotes);
+                 //           result.putStringArrayList("bundleKey", selectedNotes);
                             Log.i(TAG, "onClick:Savebutton " + selectedNotes.get(i));
                         }
                     }
-                    Log.i(TAG, "onClick: "+notes);
-                     result.putStringArrayList("bundleKey", notes);
+                //    Log.i(TAG, "onClick: "+notes);
+                    result.putStringArrayList("bundleKey", notes);
                 }
 
 
