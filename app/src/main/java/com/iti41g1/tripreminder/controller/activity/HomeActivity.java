@@ -49,11 +49,17 @@ public class HomeActivity extends AppCompatActivity {
     private HistoryFragment historyFragment;
     private List<Fragment> fragments;
     private List<String> fragmentTitles;
-
+    private int[]tabIcons={
+            R.drawable.ic_baseline_upcoming_24,
+            R.drawable.ic_baseline_history_24,
+            R.drawable.ic_baseline_person_profile_24
+    };
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+        getSupportActionBar().setTitle("Tripinder");
+        getSupportActionBar().setLogo(R.drawable.ic_travel_bag);
         fireBaseUseerId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         fireBaseUserName=FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
         fireBaseEmail=FirebaseAuth.getInstance().getCurrentUser().getEmail();
@@ -73,8 +79,10 @@ public class HomeActivity extends AppCompatActivity {
         tabLayout.setupWithViewPager(viewPager);
         fragmentsinit();
         fragmentTitlesinit();
+//        setupTabIcons();
         adaptor = new ViewPagerAdaptor(getSupportFragmentManager(), 0, fragments, fragmentTitles);
         viewPager.setAdapter(adaptor);
+
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -96,7 +104,7 @@ public class HomeActivity extends AppCompatActivity {
             checkDrawOverAppsPermissionsDialog();
         }
         //runBackgroundPermissions();
-
+        viewPager.getAdapter().notifyDataSetChanged();
 
     }
 
@@ -213,5 +221,16 @@ public class HomeActivity extends AppCompatActivity {
             }
             viewPager.getAdapter().notifyDataSetChanged();
         }
+    }
+    private void setupTabIcons() {
+        tabLayout.getTabAt(0).setIcon(tabIcons[0]);
+        tabLayout.getTabAt(1).setIcon(tabIcons[1]);
+        tabLayout.getTabAt(2).setIcon(tabIcons[2]);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        viewPager.getAdapter().notifyDataSetChanged();
     }
 }

@@ -26,6 +26,7 @@ import java.util.List;
 public class HistoryFragment extends Fragment {
     RecyclerView tripRecyclerView;
     ImageView emptyListImg;
+    int finishedTripsNum;
     private TripHistoryRecyclerAdapter tripRecyclerAdapter;
     private List tripsList = new ArrayList<Trip>();
     FloatingActionButton historyMapBtn;
@@ -60,7 +61,7 @@ public class HistoryFragment extends Fragment {
 
         @Override
         protected List<Trip> doInBackground(Void... voids) {
-
+            finishedTripsNum=HomeActivity.database.tripDAO().getCountTripType(HomeActivity.fireBaseUseerId,"finished");
             return HomeActivity.database.tripDAO().selectHistoryTrip(HomeActivity.fireBaseUseerId, "cancelled", "finished","missed");
         }
 
@@ -70,9 +71,14 @@ public class HistoryFragment extends Fragment {
             tripsList = trips;
             if (tripsList.isEmpty()) {
                 emptyListImg.setVisibility(View.VISIBLE);
-                emptyListImg.setImageResource(R.drawable.preview);
+                emptyListImg.setImageResource(R.drawable.empty);
+                historyMapBtn.setVisibility(View.GONE);
             } else {
                 emptyListImg.setVisibility(View.GONE);
+            }
+            if(finishedTripsNum==0)
+            {
+                historyMapBtn.setVisibility(View.GONE);
             }
             tripRecyclerAdapter = new TripHistoryRecyclerAdapter(getContext(), tripsList);
             tripRecyclerView.setAdapter(tripRecyclerAdapter);

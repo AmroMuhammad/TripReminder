@@ -13,10 +13,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         card_view:cardCornerRadius="30dp">
+
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="horizontal"
+            android:padding="5dp"
             android:weightSum="6">
 
 
@@ -25,14 +27,12 @@
                 android:layout_width="38dp"
                 android:layout_height="61dp"
                 android:layout_gravity="center"
-                android:layout_margin="5dp"
                 android:layout_weight="1"
-                card_view:srcCompat="@drawable/ic_baseline_directions_car_24" />
+                card_view:srcCompat="@drawable/ic_sticky_notes"/>
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="172dp"
-                android:layout_height="203dp"
-                android:layout_margin="10dp"
+                android:layout_width="281dp"
+                android:layout_height="wrap_content"
                 android:layout_weight="5"
                 android:orientation="vertical"
                 android:weightSum="2">
@@ -42,11 +42,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="0dp"
                     android:layout_marginStart="24dp"
-                    android:layout_marginTop="4dp"
+                    android:layout_marginTop="2dp"
                     android:layout_weight="1"
                     android:text="TextView"
-                    android:textColor="@color/design_default_color_primary"
-                    android:textSize="15sp"
+                    android:textColor="@color/gray"
+                    android:textSize="13sp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -54,12 +54,12 @@
                     android:id="@+id/time_txt"
                     android:layout_width="wrap_content"
                     android:layout_height="0dp"
-                    android:layout_marginStart="88dp"
-                    android:layout_marginTop="4dp"
+                    android:layout_marginStart="140dp"
+                    android:layout_marginTop="2dp"
                     android:layout_weight="1"
                     android:text="TextView"
-                    android:textColor="@color/design_default_color_primary"
-                    android:textSize="15sp"
+                    android:textColor="@color/gray"
+                    android:textSize="13sp"
                     app:layout_constraintStart_toEndOf="@+id/date_txt"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -67,45 +67,45 @@
                     android:id="@+id/name_txt"
                     android:layout_width="wrap_content"
                     android:layout_height="0dp"
-                    android:layout_marginTop="12dp"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginTop="6dp"
                     android:layout_weight="1"
                     android:text="TextView"
-                    android:textColor="@color/design_default_color_primary"
-                    android:textSize="30sp"
-                    app:layout_constraintStart_toStartOf="@+id/date_txt"
+                    android:textColor="@color/black"
+                    android:textSize="20sp"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/date_txt" />
 
                 <TextView
                     android:id="@+id/status_txt"
                     android:layout_width="wrap_content"
                     android:layout_height="0dp"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="24dp"
+                    android:layout_marginTop="4dp"
                     android:layout_weight="1"
                     android:text="TextView"
-                    android:textColor="@color/design_default_color_primary"
-                    android:textSize="20sp"
-                    app:layout_constraintStart_toEndOf="@+id/name_txt"
+                    android:textColor="@color/gray1"
+                    android:textSize="15sp"
+                    app:layout_constraintStart_toStartOf="@+id/time_txt"
                     app:layout_constraintTop_toBottomOf="@+id/time_txt" />
 
                 <TextView
                     android:id="@+id/source_txt"
                     android:layout_width="wrap_content"
                     android:layout_height="0dp"
-                    android:layout_marginTop="12dp"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginTop="8dp"
                     android:layout_weight="1"
                     android:text="TextView"
-                    android:textColor="@color/design_default_color_primary"
-                    android:textSize="20sp"
-                    app:layout_constraintStart_toStartOf="@+id/name_txt"
+                    android:textColor="@color/gray1"
+                    android:textSize="15sp"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/name_txt" />
 
                 <ImageView
                     android:id="@+id/imgProfilePhoto"
-                    android:layout_width="30dp"
-                    android:layout_height="21dp"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="8dp"
+                    android:layout_width="17dp"
+                    android:layout_height="17dp"
+                    android:layout_marginStart="12dp"
                     app:layout_constraintStart_toStartOf="@+id/source_txt"
                     app:layout_constraintTop_toBottomOf="@+id/source_txt"
                     app:srcCompat="@drawable/ic_baseline_south_24" />
@@ -114,11 +114,11 @@
                     android:id="@+id/destination_txt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
+                    android:layout_marginBottom="3dp"
                     android:layout_weight="1"
                     android:text="TextView"
-                    android:textColor="@color/design_default_color_primary"
-                    android:textSize="20sp"
+                    android:textColor="@color/gray1"
+                    android:textSize="15sp"
                     app:layout_constraintStart_toStartOf="@+id/source_txt"
                     app:layout_constraintTop_toBottomOf="@+id/imgProfilePhoto" />
 

@@ -11,22 +11,23 @@
         android:id="@+id/trip_recycleView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/yellow"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
     <ImageView
         android:id="@+id/emptyList_img"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:scaleType="centerCrop"
 ></ImageView>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/map_float_btn"
-        android:layout_width="47dp"
-        android:layout_height="65dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_gravity="bottom|right"
-        android:src="@drawable/ic_add"
-        app:backgroundTint="@color/purple_500"
-        app:fabSize="normal"
         android:layout_margin="25dp"
+        android:src="@drawable/ic_map"
+        android:backgroundTint="@color/yellow2"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.895"

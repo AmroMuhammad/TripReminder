@@ -5,28 +5,30 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".controller.Fragments.UpcomingFragment"
-    android:background="@color/design_default_color_primary">
+    >
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/trip_recycleView"
         android:layout_width="match_parent"
+        android:background="@color/yellow"
         android:layout_height="match_parent"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
     <ImageView
         android:id="@+id/emptyList_img"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:scaleType="fitCenter"
         ></ImageView>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/add_flout_btn"
-        android:layout_width="47dp"
-        android:layout_height="65dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_gravity="bottom|right"
-        android:src="@drawable/ic_add"
-        app:backgroundTint="@color/purple_500"
-        app:fabSize="normal"
         android:layout_margin="25dp"
+        android:src="@drawable/ic_baseline_add_24"
+        app:backgroundTint="@color/yellow2"
+        app:fabSize="normal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.895"

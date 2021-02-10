@@ -38,6 +38,7 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+       // getSupportActionBar().setTitle("Tripinder");
         setContentView(R.layout.activity_login);
         Log.i(Constants.LOG_TAG, "onCreate");
         database = Room.databaseBuilder(this, TripDatabase.class, "tripDB").build();
@@ -62,7 +63,7 @@ public class LoginActivity extends AppCompatActivity {
         } else {
             Log.i(Constants.LOG_TAG, "sign in process");
             startActivityForResult(AuthUI.getInstance().createSignInIntentBuilder().
-                    setIsSmartLockEnabled(false)
+                    setIsSmartLockEnabled(false).setLogo(R.drawable.logo)
                     .setTheme(R.style.AuthenticationTheme)
                     .setAvailableProviders(providers).build(), Constants.AUTH_REQUEST_CODE);
         }

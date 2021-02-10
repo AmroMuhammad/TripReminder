@@ -28,6 +28,7 @@ import java.util.List;
 public class UpcomingFragment extends Fragment {
     ImageView emptyListImg;
     RecyclerView tripRecyclerView;
+
     FloatingActionButton floatingBtnAdd;
     private TripUpcomingRecyclerAdapter tripUpcomingRecyclerAdapter;
     private List tripsList = new ArrayList<Trip>();
@@ -84,6 +85,7 @@ public class UpcomingFragment extends Fragment {
             if (tripsList.isEmpty()) {
                 emptyListImg.setVisibility(View.VISIBLE);
                 emptyListImg.setImageResource(R.drawable.preview);
+                //tripRecyclerView.setBackground(R.color.white);
             } else {
                 emptyListImg.setVisibility(View.GONE);
             }
