@@ -91,11 +91,13 @@ public class FragmentAddTrip extends Fragment {
     private static final int AUTOCOMPLETE_REQUEST_CODE_STARTPOINT = 1;
     private static final int AUTOCOMPLETE_REQUEST_CODE_ENDPOINT = 2;
     Calendar calender = Calendar.getInstance();
-    final int hour = calender.get(Calendar.HOUR_OF_DAY);
-    final int minute = calender.get(Calendar.MINUTE);
     final int year = calender.get(Calendar.YEAR);
     final int month = calender.get(Calendar.MONTH);
     final int day = calender.get(Calendar.DAY_OF_MONTH);
+    String d;
+    String m;
+    String min;
+
     Boolean isRound = false;
     Place placeStartPoint;
     Place placeEndPoint;
@@ -202,7 +204,6 @@ public class FragmentAddTrip extends Fragment {
                 Log.i(TAG, "onFragmentResult: "+resultNotes+".."+date+".."+time+date2+".."+time2);
                 // Do something with the result
 
-
             }
         });
         if (!isFirstAddNotes){
@@ -254,8 +255,6 @@ public class FragmentAddTrip extends Fragment {
                 if (isRound = onRadioButtonClicked(v)) {
                     Log.i(TAG, "onClick: " + isRound);
                     constraintLayoutRoundTrip.setVisibility(View.VISIBLE);
-
-
                 }
             }
         });
@@ -297,7 +296,7 @@ public class FragmentAddTrip extends Fragment {
                     calenderDate(textViewDate2, 2,calendarRound);
                     textViewTime2.setText("");
                 }else
-                    Toast.makeText(getContext(), "Please choose first trip date first", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Please choose date of the first trip", Toast.LENGTH_SHORT).show();
             }
         });
         imageButtonTime2.setOnClickListener(new View.OnClickListener() {
@@ -306,7 +305,7 @@ public class FragmentAddTrip extends Fragment {
                 if (isDateCorrectRoundTrip && isFirstTimeSeleceted)
                     calenderTime(textViewTime2, 2,calendarRound);
                 else
-                    Toast.makeText(getContext(), "Please choose Round Trip date first", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Please choose date of the round trip", Toast.LENGTH_SHORT).show();
             }
         });
         btnSaveTrip.setOnClickListener(new View.OnClickListener() {
@@ -403,19 +402,25 @@ public class FragmentAddTrip extends Fragment {
                 if (year >= nowYear) {
                     if (month >= nowMonth) {
                         if (day >= nowDay) {
-                            Toast.makeText(getContext(), "Date is Choosen", Toast.LENGTH_SHORT).show();
                             if (check == 1) {
                                 isDateCorrect = true;
                             } else {
                                 isDateCorrectRoundTrip = true;
                             }
                             //calnder
-                            textViewDate1.setText(day + "-" + month + "-" + year);
+                            if(day<9)
+                            {  d= "0"+day;}
+                           else d=day+"";
+                            if(month<9)
+                            {  m= "0"+month;}
+                            else m=month+"";
+                           textViewDate1.setText(d + "/" + m + "/" + year);
+                       //     textViewDate1.setText(day + "-" + month + "-" + year);
                             incomingCal.set(Calendar.DAY_OF_MONTH,day);
                             incomingCal.set(Calendar.MONTH,month-1);
                             incomingCal.set(Calendar.YEAR,year);
                         } else {
-                            Toast.makeText(getContext(), "Date is wrong", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), "Invalid Date", Toast.LENGTH_SHORT).show();
                             if (check == 1) {
                                 isDateCorrect = false;
                             } else {
@@ -423,7 +428,7 @@ public class FragmentAddTrip extends Fragment {
                             }
                         }
                     } else {
-                        Toast.makeText(getContext(), "Date is wrong", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "Invalid Date", Toast.LENGTH_SHORT).show();
                         if (check == 1) {
                             isDateCorrect = false;
                         } else {
@@ -431,7 +436,7 @@ public class FragmentAddTrip extends Fragment {
                         }
                     }
                 } else {
-                    Toast.makeText(getContext(), "Date is wrong", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Invalid Date", Toast.LENGTH_SHORT).show();
                     if (check == 1) {
                         isDateCorrect = false;
                     } else {
@@ -472,7 +477,12 @@ public class FragmentAddTrip extends Fragment {
                             isTimeCorrectRoundTrip = true;
                         }
 
-                        textViewTime1.setText(selectedHours + ":" + selectedMinute);
+                        if(selectedMinute<9)
+                            min="0"+selectedMinute;
+                        else
+                            min=selectedMinute+"";
+                        textViewTime1.setText(selectedHours + ":" + min);
+                   //     textViewTime1.setText(selectedHours + ":" + selectedMinute);
                         incomingCal.set(Calendar.HOUR_OF_DAY,selectedHours);
                         incomingCal.set(Calendar.MINUTE,selectedMinute);
                         incomingCal.set(Calendar.SECOND,0);
@@ -480,11 +490,15 @@ public class FragmentAddTrip extends Fragment {
                     } else {
                         if (selectedHours == nowHour) {
                             if (selectedMinute > nowMin) {
-                                Toast.makeText(getContext(), "time is correct", Toast.LENGTH_SHORT).show();
                                 if (check == 1)
                                     isTimeCorrect = true;
                                 else
                                     isTimeCorrectRoundTrip = true;
+                                if(selectedMinute<9)
+                                    min="0"+selectedMinute;
+                                else
+                                    min=selectedMinute+"";
+                                textViewTime1.setText(selectedHours + ":" + min);
 
                                 textViewTime1.setText(selectedHours + ":" + selectedMinute);
                                 incomingCal.set(Calendar.HOUR_OF_DAY,selectedHours);
@@ -492,14 +506,14 @@ public class FragmentAddTrip extends Fragment {
                                 incomingCal.set(Calendar.SECOND,0);
 
                             } else {
-                                Toast.makeText(getContext(), "time is not 1Correct", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getContext(), "Invalid Time", Toast.LENGTH_SHORT).show();
                                 if (check == 1)
                                     isTimeCorrect = false;
                                 else
                                     isTimeCorrectRoundTrip = false;
                             }
                         } else {
-                            Toast.makeText(getContext(), "time is not 2Correct", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), "Invalid Time", Toast.LENGTH_SHORT).show();
                             if (check == 1)
                                 isTimeCorrect = false;
                             else
@@ -507,8 +521,12 @@ public class FragmentAddTrip extends Fragment {
                         }
                     }
                 }else{
-                    Toast.makeText(getContext(), "DDDD", Toast.LENGTH_SHORT).show();
-                    textViewTime1.setText(selectedHours + ":" + selectedMinute);
+                    if(selectedMinute<9)
+                        min="0"+selectedMinute;
+                    else
+                       min=selectedMinute+"";
+                    textViewTime1.setText(selectedHours + ":" + min);
+               //     textViewTime1.setText(selectedHours + ":" + selectedMinute);
                     incomingCal.set(Calendar.HOUR_OF_DAY,selectedHours);
                     incomingCal.set(Calendar.MINUTE,selectedMinute);
                     incomingCal.set(Calendar.SECOND,0);
@@ -529,12 +547,10 @@ public class FragmentAddTrip extends Fragment {
         switch (view.getId()) {
             case R.id.radioBtn_oneDirection:
                 if (checked)
-                    Toast.makeText(getContext(), "you choose  one Direction" + isRound, Toast.LENGTH_LONG).show();
                 break;
             case R.id.radioBtn_roundTrip:
                 if (checked)
                     isRound = true;
-                Toast.makeText(getContext(), "you choose  Round Trip" + isRound, Toast.LENGTH_LONG).show();
                 break;
         }
         Log.i(TAG, "onRadioButtonClicked: " + ((RadioButton) view).getText());
@@ -683,7 +699,7 @@ public class FragmentAddTrip extends Fragment {
                 editTextTripName.setText(selectedTrip.getTripName());
                 editTextStartPoint.setText(selectedTrip.getStartPoint());
                 editTextEndPoint.setText(selectedTrip.getEndPoint());
-           //     textViewDate.setText(selectedTrip.getDate());
+               // textViewDate.setText(selectedTrip.getDate());
              //   textViewTime.setText(selectedTrip.getTime());
             }
             Log.i(TAG, "onPostExecute: "+selectedTrip);

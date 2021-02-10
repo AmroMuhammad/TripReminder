@@ -16,31 +16,17 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/btn_saveTrip"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="50dp"
-                android:layout_marginTop="148dp"
-                android:layout_marginEnd="50dp"
-                android:text="@string/Add"
-                android:background="@drawable/custom_button"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/constraintLayoutAddRound" />
-
             <EditText
                 android:id="@+id/ediTxt_tripName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="28dp"
-                android:layout_marginEnd="36dp"
+                android:layout_marginTop="32dp"
+                android:layout_marginEnd="60dp"
                 android:autofillHints=""
                 android:ems="10"
                 android:hint="@string/Hint_TripName"
                 android:inputType="textPersonName"
-                android:textSize="18sp"
+                android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -48,12 +34,13 @@
                 android:id="@+id/editTxt_startPoint"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:layout_marginEnd="36dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="60dp"
                 android:autofillHints=""
                 android:ems="10"
                 android:hint="@string/Hint_StPoint"
                 android:inputType="textPersonName"
+                android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/ediTxt_tripName" />
 
@@ -61,12 +48,13 @@
                 android:id="@+id/editTxt_endPoint"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="36dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="60dp"
                 android:autofillHints=""
                 android:ems="10"
                 android:hint="@string/Hint_EndPoint"
                 android:inputType="textPersonName"
+                android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/editTxt_startPoint" />
 
@@ -74,16 +62,13 @@
                 android:id="@+id/btn_addNotes"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="16dp"
+                android:layout_marginTop="20dp"
                 android:background="@drawable/ic_reminders"
                 android:text="@string/AddNotes"
-                app:layout_constraintBottom_toTopOf="@+id/btn_saveTrip"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.164"
+                app:layout_constraintHorizontal_bias="0.087"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/radioGroup_typeTrip"
-                app:layout_constraintVertical_bias="0.79" />
+                app:layout_constraintTop_toBottomOf="@+id/constraintLayoutAddRound" />
 
             <ImageButton
                 android:id="@+id/btn_date"
@@ -99,25 +84,26 @@
                 app:layout_constraintStart_toEndOf="@+id/txtView_chooseDate"
                 app:layout_constraintTop_toBottomOf="@+id/editTxt_endPoint" />
 
+
             <ImageButton
                 android:id="@+id/btn_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="12dp"
                 android:layout_marginEnd="24dp"
                 android:background="@color/white"
                 android:contentDescription="TODO"
                 android:src="@drawable/ic_clock"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.559"
+                app:layout_constraintHorizontal_bias="0.557"
                 app:layout_constraintStart_toEndOf="@+id/txtView_ChooseTime"
                 app:layout_constraintTop_toBottomOf="@+id/btn_date" />
 
             <RadioGroup
                 android:id="@+id/radioGroup_typeTrip"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
+                android:layout_marginStart="32dp"
                 android:layout_marginTop="28dp"
                 android:orientation="horizontal"
                 app:layout_constraintStart_toStartOf="parent"
@@ -137,19 +123,18 @@
                     android:text="@string/RoundTrip" />
             </RadioGroup>
 
-
             <TextView
                 android:id="@+id/txtView_endPoint"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
-                android:layout_marginTop="36dp"
-                android:layout_marginEnd="44dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="15dp"
                 android:text="@string/EndPoint"
                 android:textColor="@color/black"
                 android:textSize="18sp"
                 app:layout_constraintEnd_toStartOf="@+id/editTxt_endPoint"
-                app:layout_constraintHorizontal_bias="0.19"
+                app:layout_constraintHorizontal_bias="0.83"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/txtView_startPoint" />
 
@@ -158,13 +143,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
-                android:layout_marginTop="32dp"
-                android:layout_marginEnd="44dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="15dp"
                 android:text="@string/StartPoint"
                 android:textColor="@color/black"
                 android:textSize="18sp"
                 app:layout_constraintEnd_toStartOf="@+id/editTxt_startPoint"
-                app:layout_constraintHorizontal_bias="0.222"
+                app:layout_constraintHorizontal_bias="0.793"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/txtView_tripName" />
 
@@ -172,8 +157,8 @@
                 android:id="@+id/txtView_chooseDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="56dp"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="52dp"
                 android:text="@string/ChooseDate"
                 android:textColor="@color/black"
                 android:textSize="18sp"
@@ -185,13 +170,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
-                android:layout_marginTop="36dp"
-                android:layout_marginEnd="44dp"
+                android:layout_marginTop="40dp"
+                android:layout_marginEnd="15dp"
                 android:text="@string/TripName"
                 android:textColor="@color/black"
                 android:textSize="18sp"
                 app:layout_constraintEnd_toStartOf="@+id/ediTxt_tripName"
-                app:layout_constraintHorizontal_bias="0.133"
+                app:layout_constraintHorizontal_bias="0.753"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -199,8 +184,8 @@
                 android:id="@+id/txtView_ChooseTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="48dp"
+                android:layout_marginStart="32dp"
+                android:layout_marginTop="44dp"
                 android:text="@string/ChooseTime"
                 android:textColor="@color/black"
                 android:textSize="18sp"
@@ -211,31 +196,47 @@
                 android:id="@+id/txtView_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginStart="55dp"
+                android:layout_marginTop="5dp"
                 android:layout_marginBottom="13dp"
                 app:layout_constraintBottom_toTopOf="@+id/txtView_ChooseTime"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/txtView_chooseDate"
-                app:layout_constraintVertical_bias="1.0" />
+                app:layout_constraintVertical_bias="0.333" />
 
             <TextView
                 android:id="@+id/txtview_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginStart="55dp"
+                android:layout_marginTop="5dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/txtView_ChooseTime" />
 
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_saveTrip"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="50dp"
+                android:layout_marginTop="136dp"
+                android:layout_marginEnd="50dp"
+                android:layout_marginBottom="12dp"
+                android:background="@drawable/custom_button"
+                android:text="@string/Add"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/constraintLayoutAddRound" />
+
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/constraintLayoutAddRound"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
+                android:layout_width="267dp"
+                android:layout_height="155dp"
+                android:layout_marginTop="16dp"
                 android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.073"
+                app:layout_constraintHorizontal_bias="0.111"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/radioGroup_typeTrip">
 
@@ -274,6 +275,7 @@
                     android:textColor="@color/black"
                     android:textSize="18sp"
                     app:layout_constraintEnd_toStartOf="@+id/btn_date2"
+                    app:layout_constraintHorizontal_bias="0.103"
                     app:layout_constraintLeft_toLeftOf="@id/constraintLayoutAddRound"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -283,13 +285,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
-                    android:layout_marginTop="60dp"
+                    android:layout_marginTop="48dp"
                     android:layout_marginEnd="22dp"
                     android:text="@string/ChooseTime"
                     android:textColor="@color/black"
                     android:textSize="18sp"
                     app:layout_constraintEnd_toStartOf="@+id/btn_time2"
-                    app:layout_constraintHorizontal_bias="1.0"
+                    app:layout_constraintHorizontal_bias="0.109"
                     app:layout_constraintLeft_toLeftOf="@id/constraintLayoutAddRound"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/txtView_chooseDate2" />
@@ -298,11 +300,8 @@
                     android:id="@+id/txtView_Date2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginBottom="21dp"
-                    app:layout_constraintBottom_toTopOf="@+id/txtView_ChooseTime2"
-                    app:layout_constraintLeft_toLeftOf="@id/constraintLayoutAddRound"
+                    android:layout_marginStart="32dp"
+                    android:layout_marginTop="12dp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/txtView_chooseDate2" />
 
@@ -310,8 +309,8 @@
                     android:id="@+id/txtView_Time2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginStart="32dp"
+                    android:layout_marginTop="8dp"
                     app:layout_constraintLeft_toLeftOf="@id/constraintLayoutAddRound"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/txtView_ChooseTime2" />

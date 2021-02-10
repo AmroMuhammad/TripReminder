@@ -59,10 +59,6 @@ public class AdapterAddNote extends RecyclerView.Adapter<AdapterAddNote.viewHold
         return notesList.size();
     }
 
-    public List<String> getNotesList() {
-        return notesList;
-    }
-
     public void removeItem(){
         notesList.remove(notesList.get(id));
             notifyItemRemoved(id);
