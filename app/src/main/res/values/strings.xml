@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">Trip Reminder</string>
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="TripName">Trip Name</string>
     <string name="StartPoint">Start Point</string>
     <string name="EndPoint">End Point</string>
@@ -12,24 +11,13 @@
     <string name="RoundTrip">Round Trip</string>
     <string name="AddNote">Add</string>
     <string name="SaveNotes">Save</string>
-    <string name="SignOut">Sign Out</string>
-    <string name="AddTrip">Add Trip</string>
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="profile">Your Profile</string>
     <string name="sync">Sync</string>
     <string name="logout">Logout</string>
-    <string name="EditNotes">EditNotes</string>
     <string name="howToUse">How To Use</string>
     <string name="aboutAs">About As</string>
-    <string name="email">Email</string>
-    <string name="numberOfUpcomingTrips"> Number Of Upcoming Trips : </string>
-    <string name="numberOfFinishedTrips"> Number Of Finished Trips : </string>
-    <string name="numberOfCancelledTrips"> Number Of Cancelled Trips : </string>
-    <string name="numberOfMissedTrips"> Number Of Missed Trips : </string>
     <string name="tripsReport">Trips Report</string>
-    <string name="Delete_Note">Delete Note</string>
     <string name="Hint_TripName">Enter Trip Name</string>
     <string name="Hint_StPoint">Enter The Start Point</string>
     <string name="Hint_EndPoint">Enter The End Point</string>
-    <string name="Title">Add Your Notes</string>
 </resources>
