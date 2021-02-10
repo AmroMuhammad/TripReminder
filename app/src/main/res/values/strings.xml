@@ -10,8 +10,8 @@
     <string name="AddNotes">Add Notes</string>
     <string name="SingleTrip">One Direction</string>
     <string name="RoundTrip">Round Trip</string>
-    <string name="AddNote">Add Note</string>
-    <string name="SaveNotes">Save Notes</string>
+    <string name="AddNote">Add</string>
+    <string name="SaveNotes">Save</string>
     <string name="SignOut">Sign Out</string>
     <string name="AddTrip">Add Trip</string>
     <!-- TODO: Remove or change this placeholder text -->
@@ -28,4 +28,8 @@
     <string name="numberOfMissedTrips"> Number Of Missed Trips : </string>
     <string name="tripsReport">Trips Report</string>
     <string name="Delete_Note">Delete Note</string>
+    <string name="Hint_TripName">Enter Trip Name</string>
+    <string name="Hint_StPoint">Enter The Start Point</string>
+    <string name="Hint_EndPoint">Enter The End Point</string>
+    <string name="Title">Add Your Notes</string>
 </resources>

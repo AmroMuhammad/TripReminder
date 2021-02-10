@@ -8,6 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -23,6 +25,7 @@ public class AdapterAddNote extends RecyclerView.Adapter<AdapterAddNote.viewHold
 
     List<String> notesList;
     Context context;
+    int id;
 
     public AdapterAddNote(List<String> notesList, Context context) {
         this.context = context;
@@ -33,8 +36,6 @@ public class AdapterAddNote extends RecyclerView.Adapter<AdapterAddNote.viewHold
     public viewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.note_row, parent, false);
-        EditText editText = view.findViewById(R.id.editTxtNote);
-      //  editText.setText("");
         Log.i(FragmentAddNotes.TAG, "onCreateViewHolder: " + notesList.toString());
         return new viewHolder(view);
     }
@@ -43,7 +44,13 @@ public class AdapterAddNote extends RecyclerView.Adapter<AdapterAddNote.viewHold
     public void onBindViewHolder(@NonNull AdapterAddNote.viewHolder holder, int position) {
            String note=notesList.get(position);
             holder.getEditText().setText(note);
-        //  holder.note.setText("");
+            holder.note.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                        id = holder.getAdapterPosition();
+
+                }
+            });
         Log.i(FragmentAddNotes.TAG, "onBindViewHolder: " + notesList.get(position));
     }
 
@@ -52,10 +59,12 @@ public class AdapterAddNote extends RecyclerView.Adapter<AdapterAddNote.viewHold
         return notesList.size();
     }
 
-    public List<String> getNotesList() {
-        return notesList;
-    }
+    public void removeItem(){
+        notesList.remove(notesList.get(id));
+            notifyItemRemoved(id);
+            Toast.makeText(context, "z" + id, Toast.LENGTH_SHORT).show();
 
+    }
     public class viewHolder extends RecyclerView.ViewHolder {
         EditText note;
 

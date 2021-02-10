@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.iti41g1.tripreminder.R;
@@ -30,7 +31,8 @@ public class FragmentAddNotes extends Fragment {
     RecyclerView recyclerView;
     AdapterAddNote adapter;
     LinearLayoutManager linearLayoutManager;
-    Button   btnAddNote;
+    ImageButton btnAddNote;
+    ImageButton   btnDeleteNote;
     Button   btnSaveNotes;
     ArrayList<String> notes;
     String date;
@@ -70,6 +72,7 @@ public class FragmentAddNotes extends Fragment {
         // Inflate the layout for this fragment
         View view= inflater.inflate(R.layout.fragment_add_notes, container, false);
         btnAddNote=view.findViewById(R.id.btn_addNote);
+        btnDeleteNote=view.findViewById(R.id.btn_deleteNote);
         btnSaveNotes=view.findViewById(R.id.btn_saveNotes);
         recyclerView=view.findViewById(R.id.recyclerView);
         result = new Bundle();
@@ -93,12 +96,24 @@ public class FragmentAddNotes extends Fragment {
 //                Log.i(TAG, "onClick:add button "+selectedNotes.toString());
                 if(selectedNotes.size()<=10){
                     selectedNotes.add("");
+
                 Log.i(TAG, selectedNotes.toString());
                 adapter.notifyDataSetChanged();
             }else{
                     Toast.makeText(getContext(),"you can only add 10 notes",Toast.LENGTH_SHORT).show();
                 }
 
+            }
+        });
+        btnDeleteNote.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(selectedNotes.size()>0){
+                    adapter.removeItem();
+                    if(selectedNotes.size()==0)
+                        btnDeleteNote.setVisibility(View.GONE);
+                    adapter.notifyDataSetChanged();
+                }
             }
         });
         btnSaveNotes.setOnClickListener(new View.OnClickListener() {
@@ -111,12 +126,12 @@ public class FragmentAddNotes extends Fragment {
                     for (int i = 0; i < selectedNotes.size(); i++) {
                         if(!selectedNotes.get(i).isEmpty()&&selectedNotes.get(i)!=null) {
                             notes.add(selectedNotes.get(i));
-                          //  result.putStringArrayList("bundleKey", selectedNotes);
+                 //           result.putStringArrayList("bundleKey", selectedNotes);
                             Log.i(TAG, "onClick:Savebutton " + selectedNotes.get(i));
                         }
                     }
-                    Log.i(TAG, "onClick: "+notes);
-                     result.putStringArrayList("bundleKey", notes);
+                //    Log.i(TAG, "onClick: "+notes);
+                    result.putStringArrayList("bundleKey", notes);
                 }
 
 

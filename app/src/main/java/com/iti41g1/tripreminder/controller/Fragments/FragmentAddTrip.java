@@ -65,7 +65,7 @@ public class FragmentAddTrip extends Fragment {
     TextView textViewTripName;
     TextView textViewDate;
     TextView textViewDate2;
-    Button btnAddNotes;
+    ImageButton btnAddNotes;
     Button btnSaveTrip;
     ImageButton imageButtonDate;
     ImageButton imageButtonDate2;
@@ -91,11 +91,11 @@ public class FragmentAddTrip extends Fragment {
     private static final int AUTOCOMPLETE_REQUEST_CODE_STARTPOINT = 1;
     private static final int AUTOCOMPLETE_REQUEST_CODE_ENDPOINT = 2;
     Calendar calender = Calendar.getInstance();
-    final int hour = calender.get(Calendar.HOUR_OF_DAY);
-    final int minute = calender.get(Calendar.MINUTE);
     final int year = calender.get(Calendar.YEAR);
     final int month = calender.get(Calendar.MONTH);
     final int day = calender.get(Calendar.DAY_OF_MONTH);
+    String min;
+
     Boolean isRound = false;
     Place placeStartPoint;
     Place placeEndPoint;
@@ -202,7 +202,6 @@ public class FragmentAddTrip extends Fragment {
                 Log.i(TAG, "onFragmentResult: "+resultNotes+".."+date+".."+time+date2+".."+time2);
                 // Do something with the result
 
-
             }
         });
         if (!isFirstAddNotes){
@@ -254,8 +253,6 @@ public class FragmentAddTrip extends Fragment {
                 if (isRound = onRadioButtonClicked(v)) {
                     Log.i(TAG, "onClick: " + isRound);
                     constraintLayoutRoundTrip.setVisibility(View.VISIBLE);
-
-
                 }
             }
         });
@@ -297,7 +294,7 @@ public class FragmentAddTrip extends Fragment {
                     calenderDate(textViewDate2, 2,calendarRound);
                     textViewTime2.setText("");
                 }else
-                    Toast.makeText(getContext(), "Please choose first trip date first", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Please choose date of the first trip", Toast.LENGTH_SHORT).show();
             }
         });
         imageButtonTime2.setOnClickListener(new View.OnClickListener() {
@@ -306,7 +303,7 @@ public class FragmentAddTrip extends Fragment {
                 if (isDateCorrectRoundTrip && isFirstTimeSeleceted)
                     calenderTime(textViewTime2, 2,calendarRound);
                 else
-                    Toast.makeText(getContext(), "Please choose Round Trip date first", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Please choose date of the round trip", Toast.LENGTH_SHORT).show();
             }
         });
         btnSaveTrip.setOnClickListener(new View.OnClickListener() {
@@ -403,19 +400,17 @@ public class FragmentAddTrip extends Fragment {
                 if (year >= nowYear) {
                     if (month >= nowMonth) {
                         if (day >= nowDay) {
-                            Toast.makeText(getContext(), "Date is Choosen", Toast.LENGTH_SHORT).show();
                             if (check == 1) {
                                 isDateCorrect = true;
                             } else {
                                 isDateCorrectRoundTrip = true;
                             }
-                            //calnder
                             textViewDate1.setText(day + "-" + month + "-" + year);
                             incomingCal.set(Calendar.DAY_OF_MONTH,day);
                             incomingCal.set(Calendar.MONTH,month-1);
                             incomingCal.set(Calendar.YEAR,year);
                         } else {
-                            Toast.makeText(getContext(), "Date is wrong", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), "Invalid Date", Toast.LENGTH_SHORT).show();
                             if (check == 1) {
                                 isDateCorrect = false;
                             } else {
@@ -423,7 +418,7 @@ public class FragmentAddTrip extends Fragment {
                             }
                         }
                     } else {
-                        Toast.makeText(getContext(), "Date is wrong", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "Invalid Date", Toast.LENGTH_SHORT).show();
                         if (check == 1) {
                             isDateCorrect = false;
                         } else {
@@ -431,7 +426,7 @@ public class FragmentAddTrip extends Fragment {
                         }
                     }
                 } else {
-                    Toast.makeText(getContext(), "Date is wrong", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Invalid Date", Toast.LENGTH_SHORT).show();
                     if (check == 1) {
                         isDateCorrect = false;
                     } else {
@@ -471,34 +466,32 @@ public class FragmentAddTrip extends Fragment {
                         } else {
                             isTimeCorrectRoundTrip = true;
                         }
-
                         textViewTime1.setText(selectedHours + ":" + selectedMinute);
                         incomingCal.set(Calendar.HOUR_OF_DAY,selectedHours);
                         incomingCal.set(Calendar.MINUTE,selectedMinute);
                         incomingCal.set(Calendar.SECOND,0);
+                        writeSp();
                     } else {
                         if (selectedHours == nowHour) {
                             if (selectedMinute > nowMin) {
-                                Toast.makeText(getContext(), "time is correct", Toast.LENGTH_SHORT).show();
                                 if (check == 1)
                                     isTimeCorrect = true;
                                 else
                                     isTimeCorrectRoundTrip = true;
-
                                 textViewTime1.setText(selectedHours + ":" + selectedMinute);
                                 incomingCal.set(Calendar.HOUR_OF_DAY,selectedHours);
                                 incomingCal.set(Calendar.MINUTE,selectedMinute);
                                 incomingCal.set(Calendar.SECOND,0);
 
                             } else {
-                                Toast.makeText(getContext(), "time is not 1Correct", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getContext(), "Invalid Time", Toast.LENGTH_SHORT).show();
                                 if (check == 1)
                                     isTimeCorrect = false;
                                 else
                                     isTimeCorrectRoundTrip = false;
                             }
                         } else {
-                            Toast.makeText(getContext(), "time is not 2Correct", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), "Invalid Time", Toast.LENGTH_SHORT).show();
                             if (check == 1)
                                 isTimeCorrect = false;
                             else
@@ -506,7 +499,7 @@ public class FragmentAddTrip extends Fragment {
                         }
                     }
                 }else{
-                    Toast.makeText(getContext(), "DDDD", Toast.LENGTH_SHORT).show();
+                    textViewTime1.setText(selectedHours + ":" + min);
                     textViewTime1.setText(selectedHours + ":" + selectedMinute);
                     incomingCal.set(Calendar.HOUR_OF_DAY,selectedHours);
                     incomingCal.set(Calendar.MINUTE,selectedMinute);
@@ -528,12 +521,10 @@ public class FragmentAddTrip extends Fragment {
         switch (view.getId()) {
             case R.id.radioBtn_oneDirection:
                 if (checked)
-                    Toast.makeText(getContext(), "you choose  one Direction" + isRound, Toast.LENGTH_LONG).show();
                 break;
             case R.id.radioBtn_roundTrip:
                 if (checked)
                     isRound = true;
-                Toast.makeText(getContext(), "you choose  Round Trip" + isRound, Toast.LENGTH_LONG).show();
                 break;
         }
         Log.i(TAG, "onRadioButtonClicked: " + ((RadioButton) view).getText());
@@ -576,42 +567,17 @@ public class FragmentAddTrip extends Fragment {
                                         placeStartPoint.getLatLng().longitude, placeEndPoint.getName(), placeEndPoint.getLatLng().latitude, placeEndPoint.getLatLng().longitude,
                                         textViewDate.getText().toString(), textViewTime.getText().toString(), R.drawable.preview,
                                         "upcoming", myPref.getLong("CalendarNormal", 0), resultNotes);
-
-                                Log.i(TAG, "checkData:mmmmmm " + trip.getTripName() + trip.getDate() + trip.getTime() +
-                                        trip.getEndPoint() + trip.getStartPoint() + trip.getTripStatus());
-                                insertRoom(trip);
-                            }else{
-                                trip = new Trip(HomeActivity.fireBaseUseerId, editTextTripName.getText().toString(), placeStartPoint.getName(), placeStartPoint.getLatLng().latitude,
-                                        placeStartPoint.getLatLng().longitude, placeEndPoint.getName(), placeEndPoint.getLatLng().latitude, placeEndPoint.getLatLng().longitude,
-                                        textViewDate.getText().toString(), textViewTime.getText().toString(), R.drawable.preview,
-                                        "upcoming", calenderNormal.getTimeInMillis(), null);
-
-                                Log.i(TAG, "checkData:mmmmmm " + trip.getTripName() + trip.getDate() + trip.getTime() +
-                                        trip.getEndPoint() + trip.getStartPoint() + trip.getTripStatus());
-                                insertRoom(trip);
-                            }
                                 if (isRound) {
                                     if (!TextUtils.isEmpty(textViewDate2.getText())) {
                                         if (!TextUtils.isEmpty(textViewTime2.getText())) {
-                                            if (resultNotes != null) {
-                                                //create two obj
-                                                Trip tripRound = new Trip(HomeActivity.fireBaseUseerId, editTextTripName.getText().toString() + " Round", placeEndPoint.getName(), placeEndPoint.getLatLng().latitude, placeEndPoint.getLatLng().longitude,
-                                                        placeStartPoint.getName(), placeStartPoint.getLatLng().latitude, placeStartPoint.getLatLng().longitude,
-                                                        textViewDate2.getText().toString(), textViewTime2.getText().toString(), R.drawable.preview,
-                                                        "upcoming", myPref.getLong("CalendarRound", 0), resultNotes);
-
-                                                insertRoom(tripRound);
-                                                getActivity().finish();
-                                            }else{
-                                                //create two obj
-                                                Trip tripRound = new Trip(HomeActivity.fireBaseUseerId, editTextTripName.getText().toString() + " Round", placeEndPoint.getName(), placeEndPoint.getLatLng().latitude, placeEndPoint.getLatLng().longitude,
-                                                        placeStartPoint.getName(), placeStartPoint.getLatLng().latitude, placeStartPoint.getLatLng().longitude,
-                                                        textViewDate2.getText().toString(), textViewTime2.getText().toString(), R.drawable.preview,
-                                                        "upcoming", calendarRound.getTimeInMillis(), null);
-
-                                                insertRoom(tripRound);
-                                                getActivity().finish();
-                                            }
+                                            //create two obj
+                                            Trip tripRound = new Trip(HomeActivity.fireBaseUseerId, editTextTripName.getText().toString() + " Round", placeEndPoint.getName(), placeEndPoint.getLatLng().latitude, placeEndPoint.getLatLng().longitude,
+                                                    placeStartPoint.getName(), placeStartPoint.getLatLng().latitude, placeStartPoint.getLatLng().longitude,
+                                                    textViewDate2.getText().toString(), textViewTime2.getText().toString(), R.drawable.preview,
+                                                    "upcoming", myPref.getLong("CalendarRound", 0), resultNotes);
+                                            insertRoom(trip);
+                                            insertRoom(tripRound);
+                                            getActivity().finish();
                                         } else {
                                             textViewTime2.setError("Valid Time");
                                             Toast.makeText(getContext(), "Please, Enter Valid Time for round", Toast.LENGTH_LONG).show();
@@ -620,9 +586,44 @@ public class FragmentAddTrip extends Fragment {
                                         textViewDate2.setError("Valid Date");
                                         Toast.makeText(getContext(), "Please, Enter Valid Date for round", Toast.LENGTH_LONG).show();
                                     }
-                                }else {
+                                }
+                                else {
+                                    insertRoom(trip);
                                     getActivity().finish();
                                 }
+                            }else{
+                                trip = new Trip(HomeActivity.fireBaseUseerId, editTextTripName.getText().toString(), placeStartPoint.getName(), placeStartPoint.getLatLng().latitude,
+                                        placeStartPoint.getLatLng().longitude, placeEndPoint.getName(), placeEndPoint.getLatLng().latitude, placeEndPoint.getLatLng().longitude,
+                                        textViewDate.getText().toString(), textViewTime.getText().toString(), R.drawable.preview,
+                                        "upcoming", calenderNormal.getTimeInMillis(), null);
+
+                                if (isRound) {
+                                    if (!TextUtils.isEmpty(textViewDate2.getText())) {
+                                        if (!TextUtils.isEmpty(textViewTime2.getText())) {
+                                            //create two obj
+                                            Trip tripRound = new Trip(HomeActivity.fireBaseUseerId, editTextTripName.getText().toString() + " Round", placeEndPoint.getName(), placeEndPoint.getLatLng().latitude, placeEndPoint.getLatLng().longitude,
+                                                    placeStartPoint.getName(), placeStartPoint.getLatLng().latitude, placeStartPoint.getLatLng().longitude,
+                                                    textViewDate2.getText().toString(), textViewTime2.getText().toString(), R.drawable.preview,
+                                                    "upcoming", calendarRound.getTimeInMillis(), null);
+                                            insertRoom(trip);
+                                            insertRoom(tripRound);
+                                            getActivity().finish();
+
+                                        } else {
+                                            textViewTime2.setError("Valid Time");
+                                            Toast.makeText(getContext(), "Please, Enter Valid Time for round", Toast.LENGTH_LONG).show();
+                                        }
+                                    } else {
+                                        textViewDate2.setError("Valid Date");
+                                        Toast.makeText(getContext(), "Please, Enter Valid Date for round", Toast.LENGTH_LONG).show();
+                                    }
+                                }
+                                else {
+                                    insertRoom(trip);
+                                    getActivity().finish();
+                                }
+                            }
+
                         }else{
                             textViewTime.setError("Valid Time");
                             Toast.makeText(getContext(),"Please, Enter Valid Time",Toast.LENGTH_LONG).show();
@@ -672,8 +673,8 @@ public class FragmentAddTrip extends Fragment {
                 editTextTripName.setText(selectedTrip.getTripName());
                 editTextStartPoint.setText(selectedTrip.getStartPoint());
                 editTextEndPoint.setText(selectedTrip.getEndPoint());
-                textViewDate.setText(selectedTrip.getDate());
-                textViewTime.setText(selectedTrip.getTime());
+               // textViewDate.setText(selectedTrip.getDate());
+             //   textViewTime.setText(selectedTrip.getTime());
             }
             Log.i(TAG, "onPostExecute: "+selectedTrip);
             }
