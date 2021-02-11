@@ -215,13 +215,11 @@ public static final String TAG="profile";
                         task.addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
-                                Toast.makeText(getContext(), "Success Store Data in FireBase", Toast.LENGTH_SHORT).show();
                             }
                         });
                         task.addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception e) {
-                                Toast.makeText(getContext(), "Failure Store Data in FireBase", Toast.LENGTH_SHORT).show();
                             }
                         });
                     }

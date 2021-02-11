@@ -398,7 +398,6 @@ public class FragmentAddTrip extends Fragment {
                         isDateTodayRoundTrip=false;
                 }
                 if (year > nowYear) {
-                    Toast.makeText(getContext(), "Date is Choosen", Toast.LENGTH_SHORT).show();
                     if (check == 1) {
                         isDateCorrect = true;
                     } else {
@@ -412,7 +411,6 @@ public class FragmentAddTrip extends Fragment {
                     textViewDate1.setText(format.format(incomingCal.getTime()));
                 }else if(year == nowYear){
                     if (month > nowMonth) {
-                        Toast.makeText(getContext(), "Date is Choosen", Toast.LENGTH_SHORT).show();
                         if (check == 1) {
                             isDateCorrect = true;
                         } else {
@@ -426,7 +424,6 @@ public class FragmentAddTrip extends Fragment {
                         textViewDate1.setText(format.format(incomingCal.getTime()));
                     } else if(month == nowMonth){
                         if (day >= nowDay) {
-                            Toast.makeText(getContext(), "Date is Choosen", Toast.LENGTH_SHORT).show();
                             if (check == 1) {
                                 isDateCorrect = true;
                             } else {
@@ -504,7 +501,6 @@ public class FragmentAddTrip extends Fragment {
                     } else {
                         if (selectedHours == nowHour) {
                             if (selectedMinute > nowMin) {
-                                Toast.makeText(getContext(), "time is correct", Toast.LENGTH_SHORT).show();
                                 if (check == 1)
                                     isTimeCorrect = true;
                                 else
@@ -517,14 +513,14 @@ public class FragmentAddTrip extends Fragment {
                                 textViewTime1.setText(format.format(incomingCal.getTime()));
 
                             } else {
-                                Toast.makeText(getContext(), "time is not 1Correct", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getContext(), "Time is not correct", Toast.LENGTH_SHORT).show();
                                 if (check == 1)
                                     isTimeCorrect = false;
                                 else
                                     isTimeCorrectRoundTrip = false;
                             }
                         } else {
-                            Toast.makeText(getContext(), "time is not 2Correct", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), "Time is not correct", Toast.LENGTH_SHORT).show();
                             if (check == 1)
                                 isTimeCorrect = false;
                             else
@@ -532,7 +528,6 @@ public class FragmentAddTrip extends Fragment {
                         }
                     }
                 }else{
-                    Toast.makeText(getContext(), "DDDD", Toast.LENGTH_SHORT).show();
                     incomingCal.set(Calendar.HOUR_OF_DAY,selectedHours);
                     incomingCal.set(Calendar.MINUTE,selectedMinute);
                     incomingCal.set(Calendar.SECOND,0);
@@ -614,11 +609,11 @@ public class FragmentAddTrip extends Fragment {
                                             getActivity().finish();
                                         } else {
                                             textViewTime2.setError("Valid Time");
-                                            Toast.makeText(getContext(), "Please, Enter Valid Time for round", Toast.LENGTH_LONG).show();
+                                            Toast.makeText(getContext(), "Please, Enter Valid Time for round trip", Toast.LENGTH_SHORT).show();
                                         }
                                     } else {
                                         textViewDate2.setError("Valid Date");
-                                        Toast.makeText(getContext(), "Please, Enter Valid Date for round", Toast.LENGTH_LONG).show();
+                                        Toast.makeText(getContext(), "Please, Enter Valid Date for round trip", Toast.LENGTH_SHORT).show();
                                     }
                                 }
                                 else {
@@ -645,11 +640,11 @@ public class FragmentAddTrip extends Fragment {
 
                                         } else {
                                             textViewTime2.setError("Valid Time");
-                                            Toast.makeText(getContext(), "Please, Enter Valid Time for round", Toast.LENGTH_LONG).show();
+                                            Toast.makeText(getContext(), "Please, Enter Valid Time for round trip", Toast.LENGTH_SHORT).show();
                                         }
                                     } else {
                                         textViewDate2.setError("Valid Date");
-                                        Toast.makeText(getContext(), "Please, Enter Valid Date for round", Toast.LENGTH_LONG).show();
+                                        Toast.makeText(getContext(), "Please, Enter Valid Date for round trip", Toast.LENGTH_SHORT).show();
                                     }
                                 }
                                 else {
@@ -660,24 +655,24 @@ public class FragmentAddTrip extends Fragment {
 
                         }else{
                             textViewTime.setError("Valid Time");
-                            Toast.makeText(getContext(),"Please, Enter Valid Time",Toast.LENGTH_LONG).show();
+                            Toast.makeText(getContext(),"Please, Enter Valid Time",Toast.LENGTH_SHORT).show();
                         }
                     }else{
                         textViewDate.setError("Please Enter Valid Date");
-                        Toast.makeText(getContext(),"Please, Enter Valid Date",Toast.LENGTH_LONG).show();
+                        Toast.makeText(getContext(),"Please, Enter Valid Date",Toast.LENGTH_SHORT).show();
                     }
                 }else{
                     editTextStartPoint.setError(" Required End Point");
-                    Toast.makeText(getContext(),"Please, Required End Point",Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(),"Please, Required End Point",Toast.LENGTH_SHORT).show();
                 }
 
             }else{
                 editTextStartPoint.setError("Please Enter Valid Start Point");
-                Toast.makeText(getContext(),"Please, Required Start Point",Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(),"Please, Required Start Point",Toast.LENGTH_SHORT).show();
             }
         }else{
             editTextTripName.setError("Required");
-            Toast.makeText(getContext(),"Please, Required Trip Name",Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(),"Please, Required Trip Name",Toast.LENGTH_SHORT).show();
 
         }
     }
