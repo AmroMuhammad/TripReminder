@@ -127,7 +127,7 @@ public class LoginActivity extends AppCompatActivity {
             public void run() {
                 Log.i(TAG, "insertTripsINRoom: " + trips.size());
                 for (int i = 0; i < trips.size(); i++) {
-                    if(Calendar.getInstance().getTimeInMillis() > trips.get(i).getCalendar() && trips.get(i).getTripStatus().equals(Constants.MISSED_TRIP_STATUS)){
+                    if(Calendar.getInstance().getTimeInMillis() > trips.get(i).getCalendar() && trips.get(i).getTripStatus().equals(Constants.UPCOMING_TRIP_STATUS)){
                         trips.get(i).setTripStatus(Constants.MISSED_TRIP_STATUS);
                     }
                     Trip trip = new Trip(trips.get(i).getUserID(), trips.get(i).getTripName(), trips.get(i).getStartPoint(),
@@ -137,7 +137,7 @@ public class LoginActivity extends AppCompatActivity {
                             trips.get(i).getCalendar(), trips.get(i).getNotes());
 
                     database.tripDAO().insert(trip);
-                    if(trips.get(i).getTripStatus().equals("upcoming")){
+                    if(trips.get(i).getTripStatus().equals(Constants.UPCOMING_TRIP_STATUS)){
                         initAlarm(trips.get(i));
                     }
                     Log.i(TAG, "insertTripsINRoom: " + trip.getTripName());
