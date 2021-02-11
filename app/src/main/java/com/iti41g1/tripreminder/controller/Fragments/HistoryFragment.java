@@ -36,7 +36,7 @@ public class HistoryFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         new LoadRoomData().execute();
         tripRecyclerView = view.findViewById(R.id.trip_recycleView);
-        tripRecyclerAdapter = new TripHistoryRecyclerAdapter(getContext(), tripsList);
+        tripRecyclerAdapter = new TripHistoryRecyclerAdapter(getContext(), tripsList,getActivity());
         tripRecyclerView.setAdapter(tripRecyclerAdapter);
         emptyListImg = view.findViewById(R.id.emptyList_img);
         historyMapBtn = view.findViewById(R.id.map_float_btn);
@@ -80,7 +80,7 @@ public class HistoryFragment extends Fragment {
             {
                 historyMapBtn.setVisibility(View.GONE);
             }
-            tripRecyclerAdapter = new TripHistoryRecyclerAdapter(getContext(), tripsList);
+            tripRecyclerAdapter = new TripHistoryRecyclerAdapter(getContext(), tripsList,getActivity());
             tripRecyclerView.setAdapter(tripRecyclerAdapter);
         }
     }

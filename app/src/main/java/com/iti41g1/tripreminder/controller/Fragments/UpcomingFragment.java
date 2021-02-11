@@ -85,7 +85,7 @@ public class UpcomingFragment extends Fragment {
             if (tripsList.isEmpty()) {
                 emptyListImg.setVisibility(View.VISIBLE);
                 emptyListImg.setImageResource(R.drawable.preview);
-                //tripRecyclerView.setBackground(R.color.white);
+                tripRecyclerView.setBackgroundColor(0xFFFFF);
             } else {
                 emptyListImg.setVisibility(View.GONE);
             }

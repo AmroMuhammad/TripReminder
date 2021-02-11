@@ -5,15 +5,22 @@ import android.app.PendingIntent;
 import android.content.ComponentName;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.room.Room;
 import androidx.viewpager.widget.ViewPager;
@@ -115,20 +122,42 @@ public class HomeActivity extends AppCompatActivity {
         viewPager.getAdapter().notifyDataSetChanged();
     }
 
-    private void checkDrawOverAppsPermissionsDialog() {
-        new AlertDialog.Builder(this).setTitle("Permission request").setCancelable(false).setMessage("Allow Draw Over Apps Permission to be able to use application probably")
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        drawOverAppPermission();
-                    }
-                }).setNegativeButton("No", new DialogInterface.OnClickListener() {
+    private void checkDrawOverAppsPermissionsDialog(){
+        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this,R.style.AlertDialogTheme);
+        View view = LayoutInflater.from(this).inflate(R.layout.layout_permission_dialog,(ConstraintLayout) findViewById(R.id.dialogLayoutContainer));
+        builder.setView(view);
+        ((TextView)view.findViewById(R.id.textTitle)).setText(Constants.APP_NAME);
+        ((TextView)view.findViewById(R.id.textMessage)).setText("Allow Draw Over Apps Permission to be able to use application probably");
+        ((Button)view.findViewById(R.id.btnCancel)).setText(Constants.PER_DIALOG_CANCEL);
+        ((Button)view.findViewById(R.id.btnOk)).setText(Constants.PER_DIALOG_CONFIRM);
+        ((ImageView)view.findViewById(R.id.imgTitle)).setImageResource(R.drawable.ic_baseline_warning_24);
+
+        final androidx.appcompat.app.AlertDialog alertDialog = builder.create();
+
+        view.findViewById(R.id.btnCancel).setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
+            public void onClick(View v) {
                 errorWarningForNotGivingDrawOverAppsPermissions();
+                alertDialog.dismiss();
             }
-        }).show();
+        });
+
+
+        view.findViewById(R.id.btnOk).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                drawOverAppPermission();
+                alertDialog.dismiss();
+            }
+        });
+
+        if(alertDialog.getWindow() !=null){
+            alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(0));
+        }
+        alertDialog.show();
     }
+
+
 
     // to run broadcast in API == 30
     // add intent.flag(Intent.FLAG_INCLUDE_STOPPED_PACKAGES) in receiver to run app also if app is killed for API >= Marshmellow
@@ -140,14 +169,31 @@ public class HomeActivity extends AppCompatActivity {
         }
     }
 
-    private void errorWarningForNotGivingDrawOverAppsPermissions() {
-        new AlertDialog.Builder(this).setTitle("Warning").setCancelable(false).setMessage("Unfortunately the display over other apps permission" +
-                " is not granted so the application might not behave properly \nTo enable this permission kindly restart the application")
-                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                    }
-                }).show();
+    private void errorWarningForNotGivingDrawOverAppsPermissions(){
+        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this,R.style.AlertDialogTheme);
+        View view = LayoutInflater.from(this).inflate(R.layout.layout_dialog_warning,(ConstraintLayout) findViewById(R.id.dialogLayoutContainer));
+        builder.setView(view);
+        ((TextView)view.findViewById(R.id.textTitle)).setText(Constants.APP_NAME);
+        ((TextView)view.findViewById(R.id.textMessage)).setText("Unfortunately the display over other apps permission" +
+                " is not granted so the application might not behave properly \nTo enable this permission kindly restart the application");
+        ((Button)view.findViewById(R.id.btnOk)).setText(Constants.PER_DIALOG_OK);
+        ((ImageView)view.findViewById(R.id.imgTitle)).setImageResource(R.drawable.ic_baseline_warning_24);
+
+        final androidx.appcompat.app.AlertDialog alertDialog = builder.create();
+
+
+        view.findViewById(R.id.btnOk).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                alertDialog.dismiss();
+            }
+        });
+
+        if(alertDialog.getWindow() !=null){
+            alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(0));
+        }
+        alertDialog.show();
     }
 
     // to run broadcast in API equals to marshmellow (API 26) and add intent.flag(Intent.FLAG_INCLUDE_STOPPED_PACKAGES) in receiver to run app also

@@ -6,6 +6,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -13,12 +14,14 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -55,6 +58,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 import static android.content.Context.ALARM_SERVICE;
 import static android.content.Context.CONNECTIVITY_SERVICE;
+import static android.content.Context.CONSUMER_IR_SERVICE;
 import static androidx.core.content.ContextCompat.getSystemService;
 
 public class ProfileFragment extends Fragment {
@@ -197,27 +201,27 @@ public static final String TAG="profile";
         if(isNetworkAvailable(getContext())) {
             Trip trip;
             LoginActivity.databaseRef.child("TripReminder").child("userID").child(HomeActivity.fireBaseUseerId).child("trips").removeValue();
-
+            Log.i(Constants.LOG_TAG,trips.size()+"");
             for (int i = 0; i < trips.size(); i++) {
                 trip = new Trip(trips.get(i).getUserID(),trips.get(i).getTripName(),trips.get(i).getStartPoint(),
                         trips.get(i).getStartPointLat(),trips.get(i).getStartPointLong(),trips.get(i).getEndPoint(),
                         trips.get(i).getEndPointLat(),trips.get(i).getEndPointLong(),trips.get(i).getDate(),
                         trips.get(i).getTime(),trips.get(i).getTripImg(),trips.get(i).getTripStatus(),
                         trips.get(i).getCalendar(), trips.get(i).getNotes());
-                Log.i(TAG, "writeOnFireBase: " + trip.getTripName() + trip.getId() + trip.getStartPoint()+trip.getNotes());
+                Log.i(Constants.LOG_TAG, "writeOnFireBase: " + trip.getTripName() + trip.getId() + trip.getStartPoint()+trip.getNotes());
                  LoginActivity.databaseRef.child("TripReminder").child("userID").child(HomeActivity.fireBaseUseerId).child("trips").push().setValue(trip).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         task.addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
-                                //Toast.makeText(getContext(), "Success Store Data in FireBase", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getContext(), "Success Store Data in FireBase", Toast.LENGTH_SHORT).show();
                             }
                         });
                         task.addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception e) {
-                                //Toast.makeText(getContext(), "Failure Store Data in FireBase", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getContext(), "Failure Store Data in FireBase", Toast.LENGTH_SHORT).show();
                             }
                         });
                     }
@@ -277,14 +281,14 @@ public static final String TAG="profile";
         txtAboutAs.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openDaialog("Amr \n Nermeen \n Donia");
+                openDaialog("This Application is made by Group One ITI intake 41 as project for android Course \nMade By \n \nAmr Muhammad \nDonia Ashraf \nNermeen Abdo");
             }
         });
 
         imgAboutAs.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openDaialog(" Amr \n Nermeen \n Donia");
+                openDaialog("This Application is made by Group One ITI intake 41 as project for android Course \nMade By \nAmr Muhammad \nDonia Ashraf \nNermeen Abdo");
             }
         });
     }
@@ -292,28 +296,42 @@ public static final String TAG="profile";
         txtHowToUse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openDaialog(" How to Use ? ");
+                openDaialog("This application helps you to schedule your trips by addind trip from upcoming window and can delete any trip by long pressing on it so it be transferred to" +
+                        "Histroy window and can show finished trips routes on google maps");
             }
         });
 
         imgHowToUse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openDaialog(" How to Use ? ");
+                openDaialog("This application helps you to schedule your trips by addind trip from upcoming window and can delete any trip by long pressing on it so it be transferred to" +
+                        "Histroy window and can show finished trips routes on google maps");
             }
         });
     }
-    public void openDaialog(String message){
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext());
-        alertDialogBuilder.setMessage(message);
-        alertDialogBuilder.setNegativeButton("Close",new DialogInterface.OnClickListener() {
+
+    private void openDaialog(String message) {
+        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(getContext(), R.style.AlertDialogTheme);
+        View view = LayoutInflater.from(getContext()).inflate(R.layout.layout_dialog_warning, (ConstraintLayout) getActivity().findViewById(R.id.dialogLayoutContainer));
+        builder.setView(view);
+        ((TextView) view.findViewById(R.id.textTitle)).setText(Constants.APP_NAME);
+        ((TextView) view.findViewById(R.id.textMessage)).setText(message);
+        ((Button) view.findViewById(R.id.btnOk)).setText(Constants.PER_DIALOG_OK);
+        ((ImageView) view.findViewById(R.id.imgTitle)).setImageResource(R.drawable.ic_baseline_warning_24);
+
+        final androidx.appcompat.app.AlertDialog alertDialog = builder.create();
+
+
+        view.findViewById(R.id.btnOk).setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
+            public void onClick(View v) {
+                alertDialog.dismiss();
             }
         });
 
-        AlertDialog alertDialog = alertDialogBuilder.create();
+        if(alertDialog.getWindow() !=null){
+            alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(0));
+        }
         alertDialog.show();
     }
      class GetCountTrips extends AsyncTask<Void, Void,String> {
