@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.iti41g1.tripreminder">
 
     <!--
@@ -21,7 +22,8 @@
         android:icon="@drawable/ic_travel_bag"
         android:label="@string/app_name"
         android:roundIcon="@drawable/ic_travel_bag"
-        android:supportsRtl="true"
+        android:supportsRtl="false"
+        tools:replace="android:supportsRtl"
         android:theme="@style/Theme.TripReminder">
 
         <!--
@@ -36,18 +38,23 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
-        <activity android:name=".controller.activity.HistoryMapActivity" />
-        <activity android:name=".controller.activity.AddTripActivity" />
+        <activity android:name=".controller.activity.HistoryMapActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".controller.activity.AddTripActivity"
+            android:screenOrientation="portrait"/>
         <activity android:name=".controller.activity.SplashActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".controller.activity.HomeActivity" />
+        <activity android:name=".controller.activity.HomeActivity"
+            android:screenOrientation="portrait"/>
         <activity android:name=".controller.activity.LoginActivity"
+            android:screenOrientation="portrait"
           />
 
         <receiver
@@ -57,7 +64,8 @@
 
         <activity
             android:name=".controller.activity.ActivityForAlert"
-            android:theme="@style/Theme.AppCompat.Transparent.NoActionBar" />
+            android:theme="@style/Theme.AppCompat.Transparent.NoActionBar"
+            android:screenOrientation="portrait"/>
 
         <service
             android:name=".controller.services.FloatingViewService"
