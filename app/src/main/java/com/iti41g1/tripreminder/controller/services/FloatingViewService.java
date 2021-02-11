@@ -14,6 +14,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.CheckBox;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.room.Room;
@@ -39,6 +40,7 @@ public class FloatingViewService extends Service {
     private List<String> notes;
     private int tripId;
     private TripDatabase database;
+    private TextView txtNotes;
 
     public FloatingViewService() {
     }
@@ -183,14 +185,18 @@ public class FloatingViewService extends Service {
         checkBoxes.add(mFloatingView.findViewById(R.id.checkBox8));
         checkBoxes.add(mFloatingView.findViewById(R.id.checkBox9));
         checkBoxes.add(mFloatingView.findViewById(R.id.checkBox10));
+        txtNotes = mFloatingView.findViewById(R.id.textNotes);
     }
 
     private void attachNotesToCheckBoxes(Trip trip){
         if(trip.getNotes() != null && !trip.getNotes().isEmpty()) {
+            txtNotes.setText("Notes");
             for (int i = 0; i < trip.getNotes().size(); i++) {
                 checkBoxes.get(i).setText(trip.getNotes().get(i));
                 checkBoxes.get(i).setVisibility(View.VISIBLE);
             }
+        }else{
+            txtNotes.setText("No Available Notes");
         }
     }
 

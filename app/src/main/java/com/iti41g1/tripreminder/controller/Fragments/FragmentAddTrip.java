@@ -563,10 +563,16 @@ public class FragmentAddTrip extends Fragment {
     public void checkData(){
         Log.i(TAG, "checkData: ");
         if(!TextUtils.isEmpty(editTextTripName.getText())){
+            editTextTripName.setError(null);
             if(!TextUtils.isEmpty(editTextStartPoint.getText())){
+                editTextStartPoint.setError(null);
                 if(!TextUtils.isEmpty(editTextEndPoint.getText())){
+                    editTextEndPoint.setError(null);
                     if(!TextUtils.isEmpty(textViewDate.getText())){
+                        textViewDate.setError(null);
                         if(!TextUtils.isEmpty(textViewTime.getText())){
+                            textViewTime.setError(null);
+
                             //when edit trip
                             if(AddTripActivity.key==2){
                                 new Thread(new Runnable() {
@@ -598,7 +604,9 @@ public class FragmentAddTrip extends Fragment {
                                         "upcoming", myPref.getLong("CalendarNormal", 0), resultNotes);
                                 if (isRound) {
                                     if (!TextUtils.isEmpty(textViewDate2.getText())) {
+                                        textViewDate2.setError(null);
                                         if (!TextUtils.isEmpty(textViewTime2.getText())) {
+                                            textViewTime2.setError(null);
                                             //create two obj
                                             Trip tripRound = new Trip(HomeActivity.fireBaseUseerId, editTextTripName.getText().toString() + " Round", placeEndPoint.getName(), placeEndPoint.getLatLng().latitude, placeEndPoint.getLatLng().longitude,
                                                     placeStartPoint.getName(), placeStartPoint.getLatLng().latitude, placeStartPoint.getLatLng().longitude,
@@ -628,7 +636,9 @@ public class FragmentAddTrip extends Fragment {
 
                                 if (isRound) {
                                     if (!TextUtils.isEmpty(textViewDate2.getText())) {
+                                        textViewDate2.setError(null);
                                         if (!TextUtils.isEmpty(textViewTime2.getText())) {
+                                            textViewTime2.setError(null);
                                             //create two obj
                                             Trip tripRound = new Trip(HomeActivity.fireBaseUseerId, editTextTripName.getText().toString() + " Round", placeEndPoint.getName(), placeEndPoint.getLatLng().latitude, placeEndPoint.getLatLng().longitude,
                                                     placeStartPoint.getName(), placeStartPoint.getLatLng().latitude, placeStartPoint.getLatLng().longitude,
@@ -639,11 +649,11 @@ public class FragmentAddTrip extends Fragment {
                                             getActivity().finish();
 
                                         } else {
-                                            textViewTime2.setError("Valid Time");
+                                            textViewTime2.setError("Invalid Time");
                                             Toast.makeText(getContext(), "Please, Enter Valid Time for round trip", Toast.LENGTH_SHORT).show();
                                         }
                                     } else {
-                                        textViewDate2.setError("Valid Date");
+                                        textViewDate2.setError("Invalid Date");
                                         Toast.makeText(getContext(), "Please, Enter Valid Date for round trip", Toast.LENGTH_SHORT).show();
                                     }
                                 }
@@ -667,7 +677,7 @@ public class FragmentAddTrip extends Fragment {
                 }
 
             }else{
-                editTextStartPoint.setError("Please Enter Valid Start Point");
+                editTextEndPoint.setError("Please Enter Valid Start Point");
                 Toast.makeText(getContext(),"Please, Required Start Point",Toast.LENGTH_SHORT).show();
             }
         }else{

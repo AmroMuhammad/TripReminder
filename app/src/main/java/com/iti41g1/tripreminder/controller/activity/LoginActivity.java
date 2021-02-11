@@ -36,16 +36,17 @@ public class LoginActivity extends AppCompatActivity {
     private FirebaseUser user;
     List<Trip> tripsl;
     public static final String TAG = "Login";
-    TripDatabase database;
-    public static DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference();
+    private TripDatabase database;
+    private   DatabaseReference databaseRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-       // getSupportActionBar().setTitle("Tripinder");
+        // getSupportActionBar().setTitle("Tripinder");
         setContentView(R.layout.activity_login);
         Log.i(Constants.LOG_TAG, "onCreate");
         database = Room.databaseBuilder(this, TripDatabase.class, "tripDB").build();
+        databaseRef = FirebaseDatabase.getInstance().getReference();
         initializeSignInProcess();
     }
 
@@ -84,6 +85,7 @@ public class LoginActivity extends AppCompatActivity {
                 Log.i(Constants.LOG_TAG, "signed in successfully");
                 //check room isEmpty
                 new check().execute();
+                readOnFireBase();
 
             } else {
                 Log.i(Constants.LOG_TAG, "not signed in successfully");
@@ -92,22 +94,24 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    public void readOnFireBase() {
-        tripsl = new ArrayList<>();
-        databaseRef.child("TripReminder").child("userID").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("trips").addValueEventListener(new ValueEventListener() {
+    private void readOnFireBase() {
+
+        tripsl=new ArrayList<>();
+        databaseRef.child("TripReminder").child("userID").child(FirebaseAuth.getInstance().getUid()).child("trips").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
-                    Trip[] tripList = new Trip[(int) dataSnapshot.getChildrenCount()];
+                    Log.i(TAG, "onDataChange: ");
+                    //     Trip[] tripList = new Trip[(int) dataSnapshot.getChildrenCount()];
                     int i = 0;
                     for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                         // TODO: handle the post
                         Trip trip = postSnapshot.getValue(Trip.class);
-                        tripList[i] = trip;
+                        //           tripList[i] = trip;
                         tripsl.add(trip);
                         i++;
                     }
-                    Log.i(TAG, "onDataChange: " + tripList.length);
+                    //         Log.i(TAG, "onDataChange: " + tripList.length);
                 }
                 insertTripsINRoom(tripsl);
             }
@@ -136,6 +140,7 @@ public class LoginActivity extends AppCompatActivity {
                             trips.get(i).getTime(), trips.get(i).getTripImg(), trips.get(i).getTripStatus(),
                             trips.get(i).getCalendar(), trips.get(i).getNotes());
 
+
                     database.tripDAO().insert(trip);
                     if(trips.get(i).getTripStatus().equals(Constants.UPCOMING_TRIP_STATUS)){
                         initAlarm(trips.get(i));
@@ -145,12 +150,11 @@ public class LoginActivity extends AppCompatActivity {
             }
         }).start();
     }
-
     private class check extends AsyncTask<Void, Void, Void> {
         @Override
         protected Void doInBackground(Void... voids) {
             database.tripDAO().clear();
-            readOnFireBase();
+            //    readOnFireBase();
             return null;
         }
 

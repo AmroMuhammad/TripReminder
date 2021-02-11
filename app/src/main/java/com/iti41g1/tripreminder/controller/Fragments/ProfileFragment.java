@@ -16,6 +16,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
+import androidx.room.Room;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -32,6 +33,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -45,6 +47,7 @@ import com.iti41g1.tripreminder.R;
 import com.iti41g1.tripreminder.controller.activity.HomeActivity;
 import com.iti41g1.tripreminder.controller.activity.LoginActivity;
 import com.iti41g1.tripreminder.database.Trip;
+import com.iti41g1.tripreminder.database.TripDatabase;
 import com.squareup.picasso.Picasso;
 
 import org.w3c.dom.Comment;
@@ -76,9 +79,13 @@ public class ProfileFragment extends Fragment {
     TextView txtEmail;
     CircleImageView imgProfilePhoto;
     String reportTripMessage;
-public static final String TAG="profile";
-   // public DatabaseReference databaseRef =FirebaseDatabase.getInstance().getReference();
-     List<Trip>trips;
+    public static final String TAG="profile";
+   private DatabaseReference databaseReference;
+   private TripDatabase database;
+   private String fireBaseUseerId;
+     List<Trip>trips = new ArrayList<>();
+     boolean isSuccess=false;
+     boolean isSync=false;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -87,6 +94,9 @@ public static final String TAG="profile";
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        databaseReference = FirebaseDatabase.getInstance().getReference();
+        database = Room.databaseBuilder(getContext(), TripDatabase.class, "tripDB").build();
+        fireBaseUseerId = FirebaseAuth.getInstance().getCurrentUser().getUid();
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -118,7 +128,6 @@ public static final String TAG="profile";
 
             Picasso.get().load(HomeActivity.fireBaseUserPhotoUri).into(imgProfilePhoto);
         }
-        new readData().execute();
         initializeLogOut();
         getTripsReport();
         intializeAboutUs();
@@ -127,17 +136,21 @@ public static final String TAG="profile";
         imgSync.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-             writeOnFireBase(trips);
+                isSync=true;
+                new readData().execute();
+                writeOnFireBase(trips);
             }
         });
         txtSync.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                isSync=true;
+                new readData().execute();
                 writeOnFireBase(trips);
             }
         });
     }
-    
+
     public void initializeLogOut() {
         imgLogout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -146,6 +159,7 @@ public static final String TAG="profile";
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         new UnregisterData().execute();
+                        new readData().execute();
                         writeOnFireBase(trips);
                         startActivity(new Intent(getContext(), LoginActivity.class));
                         getActivity().finish();
@@ -161,6 +175,7 @@ public static final String TAG="profile";
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         new UnregisterData().execute();
+                        new readData().execute();
                         writeOnFireBase(trips);
                         startActivity(new Intent(getContext(), LoginActivity.class));
                         getActivity().finish();
@@ -169,9 +184,7 @@ public static final String TAG="profile";
             }
         });
     }
-    public void initializeSync(){
 
-    }
     private class UnregisterData extends AsyncTask<Void, Void, List<Trip>> {
 
         @Override
@@ -197,39 +210,50 @@ public static final String TAG="profile";
             alarmManager.cancel(notifyPendingIntent);
         }
     }
+
     public void writeOnFireBase(List<Trip>trips){
         if(isNetworkAvailable(getContext())) {
             Trip trip;
-            LoginActivity.databaseRef.child("TripReminder").child("userID").child(HomeActivity.fireBaseUseerId).child("trips").removeValue();
-            Log.i(Constants.LOG_TAG,trips.size()+"");
+            databaseReference.child("TripReminder").child("userID").child(fireBaseUseerId).child("trips").removeValue();
+
             for (int i = 0; i < trips.size(); i++) {
                 trip = new Trip(trips.get(i).getUserID(),trips.get(i).getTripName(),trips.get(i).getStartPoint(),
                         trips.get(i).getStartPointLat(),trips.get(i).getStartPointLong(),trips.get(i).getEndPoint(),
                         trips.get(i).getEndPointLat(),trips.get(i).getEndPointLong(),trips.get(i).getDate(),
                         trips.get(i).getTime(),trips.get(i).getTripImg(),trips.get(i).getTripStatus(),
                         trips.get(i).getCalendar(), trips.get(i).getNotes());
-                Log.i(Constants.LOG_TAG, "writeOnFireBase: " + trip.getTripName() + trip.getId() + trip.getStartPoint()+trip.getNotes());
-                 LoginActivity.databaseRef.child("TripReminder").child("userID").child(HomeActivity.fireBaseUseerId).child("trips").push().setValue(trip).addOnCompleteListener(new OnCompleteListener<Void>() {
+                Log.i(TAG, "writeOnFireBase: " + trip.getTripName() + trip.getId() + trip.getStartPoint()+trip.getNotes());
+                databaseReference.child("TripReminder").child("userID").child(fireBaseUseerId).child("trips").push().setValue(trip).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         task.addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
+                                if(isSync){
+                                    isSuccess=true;
+                                }
                             }
                         });
                         task.addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception e) {
+                                if(!isSync){
+                                    isSuccess=false;
+                                }
                             }
                         });
                     }
                 });
             }
+            if(isSuccess){
+                Toast.makeText(getContext(), "Synchronization is completed successfully", Toast.LENGTH_SHORT).show();
+                isSync=false;
+            }
         }
         else{
             Toast.makeText(getContext(), "No Internet ", Toast.LENGTH_SHORT).show();
         }
-       Log.i(TAG, "writeOnFireBase: ");
+        Log.i(TAG, "writeOnFireBase: ");
     }
 
     public static boolean isNetworkAvailable(Context con) {
@@ -250,11 +274,12 @@ public static final String TAG="profile";
     private class readData extends AsyncTask<Void, Void, List<Trip>> {
         @Override
         protected List<Trip> doInBackground(Void... voids) {
-            return  HomeActivity.database.tripDAO().selectAll(HomeActivity.fireBaseUseerId);
+            return  database.tripDAO().selectAll(fireBaseUseerId);
         }
         @Override
         protected void onPostExecute(List<Trip> tripsl) {
             super.onPostExecute(trips);
+            Log.i(TAG, "onPostExecute: "+trips);
             trips=tripsl;
         }
     }

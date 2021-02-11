@@ -48,4 +48,10 @@ public interface TripDAO {
 
     @Query("SELECT COUNT(*) FROM Trip WHERE userId  = :userId And tripStatus LIKE :status" )
     int getCountTripType(String userId ,String status);
+
+    @Query("DELETE FROM Trip where userID= :userId AND tripStatus = :status ")
+    void deleteUpcomingById(String userId,String status);
+
+    @Query("DELETE FROM Trip where userID= :userId AND( tripStatus = :status OR tripStatus = :status1 OR tripStatus = :status2 ) ")
+    void deleteHistoryById(String userId,String status,String status1,String status2);
 }

@@ -56,11 +56,6 @@ public class HomeActivity extends AppCompatActivity {
     private HistoryFragment historyFragment;
     private List<Fragment> fragments;
     private List<String> fragmentTitles;
-    private int[]tabIcons={
-            R.drawable.ic_baseline_upcoming_24,
-            R.drawable.ic_baseline_history_24,
-            R.drawable.ic_baseline_person_profile_24
-    };
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -267,11 +262,6 @@ public class HomeActivity extends AppCompatActivity {
             }
             viewPager.getAdapter().notifyDataSetChanged();
         }
-    }
-    private void setupTabIcons() {
-        tabLayout.getTabAt(0).setIcon(tabIcons[0]);
-        tabLayout.getTabAt(1).setIcon(tabIcons[1]);
-        tabLayout.getTabAt(2).setIcon(tabIcons[2]);
     }
 
     @Override

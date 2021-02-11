@@ -29,7 +29,7 @@ public class HistoryFragment extends Fragment {
     int finishedTripsNum;
     private TripHistoryRecyclerAdapter tripRecyclerAdapter;
     private List tripsList = new ArrayList<Trip>();
-    FloatingActionButton historyMapBtn;
+    public static FloatingActionButton historyMapBtn;
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {

@@ -8,6 +8,8 @@ import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +25,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.iti41g1.tripreminder.Models.Constants;
 import com.iti41g1.tripreminder.R;
+import com.iti41g1.tripreminder.controller.Fragments.HistoryFragment;
 import com.iti41g1.tripreminder.controller.activity.AddTripActivity;
 import com.iti41g1.tripreminder.controller.activity.HomeActivity;
 import com.iti41g1.tripreminder.database.Trip;
@@ -33,6 +36,7 @@ public class TripHistoryRecyclerAdapter extends RecyclerView.Adapter<TripHistory
     List tripList;
     Context context;
     Activity activity;
+    Handler handler;
     public TripHistoryRecyclerAdapter(Context context, List TrripInfoList, Activity ac) {
         this.context = context;
         this.tripList=TrripInfoList;
@@ -60,6 +64,18 @@ public class TripHistoryRecyclerAdapter extends RecyclerView.Adapter<TripHistory
             @Override
             public boolean onLongClick(View v) {
                 customTwoButtonsDialog(((Trip) tripList.get(position)),position);
+                handler = new Handler(){
+                    @Override
+                    public void handleMessage(@NonNull Message msg) {
+                        super.handleMessage(msg);
+                        int finishedTripsNum = msg.arg1;
+                        if(finishedTripsNum==0)
+                        {
+
+                            HistoryFragment.historyMapBtn.setVisibility(View.GONE);
+                        }
+                    }
+                };
                 tripList.remove(((Trip) tripList.get(position)));
                 return false;
             }
@@ -115,7 +131,10 @@ public class TripHistoryRecyclerAdapter extends RecyclerView.Adapter<TripHistory
                     public void run() {
                         HomeActivity.database.tripDAO().deleteById(HomeActivity.fireBaseUseerId,trip.getId());
                         //   tripList.remove(trip);
-
+                        int finishesTripNum=HomeActivity.database.tripDAO().getCountTripType(HomeActivity.fireBaseUseerId,"finished");
+                        Message msg=new Message();
+                        msg.arg1  = finishesTripNum;
+                        handler.sendMessage(msg);
 
                     }
                 }).start();
@@ -125,6 +144,7 @@ public class TripHistoryRecyclerAdapter extends RecyclerView.Adapter<TripHistory
             }
         });
 
+
         if(alertDialog.getWindow() !=null){
             alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(0));
         }
@@ -133,4 +153,3 @@ public class TripHistoryRecyclerAdapter extends RecyclerView.Adapter<TripHistory
 
 
 }
-
