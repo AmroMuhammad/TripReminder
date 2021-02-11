@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Trip Reminder</string>
+    <string name="app_name">Tripinder</string>
     <string name="TripName">Trip Name</string>
     <string name="StartPoint">Start Point</string>
     <string name="EndPoint">End Point</string>
