@@ -64,8 +64,7 @@
 
         <activity
             android:name=".controller.activity.ActivityForAlert"
-            android:theme="@style/Theme.AppCompat.Transparent.NoActionBar"
-            android:screenOrientation="portrait"/>
+            android:theme="@style/Theme.AppCompat.Transparent.NoActionBar" />
 
         <service
             android:name=".controller.services.FloatingViewService"
